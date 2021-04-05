@@ -1,0 +1,41 @@
+slug: terraform-build-your-own-provider
+type: track
+title: Build Your Own Terraform Provider
+teaser: TODO
+description: TODO
+icon: https://storage.googleapis.com/instruqt-frontend/assets/hashicorp/tracks/terraform.png
+tags:
+- terraform
+owner: hashicorp
+developers:
+- neil@hashicorp.com
+private: true
+published: false
+challenges:
+- slug: setup-and-implement-read
+  type: challenge
+  title: Setup and Implement Read
+  teaser: TODO
+  assignment: |-
+    The [root token](https://www.vaultproject.io/docs/concepts/tokens/) for
+    this Vault installation is simply "root". Using the root token, you'll have
+    full access to Vault to begin this challenge. You can log in using the
+    [`vault login`](https://www.vaultproject.io/docs/commands/login/) command,
+    or using the token in the UI.
+
+    ```
+    git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
+    ```
+  notes:
+  - type: text
+    contents: |-
+      You are a DevOps engineer at HashiCups.
+      In these tutorials, you will write a custom provider against the API of a fictional coffee-shop application called
+      HashiCups using the Terraform Plugin SDKv2. Through the process, you will learn how to create data sources,
+      authenticate the provider to the HashiCups client, and create resources with CRUD functionality.
+  tabs:
+  - title: Terminal
+    type: terminal
+    hostname: kubernetes
+  difficulty: basic
+  timelimit: 240
