@@ -1,0 +1,7 @@
+#!/bin/bash -l
+
+# List the items mounted at kv/
+# echo "vault kv list kv" >> /root/.bash_history
+# vault kv list kv
+
+exit 0
