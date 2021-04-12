@@ -19,19 +19,13 @@ challenges:
   title: Setup and Implement Read
   teaser: TODO
   assignment: |-
+    *Set up your development environment*
+
     The Terraform HashiCups Provider repository has been cloned for you. It will serve as the boilerplate for your
     provider workspace. Change into the cloned repository.
 
-    ```
-    cd terraform-provider-hashicups
-    ```
-
-    The HashiCups provider requires an instance of HashiCups. Navigate to the `docker_compose` directory then run
-    `docker-compose` up to spin up a local instance of HashiCups on port `:19090`.
-
-    ```
-    cd docker_compose && docker-compose up -d
-    ```
+    The HashiCups provider requires an instance of HashiCups. This has been started for you using `docker-compose` and
+    the service is run on port `:19090`. Confirm the service is running.
 
     ```
     curl localhost:19090/health
@@ -39,6 +33,227 @@ challenges:
 
     ```
     curl -X POST localhost:19090/signup -d '{"username":"education", "password":"test123"}' | jq
+    ```
+
+    *Explore your development environment*
+
+
+    Run the `go mod init` command to define this directory as the root of a module. Then, run `go mod vendor` to
+    create a `vendor` directory that contains all the provider's dependencies.
+
+    ```
+    cd /root/github.com/hashicorp/terraform-provider-hashicups
+    go mod init terraform-provider-hashicups
+    go mod vendor
+    ```
+
+    Next, build the provider using the Makefile.
+
+    ```
+    make build
+    ```
+
+    This runs the `go build -o terraform-provider-hashicups` command. Terraform searches for plugins in the format of
+    `terraform-<TYPE>-<NAME>`. In the case above, the plugin is of type "provider" and of name "hashicups".
+
+    To verify things are working correctly, execute the recently created binary.
+
+    ```
+    ./terrraform-provider-hashicups
+    ```
+
+    You should see output like the below.
+
+    ```
+    This binary is a plugin. These are not meant to be executed directly.
+    Please execute the program that consumes these plugins, which will
+    load any plugins automatically
+    ```
+
+    *Define the coffees data source*
+
+    Now that you have created the provider, add the coffees data resource. The coffees data source will pull information
+    on all coffees served by HashiCups.
+
+    Create a new file named `data_source_coffee.go` in the `hashicups` directory and add the following code snippet. As a
+    general convention, Terraform providers put each data source in their own file, named after the resource, prefixed
+    with data_source_.
+
+    The libraries imported here will be used in `dataSourceCoffeesRead`.
+
+    ```
+    package hashicups
+
+    import (
+      "context"
+      "encoding/json"
+      "fmt"
+      "net/http"
+      "strconv"
+      "time"
+
+      "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+      "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+    )
+
+    func dataSourceCoffees() *schema.Resource {
+      return &schema.Resource{
+        ReadContext: dataSourceCoffeesRead,
+        Schema: map[string]*schema.Schema{},
+      }
+    }
+    ```
+
+    *Define the coffees schema*
+
+    ```
+    curl localhost:19090/coffees
+    ```
+
+    Since the response returns a list of coffees, the coffees schema should reflect that. Update your coffees data
+    source's schema with the following code snippet.
+
+    ```
+    Schema: map[string]*schema.Schema{
+      "coffees": &schema.Schema{
+        Type:     schema.TypeList,
+        Computed: true,
+        Elem: &schema.Resource{
+          Schema: map[string]*schema.Schema{
+            "id": &schema.Schema{
+              Type:     schema.TypeInt,
+              Computed: true,
+            },
+            "name": &schema.Schema{
+              Type:     schema.TypeString,
+              Computed: true,
+            },
+            "teaser": &schema.Schema{
+              Type:     schema.TypeString,
+              Computed: true,
+            },
+            "description": &schema.Schema{
+              Type:     schema.TypeString,
+              Computed: true,
+            },
+            "price": &schema.Schema{
+              Type:     schema.TypeInt,
+              Computed: true,
+            },
+            "image": &schema.Schema{
+              Type:     schema.TypeString,
+              Computed: true,
+            },
+            "ingredients": &schema.Schema{
+              Type:     schema.TypeList,
+              Computed: true,
+              Elem: &schema.Resource{
+                Schema: map[string]*schema.Schema{
+                  "ingredient_id": &schema.Schema{
+                    Type:     schema.TypeInt,
+                    Computed: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    *Implement read*
+
+    ```
+    func dataSourceCoffeesRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+      client := &http.Client{Timeout: 10 * time.Second}
+
+      // Warning or errors can be collected in a slice type
+      var diags diag.Diagnostics
+
+      req, err := http.NewRequest("GET", fmt.Sprintf("%s/coffees", "http://localhost:19090"), nil)
+      if err != nil {
+        return diag.FromErr(err)
+      }
+
+      r, err := client.Do(req)
+      if err != nil {
+        return diag.FromErr(err)
+      }
+      defer r.Body.Close()
+
+      coffees := make([]map[string]interface{}, 0)
+      err = json.NewDecoder(r.Body).Decode(&coffees)
+      if err != nil {
+        return diag.FromErr(err)
+      }
+
+      if err := d.Set("coffees", coffees); err != nil {
+        return diag.FromErr(err)
+      }
+
+      // always run
+      d.SetId(strconv.FormatInt(time.Now().Unix(), 10))
+
+      return diags
+    }
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    *Add data source to provider*
+
+    ```
+    // Provider -
+
+    func Provider() *schema.Provider {
+      return &schema.Provider{
+          ResourcesMap: map[string]*schema.Resource{},
+    -       DataSourcesMap: map[string]*schema.Resource{},
+    +       DataSourcesMap: map[string]*schema.Resource{
+    +            "hashicups_coffees":     dataSourceCoffees(),
+    +       },
+      }
+    }
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    *Test the provider*
+
+    Build the provider binary.
+
+    ```
+    cd /root/github.com/hashicorp/terraform-provider-hashicups
+    make build
+    ```
+
+    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
+    exist already.
+
+    ```
+    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
+    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Next, move the binary to the appropriate subdirectory within your user plugins directory.
+
+    ```
+    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
     ```
   notes:
   - type: text
@@ -57,11 +272,11 @@ challenges:
   - title: Text Editor
     type: code
     hostname: workstation
-    path: /root/terraform-provider-hashicups
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
   - title: VS Code Editor
     type: service
     hostname: workstation
-    path: /root/terraform-provider-hashicups
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
     port: 8443
   - title: Docker Terminal
     type: terminal
@@ -71,4 +286,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 1000
-checksum: "17507501267249511079"
+checksum: "9558298310907772840"

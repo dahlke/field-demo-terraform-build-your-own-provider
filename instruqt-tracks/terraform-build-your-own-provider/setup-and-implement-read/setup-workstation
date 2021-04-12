@@ -1,21 +1,42 @@
 #!/bin/sh
 
 ###########
-# Set up the development environment
+# Install Docker Compose and Docker
 ###########
-# git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
-git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hashicups
 
 # TODO: need to change the compose version to  match the Docker version
 # https://docs.docker.com/compose/compose-file/compose-versioning/
 
-###########
-# Install Docker Compose
-###########
 apt-get update
 apt install -y docker-compose docker.io
 
 sudo systemctl unmask docker
 sudo systemctl start docker
+
+###########
+# Install Golang 1.11+ to use with Go Modules
+###########
+# TODO: parameterize this or bake it into the image
+wget https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
+rm -rf /usr/bin/go && tar -C /usr/bin -xzf go1.16.3.linux-amd64.tar.gz
+
+# TODO these aren't working?
+export PATH=$PATH:/usr/bin/go/bin
+export GOPATH=/root
+
+###########
+# Set up the development environment
+###########
+# git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
+
+mkdir -p /root/github.com/hashicorp/
+cd /root/github.com/hashicorp/
+git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hashicups
+
+###########
+# Start the HashiCups Application
+###########
+cd /root/github.com/hashicorp/terraform-provider-hashicups/docker_compose
+docker-compose up -d
 
 exit 0
