@@ -255,6 +255,53 @@ challenges:
     ```
     mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
     ```
+
+    Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
+    for the Terraform HashiCups provider.
+
+    ```
+    cd examples
+    ```
+
+    Finally, initialize your workspace to refresh your HashiCups provider, then apply. This should return the
+    properties of "Packer Spice Latte" in your output.
+
+    ```
+    terraform init && terraform apply --auto-approve
+    ```
+
+    You should see output like the below.
+
+    ```
+    Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+    Outputs:
+
+    psl = {
+      "1" = {
+        "description" = ""
+        "id" = 1
+        "image" = "/packer.png"
+        "ingredients" = tolist([
+          {
+            "ingredient_id" = 1
+          },
+          {
+            "ingredient_id" = 2
+          },
+          {
+            "ingredient_id" = 4
+          },
+        ])
+        "name" = "Packer Spiced Latte"
+        "price" = 350
+        "teaser" = "Packed with goodness to spice up your images"
+      }
+    }
+    ```
+
+    Congratulations! You created your first Terraform provider and data resource to reference information from an API
+    in your Terraform configuration.
   notes:
   - type: text
     contents: |-
@@ -286,4 +333,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 1000
-checksum: "9558298310907772840"
+checksum: "154635441005202383"
