@@ -1,0 +1,21 @@
+#!/bin/sh
+
+###########
+# Set up the development environment
+###########
+# git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
+git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hashicups
+
+# TODO: need to change the compose version to  match the Docker version
+# https://docs.docker.com/compose/compose-file/compose-versioning/
+
+###########
+# Install Docker Compose
+###########
+apt-get update
+apt install -y docker-compose docker.io
+
+sudo systemctl unmask docker
+sudo systemctl start docker
+
+exit 0

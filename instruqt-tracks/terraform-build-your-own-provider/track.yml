@@ -30,7 +30,15 @@ challenges:
     `docker-compose` up to spin up a local instance of HashiCups on port `:19090`.
 
     ```
-    cd docker_compose && docker-compose up
+    cd docker_compose && docker-compose up -d
+    ```
+
+    ```
+    curl localhost:19090/health
+    ```
+
+    ```
+    curl -X POST localhost:19090/signup -d '{"username":"education", "password":"test123"}' | jq
     ```
   notes:
   - type: text
@@ -46,9 +54,21 @@ challenges:
       - Implement read.
       - Add coffees data source to the provider schema.
   tabs:
-  - title: Terminal
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/terraform-provider-hashicups
+  - title: VS Code Editor
+    type: service
+    hostname: workstation
+    path: /root/terraform-provider-hashicups
+    port: 8443
+  - title: Docker Terminal
     type: terminal
-    hostname: builder
+    hostname: workstation
+  - title: Other Terminal
+    type: terminal
+    hostname: workstation
   difficulty: basic
   timelimit: 1000
-checksum: "17554846844610102414"
+checksum: "17507501267249511079"
