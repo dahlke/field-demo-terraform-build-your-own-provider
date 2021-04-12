@@ -59,7 +59,7 @@ challenges:
     To verify things are working correctly, execute the recently created binary.
 
     ```
-    ./terrraform-provider-hashicups
+    ./terraform-provider-hashicups
     ```
 
     You should see output like the below.
@@ -168,7 +168,23 @@ challenges:
     go fmt ./...
     ```
 
+    Notice that the coffees schema is a `schema.TypeList` of coffee (`schema.Resource`).
+
+    The coffee resource's properties should map to their respective values in the JSON response. In the above example
+    response:
+
+    - The coffee's `id` is `1`, a `schema.TypeInt`.
+    - The coffee's `name` is `"Packer Spiced Latte"`, a `schema.TypeString`.
+    - The coffee ingredients is an array of ingredient objects, a `schema.TypeList` with elements `map[string]*schema.Schema{}`.
+
+    You can use various [schema types](https://www.terraform.io/docs/extend/schemas/schema-types.html) to define complex
+    data models. You will implement a complex read in the later challenges.
+
     *Implement read*
+
+    Now that you defined the coffees schema, you can implement the `dataSourceCoffeesRead` function.
+
+    Add the following read function to your `hashicups/data_source_coffee.go` file.
 
     ```
     func dataSourceCoffeesRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -211,7 +227,37 @@ challenges:
     go fmt ./...
     ```
 
-    *Add data source to provider*
+    This function creates a new GET request to `localhost:19090/coffees`. Then, it decodes the response into a
+    `[]map[string]interface{}`. The `d.Set("coffees", coffees)` function sets the response body (list of coffees
+    object) to Terraform coffees data source, assigning each value to its respective schema position. Finally, it uses
+    `SetID` to set the resource ID.
+
+    Notice that this function returns a diag.Diagnostics type, which can return multiple errors and warnings to
+    Terraform, giving users more robust error and warning messages. You can use the `diag.FromErr()` helper function to
+    convert a Go error to a `diag.Diagnostics type`. You will implement this in a later challenge.
+
+
+    _Tip: This function doesn't use an API client library to explicitly show the steps involved. The HashiCups client
+    library is used to abstract CRUD functionality in other tutorials._
+
+    The existence of a non-blank ID tells Terraform that a resource was created. This ID can be any string value, but
+    should be a value that Terraform can use to read the resource again. Since this data resource doesn't have a unique
+    ID, you set the ID to the current UNIX time, which will force this resource to refresh during every Terraform apply.
+
+    When you create something in Terraform but delete it manually, Terraform should gracefully handle it. If the API
+    returns an error when the resource doesn't exist, the read function should check to see if the resource is
+    available first. If the resource isn't available, the function should set the ID to an empty string so Terraform
+    "destroys" the resource in state. The following code snippet is an example of how this can be implemented; you do
+    not need to add this to your configuration for this tutorial.
+
+    ```
+    if resourceDoesntExist {
+      d.SetID("")
+      return
+    }
+    ```
+
+    *Add a coffees data source to provider*
 
     ```
     // Provider -
@@ -320,17 +366,12 @@ challenges:
     type: code
     hostname: workstation
     path: /root/github.com/hashicorp/terraform-provider-hashicups
-  - title: VS Code Editor
-    type: service
-    hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
-    port: 8443
-  - title: Docker Terminal
+  - title: Terminal
     type: terminal
     hostname: workstation
   - title: Other Terminal
     type: terminal
     hostname: workstation
   difficulty: basic
-  timelimit: 1000
-checksum: "154635441005202383"
+  timelimit: 900
+checksum: "6289291088409491134"
