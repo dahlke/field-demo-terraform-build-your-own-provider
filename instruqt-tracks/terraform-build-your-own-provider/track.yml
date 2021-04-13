@@ -897,11 +897,30 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: implement-complex-read
+  id: eeck3jwxpdvx
   type: challenge
   title: Implement Complex Read
   teaser: TODO
-  assignment: |-
-    *TODO*
+  assignment: '*TODO*'
+  notes:
+  - type: text
+    contents: TODO
+  tabs:
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
+  - title: Terminal
+    type: terminal
+    hostname: workstation
+  difficulty: basic
+  timelimit: 600
+- slug: debug-a-terraform-provider
+  id: v9pfi6evmjkl
+  type: challenge
+  title: Debug a Terraform Provider
+  teaser: TODO
+  assignment: '*TODO*'
   notes:
   - type: text
     contents: TODO
@@ -916,11 +935,11 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: implement-create
+  id: r0fxk6mcj0j4
   type: challenge
   title: Implement Create
   teaser: TODO
-  assignment: |-
-    *TODO*
+  assignment: '*TODO*'
   notes:
   - type: text
     contents: TODO
@@ -934,4 +953,61 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "5736938974036304556"
+- slug: implement-update
+  id: ha0jyuqtf69e
+  type: challenge
+  title: Implement Update
+  teaser: TODO
+  assignment: '*TODO*'
+  notes:
+  - type: text
+    contents: TODO
+  tabs:
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
+  - title: Terminal
+    type: terminal
+    hostname: workstation
+  difficulty: basic
+  timelimit: 600
+- slug: implement-delete
+  id: x3lvijqrir1b
+  type: challenge
+  title: Implement Delete
+  teaser: TODO
+  assignment: '*TODO*'
+  notes:
+  - type: text
+    contents: TODO
+  tabs:
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
+  - title: Terminal
+    type: terminal
+    hostname: workstation
+  difficulty: basic
+  timelimit: 600
+- slug: implement-import
+  id: zilnjsye2znc
+  type: challenge
+  title: Implement Import
+  teaser: TODO
+  assignment: '*TODO*'
+  notes:
+  - type: text
+    contents: TODO
+  tabs:
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
+  - title: Terminal
+    type: terminal
+    hostname: workstation
+  difficulty: basic
+  timelimit: 600
+checksum: "7586381069775440146"
