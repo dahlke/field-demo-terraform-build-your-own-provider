@@ -20,8 +20,7 @@ challenges:
   id: pxpflxfcohzc
   type: challenge
   title: Setup and Implement Read
-  teaser: In this challenge you will learn to implement a read on a public endpoint
-    for a Terraform Provider.
+  teaser: Learn to implement a read on a public endpoint with a Terraform Provider.
   assignment: |-
     *Set up your development environment*
 
@@ -47,7 +46,63 @@ challenges:
     go mod vendor
     ```
 
-    Next, build the provider using the Makefile.
+    *Explore `main.go` file*
+
+    Open `main.go` in the root of the repository. The contents of the main function consume the Plugin SDK's `plugin`
+    library which facilitates the RPC communication between Terraform Core and the plugin.
+
+    ```
+    package main
+
+    import (
+      "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+      "github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
+
+      "terraform-provider-hashicups/hashicups"
+    )
+
+    func main() {
+      plugin.Serve(&plugin.ServeOpts{
+        ProviderFunc: func() *schema.Provider {
+          return hashicups.Provider()
+        },
+      })
+    }
+    ```
+
+    Notice the `ProviderFunc` returns a `*schema.Provider` from the `hashicups` package.
+
+    *Explore provider schema*
+
+    The `hashicups/provider.go` file currently defines an empty provider.
+
+    ```
+    package hashicups
+
+    import (
+      "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+    )
+
+    // Provider -
+    func Provider() *schema.Provider {
+      return &schema.Provider{
+        ResourcesMap: map[string]*schema.Resource{},
+        DataSourcesMap: map[string]*schema.Resource{},
+      }
+    }
+    ```
+
+    The `helper/schema` library is part of Terraform Core. It abstracts many of the complexities and ensures
+    consistency between providers. The `*schema.Provider` type can accept:
+
+    - the resources it supports (`ResourcesMap` and `DataSourcesMap`)
+    - configuration keys (properties in `*schema.Schema{}`)
+    - any callbacks to configure (`ConfigureContextFunc`)
+
+    You can use configuration keys and callbacks to authenticate and configure the provider. You will add them in the
+    Add Authentication to a Provider challenge.
+
+    Next, build the provider using the `Makefile`.
 
     ```
     make build
@@ -70,7 +125,7 @@ challenges:
     load any plugins automatically
     ```
 
-    *Define the coffees data source*
+    *Define `coffees` data source*
 
     Now that you have created the provider, add the coffees data resource. The coffees data source will pull information
     on all coffees served by HashiCups.
@@ -104,7 +159,7 @@ challenges:
     }
     ```
 
-    *Define the coffees schema*
+    *Define `coffees` schema*
 
     ```
     curl localhost:19090/coffees
@@ -232,13 +287,12 @@ challenges:
     object) to Terraform coffees data source, assigning each value to its respective schema position. Finally, it uses
     `SetID` to set the resource ID.
 
-    Notice that this function returns a diag.Diagnostics type, which can return multiple errors and warnings to
+    Notice that this function returns a `diag.Diagnostics` type, which can return multiple errors and warnings to
     Terraform, giving users more robust error and warning messages. You can use the `diag.FromErr()` helper function to
-    convert a Go error to a `diag.Diagnostics type`. You will implement this in a later challenge.
-
+    convert a Go error to a `diag.Diagnostics` type. You will implement this in a later challenge.
 
     _Tip: This function doesn't use an API client library to explicitly show the steps involved. The HashiCups client
-    library is used to abstract CRUD functionality in other tutorials._
+    library is used to abstract CRUD functionality in other challenges._
 
     The existence of a non-blank ID tells Terraform that a resource was created. This ID can be any string value, but
     should be a value that Terraform can use to read the resource again. Since this data resource doesn't have a unique
@@ -248,7 +302,7 @@ challenges:
     returns an error when the resource doesn't exist, the read function should check to see if the resource is
     available first. If the resource isn't available, the function should set the ID to an empty string so Terraform
     "destroys" the resource in state. The following code snippet is an example of how this can be implemented; you do
-    not need to add this to your configuration for this tutorial.
+    not need to add this to your configuration for this challenge.
 
     ```
     if resourceDoesntExist {
@@ -261,7 +315,7 @@ challenges:
 
     Now that you've defined your data source, you can add it to your provider.
 
-    In your `hashicups/provider.go` file, add the coffees data source to the `DataSourcesMap`. The `DataSourcesMap`
+    In your `hashicups/provider.go` file, add the `coffees` data source to the `DataSourcesMap`. The `DataSourcesMap`
     attribute takes a map of the data source name, `hashicups_coffees`, and the `*schema.Resource` defined in
     `hashicups/data_source_coffee.go`. Resources and data sources names must follow the `<provider>_<resource_name>`
     convention.
@@ -269,9 +323,16 @@ challenges:
     Change your `DataSourcesMap` to contain our new data source.
 
     ```
-      DataSourcesMap: map[string]*schema.Resource{
-        "hashicups_coffees":     dataSourceCoffees(),
-      },
+    // Provider -
+    func Provider() *schema.Provider {
+      return &schema.Provider{
+          ResourcesMap: map[string]*schema.Resource{},
+    -       DataSourcesMap: map[string]*schema.Resource{},
+    +       DataSourcesMap: map[string]*schema.Resource{
+    +            "hashicups_coffees":     dataSourceCoffees(),
+    +       },
+      }
+    }
     ```
 
     Format your code.
@@ -352,11 +413,21 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In these tutorials, you will write a custom provider against the API of a fictional coffee-shop application
+      In these challenges, you will write a custom provider against the API of a fictional coffee-shop application
       called HashiCups using the Terraform Plugin SDKv2. Through the process, you will learn how to create data
       sources, authenticate the provider to the HashiCups client, and create resources with CRUD functionality.
   - type: text
     contents: |-
+      There are a few possible reasons for authoring a custom Terraform provider, including:
+
+      - An internal private cloud whose functionality is either proprietary or would not benefit the open source
+      community.
+      - Extending the capabilities of an existing provider (bug fixes, new features, or customizations)
+  - type: text
+    contents: |-
+      In this challenge, you will set up your Terraform provider development environment and create a coffees data
+      source that will return all coffees HashiCups serves. To do this, you will:
+
       - Set up your development environment.
       - Define the coffees data source.
       - Define the coffees schema.
@@ -376,8 +447,7 @@ challenges:
   id: tn3cgrhoyknp
   type: challenge
   title: Add Authentication to a Provider
-  teaser: In this challenge you will learn to implement authentication in a Terraform
-    Provider.
+  teaser: Learn to implement authentication in a Terraform Provider.
   assignment: |-
     *Update provider schema*
 
@@ -398,7 +468,7 @@ challenges:
     ```
 
     Set a `HASHICUPS_TOKEN` environment variable to the token generated in the previous step. You will use this later
-    tutorials to verify your HashiCups order has been created, updated and deleted.
+    challenges to verify your HashiCups order has been created, updated and deleted.
 
     ```
     export HASHICUPS_TOKEN=<YOUR_TOKEN_HERE>
@@ -559,7 +629,7 @@ challenges:
     Congratulations! You have added authentication to your HashiCups provider.
   notes:
   - type: text
-    contents: In these tutorials, ...
+    contents: In these challenges, ...
   tabs:
   - title: Text Editor
     type: code
@@ -574,7 +644,7 @@ challenges:
   id: eaos5eypeqtn
   type: challenge
   title: Implement a Complex Read
-  teaser: In this challenge you will read from a auth protected endpoint.
+  teaser: Learn to read from a auth protected endpoint with a Terraform Provider.
   assignment: |-
     *Create an order via API*
 
@@ -874,7 +944,7 @@ challenges:
     Congratulations! You have implemented a nested read function.
   notes:
   - type: text
-    contents: 'In this tutorial, you will retrieve an order, a protected endpoint,
+    contents: 'In this challenge, you will retrieve an order, a protected endpoint,
       to verify whether a Terraform provider that interacts with the API of a fictional
       coffee-shop application, HashiCups, has been authenticated to the API successfully.
       The order schema contains nested objects, making it a more complicated data
@@ -896,42 +966,33 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-- slug: implement-complex-read
-  id: eeck3jwxpdvx
-  type: challenge
-  title: Implement Complex Read
-  teaser: TODO
-  assignment: '*TODO*'
-  notes:
-  - type: text
-    contents: TODO
-  tabs:
-  - title: Text Editor
-    type: code
-    hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
-  - title: Terminal
-    type: terminal
-    hostname: workstation
-  difficulty: basic
-  timelimit: 600
 - slug: debug-a-terraform-provider
   id: v9pfi6evmjkl
   type: challenge
   title: Debug a Terraform Provider
-  teaser: TODO
+  teaser: Learn to add custom error messages to a Terraform provider.
   assignment: |-
     *Update error messages*
 
-    In your `hashicups/provider.go` file, the `providerConfigure` function returns an `interface{}` and a `diag.Diagnostics` type. `diag.Diagnostics` can return multiple errors and warnings to Terraform, giving users more robust error and warning messages.
+    In your `hashicups/provider.go` file, the `providerConfigure` function returns an `interface{}` and a
+    `diag.Diagnostics` type. `diag.Diagnostics` can return multiple errors and warnings to Terraform, giving users more
+    robust error and warning messages.
+
     ```
     func providerConfigure(...) (interface{}, diag.Diagnostics) {
       ...
     }
-    The diag.FromError() function casts standard Go errors to diag.Diagnostics type notifying the user whenever the provider errors.
+    ```
 
-    Replace the return nil, diag.FromError(err) line in your providerConfigure function with the following code snippet. There should be two replacements — one where the user's HashiCups credentials provided and the other where its not. Notice how this appends a diag.Diagnostic type to the existing diags variable; this allows your provider to return multiple error message. This will produce an error message containing Summary and Detail contents.
+    The `diag.FromError()` function casts standard Go errors to `diag.Diagnostics` type notifying the user whenever the
+    provider errors.
 
+    Replace the `return nil, diag.FromError(err)` line in your `providerConfigure` function with the following code
+    snippet. There should be two replacements — one where the user's HashiCups credentials provided and the other
+    where its not. Notice how this appends a `diag.Diagnostic` type to the existing diags variable; this allows your
+    provider to return multiple error message. This will produce an error message containing Summary and Detail contents.
+
+    ```
     diags = append(diags, diag.Diagnostic{
       Severity: diag.Error,
       Summary:  "Unable to create HashiCups client",
@@ -1146,8 +1207,6 @@ challenges:
 
     *Fix provider*
 
-    # TODO: create a "compile" method in Makefile
-
     Comment out or remove the warning message, then recompile your Terraform provider.
 
     ```
@@ -1211,7 +1270,7 @@ challenges:
   id: r0fxk6mcj0j4
   type: challenge
   title: Implement Create
-  teaser: TODO
+  teaser: Learn to create an `order` resource with a Terraform provider.
   assignment: |-
     *Define `order` resource*
 
@@ -1266,7 +1325,7 @@ challenges:
     ```
 
     This serves as a scaffold for the `order` resource. Notice, the order resource defines create, read, update and
-    delete (CRUD) functionality. In this tutorial, you will only implement create and read to create and read a new
+    delete (CRUD) functionality. In this challenge, you will only implement create and read to create and read a new
     `order` resource.
 
     Format your code.
@@ -1648,7 +1707,7 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this tutorial, you will create an `order` resource for a Terraform provider that interacts with the API of a
+      In this challenge, you will create an `order` resource for a Terraform provider that interacts with the API of a
       fictional coffee-shop application, HashiCups. Then, you will use the schema to create a new order and populate
       the order.
   - type: text
@@ -1674,7 +1733,7 @@ challenges:
   id: ha0jyuqtf69e
   type: challenge
   title: Implement Update
-  teaser: TODO
+  teaser: Learn to add update capabilities to the order resource of a Terraform provider.
   assignment: |-
     *Update schema*
 
@@ -1841,7 +1900,7 @@ challenges:
     Congratulations! You have added update capabilities to the order resource.
   notes:
   - type: text
-    contents: 'In this tutorial, you will add update capabilities to the order resource
+    contents: 'In this challenge, you will add update capabilities to the order resource
       of a provider that interacts with the API of a fictional coffee-shop application,
       HashiCups. To do this, you will:'
   - type: text
@@ -1864,7 +1923,7 @@ challenges:
   id: x3lvijqrir1b
   type: challenge
   title: Implement Delete
-  teaser: TODO
+  teaser: Learn to add delete capabilities to the order resource for a Terraform provider.
   assignment: |-
     *Implement delete*
 
@@ -1954,7 +2013,7 @@ challenges:
     Congratulations! You have added delete capabilities to the order resource.
   notes:
   - type: text
-    contents: In this tutorial, you will add delete capabilities to the `order` resource
+    contents: In this challenge, you will add delete capabilities to the `order` resource
       for a Terraform provider that interacts with the API of a fictional coffee-shop
       application, HashiCups. To do this, you will implement delete. This delete function
       invokes a `DELETE` request to the `/orders/{orderId}` endpoint.
@@ -1972,7 +2031,7 @@ challenges:
   id: zilnjsye2znc
   type: challenge
   title: Implement Import
-  teaser: TODO
+  teaser: Learn to add import capabilities to the order resource for a Terraform provider.
   assignment: |-
     *Implement import*
 
@@ -2195,4 +2254,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "6468856021412863361"
+checksum: "9249348629032714953"
