@@ -1,7 +1,15 @@
 #!/bin/bash -l
 
-# List the items mounted at kv/
-# echo "vault kv list kv" >> /root/.bash_history
-# vault kv list kv
+# Initialize the module for our provider and install the dependencies.
+cd /root/github.com/hashicorp/terraform-provider-hashicups
+go mod init terraform-provider-hashicups
+go mod vendor
+
+# TODO: write the correct main.go
+# TODO: write the correct hashicups/provider.go
+# TODO: write the correct hashicups/data_source_coffee.go
+
+# TODO: build the provider
+# TODO: install the provider
 
 exit 0

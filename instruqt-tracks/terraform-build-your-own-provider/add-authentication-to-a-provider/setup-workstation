@@ -1,0 +1,10 @@
+#!/bin/bash -l
+
+# TODO: check out the specific branch?
+
+# Remove the .terraform.lock.hcl file and statefile from the last challenge
+cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+rm -rf .terraform
+rm .terraform.lock.hcl
+
+exit 0

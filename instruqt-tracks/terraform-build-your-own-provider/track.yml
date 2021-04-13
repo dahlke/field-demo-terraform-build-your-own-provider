@@ -519,7 +519,7 @@ challenges:
 
     *Define `preconfigure`*
 
-    Import the `context`, API client and `diag` libraries into the `provider.go` file. The `providerConfigure` function
+    Import the `context`, API client and `diag` libraries into the `hashicups/provider.go` file. The `providerConfigure` function
     will use these libraries.
 
     ```
@@ -530,6 +530,13 @@ challenges:
     + "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
       "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
     )
+    ```
+
+    Once you have added the new imports, be sure to install //www.terraform.io/docs/extend/schemas/schema-types.html#typemap).
+
+    ```
+    cd /root/github.com/hashicorp/terraform-provider-hashicups
+    go mod vendor
     ```
 
     Then, add the `providerConfigure` function below your `Provider()` function. This function retrieves the `username`
@@ -608,18 +615,27 @@ challenges:
     Check the terminal containing your HashiCups logs for the recorded operations invoked by the HashiCups provider.
 
     ```
-    api_1  | 2020-12-10T09:26:23.349Z [INFO]  Handle User | signin
-    api_1  | 2020-12-10T09:26:23.357Z [INFO]  Handle Coffee
-    api_1  | 2020-12-10T09:26:23.488Z [INFO]  Handle User | signin
-    api_1  | 2020-12-10T09:26:23.606Z [INFO]  Handle User | signin
+    cd ../docker_compose
+    docker-compose logs | grep signin
     ```
 
-    The provider should have invoked a request to the `signin `endpoint.
+    The provider should have invoked a request to the `signin `endpoint. You should see a line that looks like the below.
+
+    ```
+    api_1  | 2021-04-13T21:14:38.844Z [INFO]  Handle User | signin
+    ```
 
     Congratulations! You have added authentication to your HashiCups provider.
   notes:
   - type: text
-    contents: In these challenges, ...
+    contents: |-
+      In this challenge, you will add authentication to a Terraform provider that interacts with the API of a
+      fictional coffee-shop application, HashiCups, and access protected API endpoints.
+  - type: text
+    contents: |-
+      To do this, you will:
+      - Update provider schema.
+      - Define `providerConfigure`
   tabs:
   - title: Text Editor
     type: code
@@ -2198,4 +2214,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "1095343546029796773"
+checksum: "5501568913803260720"

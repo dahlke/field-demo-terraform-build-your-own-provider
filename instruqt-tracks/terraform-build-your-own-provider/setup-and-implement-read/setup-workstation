@@ -40,4 +40,7 @@ git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hash
 cd /root/github.com/hashicorp/terraform-provider-hashicups/docker_compose
 docker-compose up -d
 
+
+# TODO: set the cwd to the provider repo
+
 exit 0
