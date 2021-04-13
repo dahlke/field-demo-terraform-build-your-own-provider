@@ -1648,7 +1648,9 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this tutorial, you will create an `order` resource for a Terraform provider that interacts with the API of a fictional coffee-shop application, HashiCups. Then, you will use the schema to create a new order and populate the order.
+      In this tutorial, you will create an `order` resource for a Terraform provider that interacts with the API of a
+      fictional coffee-shop application, HashiCups. Then, you will use the schema to create a new order and populate
+      the order.
   - type: text
     contents: |-
       To do this, you will:
@@ -1673,10 +1675,181 @@ challenges:
   type: challenge
   title: Implement Update
   teaser: TODO
-  assignment: '*TODO*'
+  assignment: |-
+    *Update schema*
+
+    In `hashicups/resource_order.go`, update your order schema to include a parameter named `last_updated`.
+
+    ```
+    "last_updated": &schema.Schema{
+      Type:     schema.TypeString,
+      Optional: true,
+      Computed: true,
+    },
+    ```
+
+    Your `order` schema should look like the following.
+
+    ```
+    func resourceOrder() *schema.Resource {
+      return &schema.Resource{
+        ...
+        Schema: map[string]*schema.Schema{
+    +     "last_updated": &schema.Schema{
+    +       Type:     schema.TypeString,
+    +       Optional: true,
+    +       Computed: true,
+    +     },
+          "items": &schema.Schema{
+            ...
+          },
+          ...
+        },
+      },
+    }
+    ```
+
+    *Implement update*
+
+    Now that you have defined the `order` resource schema, replace the `resourceOrderUpdate` function in `hashicups/resource_order.go` with the following code snippet. This function will update the order resource if there are any changes to the order items.
+
+    ```
+    func resourceOrderUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+      c := m.(*hc.Client)
+
+      orderID := d.Id()
+
+      if d.HasChange("items") {
+        items := d.Get("items").([]interface{})
+        ois := []hc.OrderItem{}
+
+        for _, item := range items {
+          i := item.(map[string]interface{})
+
+          co := i["coffee"].([]interface{})[0]
+          coffee := co.(map[string]interface{})
+
+          oi := hc.OrderItem{
+            Coffee: hc.Coffee{
+              ID: coffee["id"].(int),
+            },
+            Quantity: i["quantity"].(int),
+          }
+          ois = append(ois, oi)
+        }
+
+        _, err := c.UpdateOrder(orderID, ois)
+        if err != nil {
+          return diag.FromErr(err)
+        }
+
+        d.Set("last_updated", time.Now().Format(time.RFC850))
+      }
+
+      return resourceOrderRead(ctx, d, m)
+    }
+    ```
+
+    Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined above. If an unauthenticated API Client is provided (no username/password), this function will fail and return an error message.
+
+    The function determines whether there are discrepancies in the `items` property between the configuration and the state.
+
+    _Tip: The `hasChange()` function enables you to invoke different APIs or build a targeted request body to update your resource when a specific property changes._
+
+    If there are discrepancies, the function will update the order with the new configuration. Then, it will update the `last_updated` attribute to the current timestamp. Finally, it will call `resourceOrderRead` to update the resource's state.
+
+    _Note: Update functions rarely update the resource ID. However, if the ID becomes blank during the update process, the provider assumes the resource is destroyed and all state is removed._
+
+    Remember to import the time library.
+
+    ```
+    import (
+      "context"
+      "strconv"
+    + "time"
+
+      hc "github.com/hashicorp-demoapp/hashicups-client-go"
+      "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+      "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+    )
+    ```
+
+    *Test the provider*
+
+    Now that you've added update capabilities to the `order` resource, verify that it works.
+
+    Build the provider binary.
+
+    ```
+    cd /root/github.com/hashicorp/terraform-provider-hashicups
+    make build
+    ```
+
+    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
+    exist already.
+
+    ```
+    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
+    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Next, move the binary to the appropriate subdirectory within your user plugins directory.
+
+    ```
+    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
+    for the Terraform HashiCups provider.
+
+    ```
+    cd examples
+    ```
+
+    Update your `hashicups_order.edu` resource in `main.tf`.
+
+    ```
+    resource "hashicups_order" "edu" {
+      items {
+        coffee {
+          id = 3
+        }
+        quantity = 2
+      }
+      items {
+        coffee {
+          id = 2
+        }
+    -   quantity = 2
+    +   quantity = 3
+      }
+    }
+    ```
+
+    Apply the configuration. This should update your order and set the `last_updated` attribute.
+
+    ```
+    terraform apply --auto-approve
+    ```
+
+    Verify that the provider updated your order by invoking the HashiCups API. Substitute the order number with your order ID and the auth token with your auth token.
+
+    ```
+    curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
+    ```
+
+    Congratulations! You have added update capabilities to the order resource.
   notes:
   - type: text
-    contents: TODO
+    contents: 'In this tutorial, you will add update capabilities to the order resource
+      of a provider that interacts with the API of a fictional coffee-shop application,
+      HashiCups. To do this, you will:'
+  - type: text
+    contents: |-
+      To do this, you will:
+
+      - Update your schema
+      - Implement update
   tabs:
   - title: Text Editor
     type: code
@@ -1692,10 +1865,99 @@ challenges:
   type: challenge
   title: Implement Delete
   teaser: TODO
-  assignment: '*TODO*'
+  assignment: |-
+    *Implement delete*
+
+    Replace the `resourceOrderDelete` function in `hashicups/resource_order.go` with the code snippet below. This function will delete the HashiCups order and Terraform resource.
+
+    ```
+    func resourceOrderDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+      c := m.(*hc.Client)
+
+      // Warning or errors can be collected in a slice type
+      var diags diag.Diagnostics
+
+      orderID := d.Id()
+
+      err := c.DeleteOrder(orderID)
+      if err != nil {
+        return diag.FromErr(err)
+      }
+
+      // d.SetId("") is automatically called assuming delete returns no errors, but
+      // it is added here for explicitness.
+      d.SetId("")
+
+      return diags
+    }
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined above. If an unauthenticated API Client is provided (no username/password), this function will fail and return an error message.
+
+    The function retrieves the order ID using `d.ID()` and deletes the order.
+
+    - If the `destroy` callback returns *without* an error, the provider assumes the resource is destroyed and all state is removed.
+    - If the destroy callback returns *with* an error, the provider assumes the resource still exists and all prior state is preserved.
+
+    The `destroy` callback should never update any state on the resource. In addition, the destroy callback should always handle the case where the resource might already be destroyed. If the resource is already destroyed, the destroy function should not return an error. If the target API doesn't have this functionality, the destroy function should verify the resource exists; if the resource does not exist, set the resource ID to "". This behavior allows Terraform users to manually delete resources without breaking Terraform.
+
+    *Test the provider*
+
+    Now that you've added delete capabilities to the `order` resource, verify that it works.
+
+    Build the provider binary.
+
+    ```
+    cd /root/github.com/hashicorp/terraform-provider-hashicups
+    make build
+    ```
+
+    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
+    exist already.
+
+    ```
+    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
+    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Next, move the binary to the appropriate subdirectory within your user plugins directory.
+
+    ```
+    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
+    for the Terraform HashiCups provider.
+
+    ```
+    cd examples
+    ```
+
+    Initialize your workspace to refresh your HashiCups provider then destroy the configuration. This should delete your HashiCups order.
+
+    ```
+    terraform init && terraform destroy --auto-approve
+    ```
+
+    Verify that the provider updated your order by invoking the HashiCups API. Substitute the order number with your order ID and the auth token with your auth token.
+
+    ```
+    curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
+    ```
+
+    Congratulations! You have added delete capabilities to the order resource.
   notes:
   - type: text
-    contents: TODO
+    contents: In this tutorial, you will add delete capabilities to the `order` resource
+      for a Terraform provider that interacts with the API of a fictional coffee-shop
+      application, HashiCups. To do this, you will implement delete. This delete function
+      invokes a `DELETE` request to the `/orders/{orderId}` endpoint.
   tabs:
   - title: Text Editor
     type: code
@@ -1711,10 +1973,218 @@ challenges:
   type: challenge
   title: Implement Import
   teaser: TODO
-  assignment: '*TODO*'
+  assignment: |-
+    *Implement import*
+
+    In `hashicups/resource_order.go, add the following `Importer` attribute to the end of the `resourceOrder()` schema.
+
+    ```
+    func resourceOrder() *schema.Resource {
+      return &schema.Resource{
+        # ..
+        Schema: map[string]*schema.Schema{
+          # ..
+        },
+    +   Importer: &schema.ResourceImporter{
+    +      StateContext: schema.ImportStatePassthroughContext,
+    +   },
+      }
+    }
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    Notice that `StateContext` is set to `schema.ImportStatePassthroughContext`. When you invoke the import command, you provide the order ID in the command. For example:
+
+    ```
+    terraform import hashicups_order.sample <order_id>
+    ```
+
+    Terraform passes the `order_id` value to the read function (`resourceOrderRead`), which then populates the resource's (`hashicups_order.sample`) state. This is the preferred method but requires a `Read` function that can retrieve the entire resource state using `d.Id()` only.
+
+    _Tip: This import method highlights the importance of selecting a descriptive and unique resource ID. A good resource ID can retrieve the resource state via API. In some cases, you can construct an ID from multiple attributes (for example, `<region>:<resource_id>`)._
+
+    *Test the provider*
+
+    Test the new provider capability by importing an order resource.
+
+    Build the provider binary.
+
+    ```
+    cd /root/github.com/hashicorp/terraform-provider-hashicups
+    make build
+    ```
+
+    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
+    exist already.
+
+    ```
+    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
+    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Next, move the binary to the appropriate subdirectory within your user plugins directory.
+
+    ```
+    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
+    for the Terraform HashiCups provider.
+
+    ```
+    cd examples
+    ```
+
+    Then, create a new directory named import.
+
+    ```
+    mkdir import && cd import
+    ```
+
+    Navigate into the import directory.
+
+    ```
+    cd import
+    ```
+
+    Create a new file named `main.tf` with the following configuration. You will import an existing HashiCups order into the `hashicups_order.sample` resource.
+
+    ```
+    terraform {
+      required_providers {
+        hashicups = {
+          version = "0.2"
+          source  = "hashicorp.com/edu/hashicups"
+        }
+      }
+    }
+
+    provider "hashicups" {
+      username = "education"
+      password = "test123"
+    }
+
+    resource "hashicups_order" "sample" {}
+
+    output "sample_order" {
+      value = hashicups_order.sample
+    }
+    ```
+
+    Initialize your workspace.
+
+    ```
+    terraform init
+    ```
+
+    Create an order via the HashiCups API. Take note of the order `id` in the response; the one below is `3`. This will be the order number you import into `hashicups_order.sample`.
+
+    ```
+    $ curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
+    ```
+
+    The output should look like the below.
+
+    ```
+    {
+      "id": 3,
+      "items": [
+        {
+          "coffee": {
+            "id": 1,
+            "name": "Packer Spiced Latte",
+            "teaser": "Packed with goodness to spice up your images",
+            "description": "",
+            "price": 350,
+            "image": "/packer.png",
+            "ingredients": null
+          },
+          "quantity": 4
+        },
+        {
+          "coffee": {
+            "id": 3,
+            "name": "Nomadicano",
+            "teaser": "Drink one today and you will want to schedule another",
+            "description": "",
+            "price": 150,
+            "image": "/nomad.png",
+            "ingredients": null
+          },
+          "quantity": 3
+        }
+      ]
+    }
+    ```
+
+    Import the order into Terraform. Replace the order ID with the one the API returned above.
+
+    ```
+    terraform import hashicups_order.sample 3
+    ```
+
+    The output should look like the below.
+
+    ```
+    hashicups_order.sample: Importing from ID "3"...
+    hashicups_order.sample: Import prepared!
+      Prepared hashicups_order for import
+    hashicups_order.sample: Refreshing state... [id=3]
+    Import successful!
+    The resources that were imported are shown above. These resources are now in
+    your Terraform state and will henceforth be managed by Terraform.
+    ```
+
+    Use the `state` subcommand to verify Terraform successfully imported the HashiCups order.
+
+    ```
+    terraform state show hashicups_order.sample
+    ```
+
+    The output should look like the below.
+
+    ```
+    # hashicups_order.sample:
+    resource "hashicups_order" "sample" {
+        id = "3"
+        items {
+            quantity = 4
+            coffee {
+                id     = 1
+                image  = "/packer.png"
+                name   = "Packer Spiced Latte"
+                price  = 350
+                teaser = "Packed with goodness to spice up your images"
+            }
+        }
+        items {
+            quantity = 3
+            coffee {
+                id     = 3
+                image  = "/nomad.png"
+                name   = "Nomadicano"
+                price  = 150
+                teaser = "Drink one today and you will want to schedule another"
+            }
+        }
+    }
+    ```
+
+    Congratulations! You have added import capabilities to the `order` resource.
+
+    Over the course of this track, you re-created the HashiCups provider and learned how to create data sources, authenticate the provider to the HashiCups client, create resources with CRUD functionality, and import existing resources.
   notes:
   - type: text
-    contents:
+    contents: In this challenge, you will add import capabilities to the `order` resource
+      of the HashiCups Terraform provider, which interacts with the API of a fictional
+      coffee-shop application. To do this, you will implement a `ResourceImporter()`
+      function. This function retrieves an existing HashiCups order and brings it
+      into Terraform state, enabling Terraform to manage it.
   tabs:
   - title: Text Editor
     type: code
@@ -1725,4 +2195,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "7586381069775440146"
+checksum: "6468856021412863361"
