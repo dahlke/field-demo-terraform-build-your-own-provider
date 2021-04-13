@@ -20,7 +20,8 @@ challenges:
   id: pxpflxfcohzc
   type: challenge
   title: Setup and Implement Read
-  teaser: TODO
+  teaser: In this challenge you will learn to implement a read on a public endpoint
+    for a Terraform Provider.
   assignment: |-
     *Set up your development environment*
 
@@ -375,7 +376,8 @@ challenges:
   id: tn3cgrhoyknp
   type: challenge
   title: Add Authentication to a Provider
-  teaser: TODO
+  teaser: In this challenge you will learn to implement authentication in a Terraform
+    Provider.
   assignment: |-
     *Update provider schema*
 
@@ -567,5 +569,317 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: basic
-  timelimit: 1800
-checksum: "6644119972458101101"
+  timelimit: 600
+- slug: implement-a-complex-read
+  id: eaos5eypeqtn
+  type: challenge
+  title: Implement a Complex Read
+  teaser: In this challenge you will read from a auth protected endpoint.
+  assignment: |-
+    *Create an order via API*
+
+    Before you can query a user's order, you must first create an order. Replace the authorization token with the token you generated in the sign in step.
+
+    ```
+    curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
+    ```
+
+    Query the order using the order ID you received in the response above as a HTML parameter (localhost:19090/orders/{orderID}). The response should be the same as the response above.
+
+    ```
+    curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
+    ```
+
+    *Define order data resource*
+
+    Now, create a file named hashicups/data_source_order.go in your hashicups directory and add the following snippet.
+
+    ```
+    package hashicups
+
+    import (
+      "context"
+      "strconv"
+
+      hc "github.com/hashicorp-demoapp/hashicups-client-go"
+      "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+      "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+    )
+
+    func dataSourceOrder() *schema.Resource {
+      return &schema.Resource{
+        ReadContext: dataSourceOrderRead,
+        Schema: map[string]*schema.Schema{
+          "id": &schema.Schema{
+            Type:     schema.TypeInt,
+            Required: true,
+          },
+          "items": &schema.Schema{
+            Type:     schema.TypeList,
+            Computed: true,
+            Elem: &schema.Resource{
+              Schema: map[string]*schema.Schema{
+                "coffee_id": &schema.Schema{
+                  Type:     schema.TypeInt,
+                  Computed: true,
+                },
+                "coffee_name": &schema.Schema{
+                  Type:     schema.TypeString,
+                  Computed: true,
+                },
+                "coffee_teaser": &schema.Schema{
+                  Type:     schema.TypeString,
+                  Computed: true,
+                },
+                "coffee_description": &schema.Schema{
+                  Type:     schema.TypeString,
+                  Computed: true,
+                },
+                "coffee_price": &schema.Schema{
+                  Type:     schema.TypeInt,
+                  Computed: true,
+                },
+                "coffee_image": &schema.Schema{
+                  Type:     schema.TypeString,
+                  Computed: true,
+                },
+                "quantity": &schema.Schema{
+                  Type:     schema.TypeInt,
+                  Computed: true,
+                },
+              },
+            },
+          },
+        },
+      }
+    }
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    Notice how the schema mirrors the JSON response — only id and items exist on the top level.
+
+      - The id is required because an order ID must be set so the data source knows which order to retrieve.
+      - The items schema is a computed list (schema.TypeList) of objects (schema.Resource) containing coffee attributes and quantity.
+      - The coffee attributes is flattened and mapped accordingly (coffee.id is mapped to coffee_id, etc...)
+
+    You will learn an alternative method to nest maps in the Implement Create tutorial, when you create new orders.
+
+    *Implement complex read*
+
+    Now that you have defined  the order schema, add the dataSourceOrderRead function to hashicups/data_source_order.go. This function will retrieve the order and map its values to the order schema defined above.
+
+    ```
+    func dataSourceOrderRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+      c := m.(*hc.Client)
+
+      // Warning or errors can be collected in a slice type
+      var diags diag.Diagnostics
+
+      orderID := strconv.Itoa(d.Get("id").(int))
+
+      order, err := c.GetOrder(orderID)
+      if err != nil {
+        return diag.FromErr(err)
+      }
+
+      orderItems := flattenOrderItemsData(&order.Items)
+      if err := d.Set("items", orderItems); err != nil {
+        return diag.FromErr(err)
+      }
+
+      d.SetId(orderID)
+
+      return diags
+    }
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    Notice the m (meta) input parameter contains the HashiCups API Client set by the ConfigureContextFunc defined above. If provider uses an unauthenticated API Client, this function will fail and return an error message.
+
+    The API Client's GetOrder function returns an order object. However, you must flatten this response to accurately map the response to the order schema. An order consists of an order ID and a list of coffee objects and their respective quantities. As a result, the order object must go through one flattening function to populate the list of coffee objects and their quantities.
+
+    Add the flattenOrderItemsData function to your hashicups/data_source_order.go file. This returns a list of order items.
+
+    ```
+    func flattenOrderItemsData(orderItems *[]hc.OrderItem) []interface{} {
+      if orderItems != nil {
+        ois := make([]interface{}, len(*orderItems), len(*orderItems))
+
+        for i, orderItem := range *orderItems {
+          oi := make(map[string]interface{})
+
+          oi["coffee_id"] = orderItem.Coffee.ID
+          oi["coffee_name"] = orderItem.Coffee.Name
+          oi["coffee_teaser"] = orderItem.Coffee.Teaser
+          oi["coffee_description"] = orderItem.Coffee.Description
+          oi["coffee_price"] = orderItem.Coffee.Price
+          oi["coffee_image"] = orderItem.Coffee.Image
+          oi["quantity"] = orderItem.Quantity
+
+          ois[i] = oi
+        }
+
+        return ois
+      }
+
+      return make([]interface{}, 0)
+    }
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    The flattenOrderItemsData function takes an *[]hc.OrderItem as orderItems. If orderItems is not nil, it will iterate through the slice and map its values into a map[string]interface{}. Notice how the function assigns the coffee attributes directly to its corresponding flattened attribute (orderItem.Coffee.ID -> coffee_id).
+
+    *Add data source to provider*
+
+    Now that you've defined the order data source, you can add it to your provider.
+
+    In your hashicups/provider.go file, add the order data source to the DataSourcesMap of your Provider() function. Resources and data sources names must follow the <provider>_<resource_name> convention.
+
+    ```
+    // Provider -
+    func Provider() *schema.Provider {
+      return &schema.Provider{
+        Schema: map[string]*schema.Schema{
+          "username": &schema.Schema{
+            Type:        schema.TypeString,
+            Optional:    true,
+            DefaultFunc: schema.EnvDefaultFunc("HASHICUPS_USERNAME", nil),
+          },
+          "password": &schema.Schema{
+            Type:        schema.TypeString,
+            Optional:    true,
+            Sensitive:   true,
+            DefaultFunc: schema.EnvDefaultFunc("HASHICUPS_PASSWORD", nil),
+          },
+        },
+        ResourcesMap: map[string]*schema.Resource{},
+        DataSourcesMap: map[string]*schema.Resource{
+            "hashicups_coffees":     dataSourceCoffees(),
+    +       "hashicups_order":       dataSourceOrder(),
+        },
+        ConfigureFunc: providerConfigure,
+      }
+    }
+    ```
+
+    *Test the provider*
+
+    Build the provider binary.
+
+    ```
+    cd /root/github.com/hashicorp/terraform-provider-hashicups
+    make build
+    ```
+
+    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
+    exist already.
+
+    ```
+    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
+    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Next, move the binary to the appropriate subdirectory within your user plugins directory.
+
+    ```
+    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
+    for the Terraform HashiCups provider.
+
+    ```
+    cd examples
+    ```
+
+    Add the following Terraform configuration to main.tf.
+
+    ```
+    data "hashicups_order" "order" {
+      id = 1
+    }
+
+    output "order" {
+      value = data.hashicups_order.order
+    }
+    ```
+
+    Finally, initialize your workspace to refresh your HashiCups provider, then apply. Notice how the coffee attributes are flattened.
+
+    ```
+    terraform init && terraform apply --auto-approve
+    ```
+
+    This should return the first order in your output.
+
+    ```
+    Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+    Outputs:
+
+    order = {
+      "id" = 1
+      "items" = [
+        {
+          "coffee_description" = ""
+          "coffee_id" = 1
+          "coffee_image" = "/packer.png"
+          "coffee_name" = "Packer Spiced Latte"
+          "coffee_price" = 350
+          "coffee_teaser" = "Packed with goodness to spice up your images"
+          "quantity" = 4
+        },
+        {
+          "coffee_description" = ""
+          "coffee_id" = 3
+          "coffee_image" = "/nomad.png"
+          "coffee_name" = "Nomadicano"
+          "coffee_price" = 150
+          "coffee_teaser" = "Drink one today and you will want to schedule another"
+          "quantity" = 3
+        },
+      ]
+    }
+    ```
+
+    Congratulations! You have implemented a nested read function.
+  notes:
+  - type: text
+    contents: 'In this tutorial, you will retrieve an order, a protected endpoint,
+      to verify whether a Terraform provider that interacts with the API of a fictional
+      coffee-shop application, HashiCups, has been authenticated to the API successfully.
+      The order schema contains nested objects, making it a more complicated data
+      structure than the previously defined coffee data source. To do this, you will:'
+  - type: text
+    contents: |-
+      - Create a new order via API
+      - Define order data source.
+      - Define order schema.
+      - Implement complex read.
+      - Add order data source to the provider schema.
+  tabs:
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
+  - title: Terminal
+    type: terminal
+    hostname: workstation
+  difficulty: basic
+  timelimit: 600
+checksum: "5736938974036304556"
