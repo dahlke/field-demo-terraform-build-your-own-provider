@@ -34,10 +34,6 @@ challenges:
     curl localhost:19090/health
     ```
 
-    ```
-    curl -X POST localhost:19090/signup -d '{"username":"education", "password":"test123"}' | jq
-    ```
-
     *Explore your development environment*
 
 
@@ -355,9 +351,9 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In these tutorials, you will write a custom provider against the API of a fictional coffee-shop application called
-      HashiCups using the Terraform Plugin SDKv2. Through the process, you will learn how to create data sources,
-      authenticate the provider to the HashiCups client, and create resources with CRUD functionality.
+      In these tutorials, you will write a custom provider against the API of a fictional coffee-shop application
+      called HashiCups using the Terraform Plugin SDKv2. Through the process, you will learn how to create data
+      sources, authenticate the provider to the HashiCups client, and create resources with CRUD functionality.
   - type: text
     contents: |-
       - Set up your development environment.
@@ -374,5 +370,202 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: basic
+  timelimit: 900
+- slug: add-authentication-to-a-provider
+  id: tn3cgrhoyknp
+  type: challenge
+  title: Add Authentication to a Provider
+  teaser: TODO
+  assignment: |-
+    *Update provider schema*
+
+    HashiCups requires a username and password to generate an JSON web token (JWT) which is used to authenticate
+    against protected endpoints. You will use this user to authenticate to the HashiCups provider to manage your
+    orders.
+
+    Create a user on HashiCups named `education` with the password `test123`.
+
+    ```
+    curl -X POST localhost:19090/signup -d '{"username":"education", "password":"test123"}' | jq
+    ```
+
+    You can then sign in again in the future using the below.
+
+    ```
+    curl -X POST localhost:19090/signin -d '{"username":"education", "password":"test123"}'
+    ```
+
+    Set a `HASHICUPS_TOKEN` environment variable to the token generated in the previous step. You will use this later
+    tutorials to verify your HashiCups order has been created, updated and deleted.
+
+    ```
+    export HASHICUPS_TOKEN=<YOUR_TOKEN_HERE>
+    ```
+
+    In your `hashicups/provider.go` file, replace the `Provider()` function with the code snippet below. This defines
+    the provider schema (`username`, `password`) and the `ConfigureContextFunc`.
+
+    ```
+    // Provider -
+    func Provider() *schema.Provider {
+      return &schema.Provider{
+        Schema: map[string]*schema.Schema{
+          "username": &schema.Schema{
+            Type:        schema.TypeString,
+            Optional:    true,
+            DefaultFunc: schema.EnvDefaultFunc("HASHICUPS_USERNAME", nil),
+          },
+          "password": &schema.Schema{
+            Type:        schema.TypeString,
+            Optional:    true,
+            Sensitive:   true,
+            DefaultFunc: schema.EnvDefaultFunc("HASHICUPS_PASSWORD", nil),
+          },
+        },
+        ResourcesMap: map[string]*schema.Resource{},
+        DataSourcesMap: map[string]*schema.Resource{
+          "hashicups_coffees":     dataSourceCoffees(),
+        },
+        ConfigureContextFunc: providerConfigure,
+      }
+    }
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    Notice the `DefaultFunc` for both the `username` and `password` parameters attempts to use the respective
+    environment variables as the default values. This is useful for automated provider testing.
+
+    *Define `preconfigure`*
+
+    Import the `context`, API client and `diag` libraries into the `provider.go` file. The `providerConfigure` function
+    will use these libraries.
+
+    ```
+    import (
+    + "context"
+
+    + "github.com/hashicorp-demoapp/hashicups-client-go"
+    + "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+      "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+    )
+    ```
+
+    Then, add the `providerConfigure` function below your `Provider()` function. This function retrieves the `username`
+    and `password` from the provider schema to authenticate and configure your provider.
+
+    ```
+    func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+      username := d.Get("username").(string)
+      password := d.Get("password").(string)
+
+      // Warning or errors can be collected in a slice type
+      var diags diag.Diagnostics
+
+      if (username != "") && (password != "") {
+        c, err := hashicups.NewClient(nil, &username, &password)
+        if err != nil {
+          return nil, diag.FromErr(err)
+        }
+
+        return c, diags
+      }
+
+      c, err := hashicups.NewClient(nil, nil, nil)
+      if err != nil {
+        return nil, diag.FromErr(err)
+      }
+
+      return c, diags
+    }
+    ```
+
+    Format your code.
+
+    ```
+    go fmt ./...
+    ```
+
+    Notice that the function is able to retrieve the `username` and `password` values from the `*schema.ResourceData`.
+    The HashiCups API client is a simple API wrapper for the HashiCups API.
+
+    By returning the HashiCups API client, the provider will be able to access the API client as a `meta` input
+    parameter. You will use the `meta` input parameter to access a protected endpoint (`/orders`) later in this track.
+
+    Save your `hashicups/provider.go` file, then run `go mod vendor` to download the API client library into your
+    `/vendor` directory.
+
+    *Test the provider*
+
+    Build the provider binary.
+
+    ```
+    cd /root/github.com/hashicorp/terraform-provider-hashicups
+    make build
+    ```
+
+    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
+    exist already.
+
+    ```
+    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
+    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Next, move the binary to the appropriate subdirectory within your user plugins directory.
+
+    ```
+    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    ```
+
+    Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
+    for the Terraform HashiCups provider.
+
+    ```
+    cd examples
+    ```
+
+    Then, authenticate your provider. You can either set them via environment variables (recommended) or update your
+    provider block. Find an example using environment variables below.
+
+    ```
+    export HASHICUPS_USERNAME=education
+    export HASHICUPS_PASSWORD=test123
+    ```
+
+    Finally, initialize your workspace to refresh your HashiCups provider, then apply.
+
+    ```
+    terraform init && terraform apply --auto-approve
+    ```
+
+    Check the terminal containing your HashiCups logs for the recorded operations invoked by the HashiCups provider.
+
+    ```
+    api_1  | 2020-12-10T09:26:23.349Z [INFO]  Handle User | signin
+    api_1  | 2020-12-10T09:26:23.357Z [INFO]  Handle Coffee
+    api_1  | 2020-12-10T09:26:23.488Z [INFO]  Handle User | signin
+    api_1  | 2020-12-10T09:26:23.606Z [INFO]  Handle User | signin
+    ```
+
+    The provider should have invoked a request to the `signin `endpoint.
+
+    Congratulations! You have added authentication to your HashiCups provider.
+  notes:
+  - type: text
+    contents: In these tutorials, ...
+  tabs:
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
+  - title: Terminal
+    type: terminal
+    hostname: workstation
+  difficulty: basic
   timelimit: 1800
-checksum: "7236237399288813528"
+checksum: "6644119972458101101"
