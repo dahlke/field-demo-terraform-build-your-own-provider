@@ -2,8 +2,11 @@ slug: terraform-build-your-own-provider
 id: h1tpybfmtmve
 type: track
 title: Build Your Own Terraform Provider
-teaser: TODO
-description: TODO
+teaser: Learn how to create your own Terraform Provider to perform CRUD operations.
+description: |-
+  In this track, you will create a Terraform provider to interact with a fictional coffee-shop application, HashiCups.
+  In the process, you will learn how providers map target APIs to Terraform in order to create, read, update, and delete
+  resources.
 icon: https://storage.googleapis.com/instruqt-frontend/assets/hashicorp/tracks/terraform.png
 tags:
 - terraform
@@ -259,18 +262,19 @@ challenges:
 
     *Add a coffees data source to provider*
 
-    ```
-    // Provider -
+    Now that you've defined your data source, you can add it to your provider.
 
-    func Provider() *schema.Provider {
-      return &schema.Provider{
-          ResourcesMap: map[string]*schema.Resource{},
-    -       DataSourcesMap: map[string]*schema.Resource{},
-    +       DataSourcesMap: map[string]*schema.Resource{
-    +            "hashicups_coffees":     dataSourceCoffees(),
-    +       },
-      }
-    }
+    In your `hashicups/provider.go` file, add the coffees data source to the `DataSourcesMap`. The `DataSourcesMap`
+    attribute takes a map of the data source name, `hashicups_coffees`, and the `*schema.Resource` defined in
+    `hashicups/data_source_coffee.go`. Resources and data sources names must follow the `<provider>_<resource_name>`
+    convention.
+
+    Change your `DataSourcesMap` to contain our new data source.
+
+    ```
+      DataSourcesMap: map[string]*schema.Resource{
+        "hashicups_coffees":     dataSourceCoffees(),
+      },
     ```
 
     Format your code.
@@ -369,9 +373,6 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  - title: Other Terminal
-    type: terminal
-    hostname: workstation
   difficulty: basic
-  timelimit: 900
-checksum: "6289291088409491134"
+  timelimit: 1800
+checksum: "7236237399288813528"
