@@ -1023,7 +1023,8 @@ challenges:
     go fmt ./...
     ```
 
-    Notice how the Diagnostic severity is set to `diag.Error`. There are two [levels of severity](https://pkg.go.dev/github.com/hashicorp/terraform-config-inspect/tfconfig?utm_source=godoc#DiagSeverity) — `diag.Error` and `diag.Warning`. You will create and view a warning message in the next section.
+    Notice how the Diagnostic severity is set to `diag.Error`. There are two [levels of severity](https://pkg.go.dev/github.com/hashicorp/terraform-config-inspect/tfconfig?utm_source=godoc#DiagSeverity) —
+    `diag.Error` and `diag.Warning`. You will create and view a warning message in the next section.
 
     *Test error message*
 
@@ -1106,13 +1107,16 @@ challenges:
     go fmt ./...
     ```
 
-    Notice that you have set the Diagnostic's severity to `diag.Warning`. When you use your provider, both warning and messages appear because diags contains both. A warning message will only appear when the provider also errors.
+    Notice that you have set the Diagnostic's severity to `diag.Warning`. When you use your provider, both warning and
+    messages appear because diags contains both. A warning message will only appear when the provider also errors.
 
-    The Diagnostic's detail contains additional information about the warning message, including which function it was triggered in. This could provide handy while debugging.
+    The Diagnostic's detail contains additional information about the warning message, including which function it was
+    triggered in. This could provide handy while debugging.
 
     *Test warning message*
 
-    Now that you've added a warning message and updated your Terraform log level, verify that the provider returns both your warning and error message.
+    Now that you've added a warning message and updated your Terraform log level, verify that the provider returns
+    both your warning and error message.
 
     Install the provider binary.
 
@@ -1196,7 +1200,10 @@ challenges:
 
     There should be no errors or warning messages.
 
-    Tip: You can also retrieve detailed Terraform and provider logs by setting the environment variable `TF_LOG`. Please include a detailed logs with any bug reports so the author can identify and address the bug. To learn more about log levels and how to interpret a crash log, refer to the Debugging Terraform Documentation.
+    Tip: You can also retrieve detailed Terraform and provider logs by setting the environment variable `TF_LOG`.
+    Please include a detailed logs with any bug reports so the author can identify and address the bug. To learn more
+    about log levels and how to interpret a crash log, refer to the
+    [Debugging Terraform Documentation](https://www.terraform.io/docs/internals/debugging.html).
 
     Congratulations! You have added error and warning messages to your HashiCups provider and implemented a nested read function.
   notes:
@@ -1348,7 +1355,8 @@ challenges:
     go fmt ./...
     ```
 
-    This `order` schema should be similar to the `order` data resource defined in the previous Implement Complex Read challenge.
+    This `order` schema should be similar to the `order` data resource defined in the previous Implement Complex
+    Read challenge.
 
     - The top level `id` attribute is missing in the `order` resource, but present in the `order` data resource. Unlike the `order` data source, you don't know the order ID ahead of time. When HashiCups provider invokes the HashiCups API, the API generates an order ID which is then assigned as the resource's ID by the HashiCups provider.
     - `items` is a `required` field, *not* a computed one. This is because the `OrderItems` need to be defined to create an order.
@@ -1358,11 +1366,14 @@ challenges:
     - The first (see `coffee` object) is to define the nested object as an `schema.TypeList` with 1 item. This is currently the closest way to emulate a nested object.
     - The second way is to use a [`schema.TypeMap`](https://www.terraform.io/docs/extend/schemas/schema-types.html#typemap). This method may be preferable if you only require a key value map of primitive types. However, you should use a validation function to enforce required keys.
 
-    Notice that the coffee object is represented as a `schema.TypeList` of one item. This method was selected because it closely matches the coffee object returned in the response.
+    Notice that the coffee object is represented as a `schema.TypeList` of one item. This method was selected because
+    it closely matches the coffee object returned in the response.
 
     *Implement create*
 
-    Now that you have defined the order resource schema, replace the `resourceOrderCreate` function in `hashicups/resource_order.go` with the following code snippet. This function will create a new HashiCups order and Terraform resource.
+    Now that you have defined the order resource schema, replace the `resourceOrderCreate` function in
+    `hashicups/resource_order.go` with the following code snippet. This function will create a new HashiCups order and
+    Terraform resource.
 
     ```
     func resourceOrderCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -1401,7 +1412,8 @@ challenges:
     }
     ```
 
-    Since this uses `strconv` to convert the `ID` into a string, remember to import the `strconv` library. Remember to also import the HashiCups API client library.
+    Since this uses `strconv` to convert the `ID` into a string, remember to import the `strconv` library. Remember
+    to also import the HashiCups API client library.
 
     ```
     import (
@@ -1420,15 +1432,22 @@ challenges:
     go fmt ./...
     ```
 
-    Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined above. If an unauthenticated API Client is provided (no username/password), this function will fail and return an error message.
+    Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined
+    above. If an unauthenticated API Client is provided (no username/password), this function will fail and return an
+    error message.
 
-    The function retrieves the order attributes using `d.Get("items")` — order items are located in `items` as defined in the schema — and typecasts it to a `[]interface{}`. Then, the function transforms the items into a slice of `OrderItem`, a struct required by the HashiCups API client to create an order.
+    The function retrieves the order attributes using `d.Get("items")` — order items are located in `items` as defined
+    in the schema — and typecasts it to a `[]interface{}`. Then, the function transforms the items into a slice of
+    `OrderItem`, a struct required by the HashiCups API client to create an order.
 
-    Finally, upon successful order creation, `SetID` sets the resource ID to the order ID. The resource ID must be a non-blank string that can be used to read the resource again. If no ID is set, Terraform assumes the resource was not created successfully; as a result, no state will be saved for that resource.
+    Finally, upon successful order creation, `SetID` sets the resource ID to the order ID. The resource ID must be a
+    non-blank string that can be used to read the resource again. If no ID is set, Terraform assumes the resource was
+    not created successfully; as a result, no state will be saved for that resource.
 
     *Implement read*
 
-    Now that you have implemented create, you must implement read to retrieve the resource current state. This will be run during the `plan` process to determine whether the resource needs to be updated.
+    Now that you have implemented create, you must implement read to retrieve the resource current state. This will be
+    run during the `plan` process to determine whether the resource needs to be updated.
 
     Replace the `resourceOrderRead` function in `hashicups/resource_order.go` with the following code snippet.
 
@@ -1461,21 +1480,26 @@ challenges:
     go fmt ./...
     ```
 
-    This function should be similar to the `dataSourceOrderRead` function in `hashicups/data_resource_order.go` with two significant change.
+    This function should be similar to the `dataSourceOrderRead` function in `hashicups/data_resource_order.go` with
+    two significant change.
 
     - The order resource's read function (`resourceOrderRead`) uses `d.ID()` as the order ID. The `order` data resource's read function (`dataSourceOrderRead`) uses an order ID provider by the user.
     - The function uses `flattenOrderItems` instead of `flattenOrderItemsData` because the `order` resource and the `order` data source uses different schemas. You will define the `flattenOrderItems` in the next section.
 
     *Add flattening functions*
 
-    The API Client's `GetOrder` function returns an order object that needs to be "flattened" so the provider can accurately map it to the order `schema`. An order consists of an order ID and a list of coffee objects and their respective quantities.
+    The API Client's `GetOrder` function returns an order object that needs to be "flattened" so the provider can
+    accurately map it to the order `schema`. An order consists of an order ID and a list of coffee objects and their
+    respective quantities.
 
     As a result, it must go through two flattening functions:
 
     - The first flattening function populates the list of coffee objects and their quantities
     - The second flattening function populates the actual coffee object itself.
 
-    Add the following function to your `hashicups/resource_order.go` file. This is the first flattening function to return a list of `order` items. The `flattenOrderItems` function takes an `*[]hc.OrderItem` as `orderItems`. If `orderItems` is not `nil`, it will iterate through the slice and map its values into a `map[string]interface{}`.
+    Add the following function to your `hashicups/resource_order.go` file. This is the first flattening function to
+    return a list of `order` items. The `flattenOrderItems` function takes an `*[]hc.OrderItem` as `orderItems`. If
+    `orderItems` is not `nil`, it will iterate through the slice and map its values into a `map[string]interface{}`.
 
     ```
     func flattenOrderItems(orderItems *[]hc.OrderItem) []interface{} {
@@ -1497,7 +1521,9 @@ challenges:
     }
     ```
 
-    Then, add the second flattening function, `flattenCoffee`, to your `hashicups/resource_order.go` file. This is called in the first flattening function. It takes a `hc.Coffee` and turns a slice with a single object. Notice how this mirrors the coffee schema — a `schema.TypeList` with a maximum of one item.
+    Then, add the second flattening function, `flattenCoffee`, to your `hashicups/resource_order.go` file. This is
+    called in the first flattening function. It takes a `hc.Coffee` and turns a slice with a single object. Notice how
+    this mirrors the coffee schema — a `schema.TypeList` with a maximum of one item.
 
     ```
     func flattenCoffee(coffee hc.Coffee) []interface{} {
@@ -1521,7 +1547,8 @@ challenges:
 
     *Add read function to create function*
 
-    Finally, add `resourceOrderRead` to the bottom of your `resourceOrderCreate` function. This will populate the Terraform state to its current state after the resource creation.
+    Finally, add `resourceOrderRead` to the bottom of your `resourceOrderCreate` function. This will populate the
+    Terraform state to its current state after the resource creation.
 
     ```
     func resourceOrderCreate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -1545,7 +1572,8 @@ challenges:
 
     Now that you've defined the `order` resource, you can add it to your provider.
 
-    In your `hashicups/provider.go` file, add the `order` resource to the `ResourceMap`. Resources and data sources names must follow the `<provider>_<resource_name>` convention.
+    In your `hashicups/provider.go` file, add the `order` resource to the `ResourceMap`. Resources and data sources
+    names must follow the `<provider>_<resource_name>` convention.
 
     ```
     // Provider -
@@ -1622,7 +1650,8 @@ challenges:
     }
     ```
 
-    Then, initialize your workspace to refresh your HashiCups provider then. This should create an order and return its values in your output.
+    Then, initialize your workspace to refresh your HashiCups provider then. This should create an order and
+    return its values in your output.
 
     ```
     terraform init && terraform apply --auto-approve
@@ -1701,7 +1730,9 @@ challenges:
 
     *Implement update*
 
-    Now that you have defined the `order` resource schema, replace the `resourceOrderUpdate` function in `hashicups/resource_order.go` with the following code snippet. This function will update the order resource if there are any changes to the order items.
+    Now that you have defined the `order` resource schema, replace the `resourceOrderUpdate` function in
+    `hashicups/resource_order.go` with the following code snippet. This function will update the order resource if
+    there are any changes to the order items.
 
     ```
     func resourceOrderUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -1740,15 +1771,22 @@ challenges:
     }
     ```
 
-    Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined above. If an unauthenticated API Client is provided (no username/password), this function will fail and return an error message.
+    Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined
+    above. If an unauthenticated API Client is provided (no username/password), this function will fail and return
+    an error message.
 
-    The function determines whether there are discrepancies in the `items` property between the configuration and the state.
+    The function determines whether there are discrepancies in the `items` property between the configuration and
+    the state.
 
-    _Tip: The `hasChange()` function enables you to invoke different APIs or build a targeted request body to update your resource when a specific property changes._
+    _Tip: The `hasChange()` function enables you to invoke different APIs or build a targeted request body to update
+    your resource when a specific property changes._
 
-    If there are discrepancies, the function will update the order with the new configuration. Then, it will update the `last_updated` attribute to the current timestamp. Finally, it will call `resourceOrderRead` to update the resource's state.
+    If there are discrepancies, the function will update the order with the new configuration. Then, it will update
+    the `last_updated` attribute to the current timestamp. Finally, it will call `resourceOrderRead` to update the
+    resource's state.
 
-    _Note: Update functions rarely update the resource ID. However, if the ID becomes blank during the update process, the provider assumes the resource is destroyed and all state is removed._
+    _Note: Update functions rarely update the resource ID. However, if the ID becomes blank during the update process,
+    the provider assumes the resource is destroyed and all state is removed._
 
     Remember to import the time library.
 
@@ -1807,7 +1845,8 @@ challenges:
     terraform apply --auto-approve
     ```
 
-    Verify that the provider updated your order by invoking the HashiCups API. Substitute the order number with your order ID and the auth token with your auth token.
+    Verify that the provider updated your order by invoking the HashiCups API. Substitute the order number with your
+    order ID and the auth token with your auth token.
 
     ```
     curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
@@ -1843,7 +1882,8 @@ challenges:
   assignment: |-
     *Implement delete*
 
-    Replace the `resourceOrderDelete` function in `hashicups/resource_order.go` with the code snippet below. This function will delete the HashiCups order and Terraform resource.
+    Replace the `resourceOrderDelete` function in `hashicups/resource_order.go` with the code snippet below. This
+    function will delete the HashiCups order and Terraform resource.
 
     ```
     func resourceOrderDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -1873,14 +1913,20 @@ challenges:
     go fmt ./...
     ```
 
-    Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined above. If an unauthenticated API Client is provided (no username/password), this function will fail and return an error message.
+    Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined
+    above. If an unauthenticated API Client is provided (no username/password), this function will fail and return an
+    error message.
 
     The function retrieves the order ID using `d.ID()` and deletes the order.
 
     - If the `destroy` callback returns *without* an error, the provider assumes the resource is destroyed and all state is removed.
     - If the destroy callback returns *with* an error, the provider assumes the resource still exists and all prior state is preserved.
 
-    The `destroy` callback should never update any state on the resource. In addition, the destroy callback should always handle the case where the resource might already be destroyed. If the resource is already destroyed, the destroy function should not return an error. If the target API doesn't have this functionality, the destroy function should verify the resource exists; if the resource does not exist, set the resource ID to "". This behavior allows Terraform users to manually delete resources without breaking Terraform.
+    The `destroy` callback should never update any state on the resource. In addition, the destroy callback should
+    always handle the case where the resource might already be destroyed. If the resource is already destroyed, the
+    destroy function should not return an error. If the target API doesn't have this functionality, the destroy
+    function should verify the resource exists; if the resource does not exist, set the resource ID to "". This
+    behavior allows Terraform users to manually delete resources without breaking Terraform.
 
     *Test the provider*
 
@@ -1899,13 +1945,15 @@ challenges:
     cd examples
     ```
 
-    Initialize your workspace to refresh your HashiCups provider then destroy the configuration. This should delete your HashiCups order.
+    Initialize your workspace to refresh your HashiCups provider then destroy the configuration. This should delete
+    your HashiCups order.
 
     ```
     terraform init && terraform destroy --auto-approve
     ```
 
-    Verify that the provider updated your order by invoking the HashiCups API. Substitute the order number with your order ID and the auth token with your auth token.
+    Verify that the provider updated your order by invoking the HashiCups API. Substitute the order number with your
+    order ID and the auth token with your auth token.
 
     ```
     curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
@@ -1958,15 +2006,20 @@ challenges:
     go fmt ./...
     ```
 
-    Notice that `StateContext` is set to `schema.ImportStatePassthroughContext`. When you invoke the import command, you provide the order ID in the command. For example:
+    Notice that `StateContext` is set to `schema.ImportStatePassthroughContext`. When you invoke the import command,
+    you provide the order ID in the command. For example:
 
     ```
     terraform import hashicups_order.sample <order_id>
     ```
 
-    Terraform passes the `order_id` value to the read function (`resourceOrderRead`), which then populates the resource's (`hashicups_order.sample`) state. This is the preferred method but requires a `Read` function that can retrieve the entire resource state using `d.Id()` only.
+    Terraform passes the `order_id` value to the read function (`resourceOrderRead`), which then populates the
+    resource's (`hashicups_order.sample`) state. This is the preferred method but requires a `Read` function that can
+    retrieve the entire resource state using `d.Id()` only.
 
-    _Tip: This import method highlights the importance of selecting a descriptive and unique resource ID. A good resource ID can retrieve the resource state via API. In some cases, you can construct an ID from multiple attributes (for example, `<region>:<resource_id>`)._
+    _Tip: This import method highlights the importance of selecting a descriptive and unique resource ID. A good
+    resource ID can retrieve the resource state via API. In some cases, you can construct an ID from multiple
+    attributes (for example, `<region>:<resource_id>`)._
 
     *Test the provider*
 
@@ -1997,7 +2050,8 @@ challenges:
     cd import
     ```
 
-    Create a new file named `main.tf` with the following configuration. You will import an existing HashiCups order into the `hashicups_order.sample` resource.
+    Create a new file named `main.tf` with the following configuration. You will import an existing HashiCups order
+    into the `hashicups_order.sample` resource.
 
     ```
     terraform {
@@ -2027,10 +2081,12 @@ challenges:
     terraform init
     ```
 
-    Create an order via the HashiCups API. Take note of the order `id` in the response; the one below is `3`. This will be the order number you import into `hashicups_order.sample`.
+    Create an order via the HashiCups API. Take note of the order `id` in the response; the one below is `3`. This will
+     be the order number you import into `hashicups_order.sample`.
 
     ```
-    $ curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
+    $ curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 },
+    "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
     ```
 
     The output should look like the below.
@@ -2122,7 +2178,9 @@ challenges:
 
     Congratulations! You have added import capabilities to the `order` resource.
 
-    Over the course of this track, you re-created the HashiCups provider and learned how to create data sources, authenticate the provider to the HashiCups client, create resources with CRUD functionality, and import existing resources.
+    Over the course of this track, you re-created the HashiCups provider and learned how to create data sources,
+    authenticate the provider to the HashiCups client, create resources with CRUD functionality, and import existing
+    resources.
   notes:
   - type: text
     contents: In this challenge, you will add import capabilities to the `order` resource
