@@ -364,6 +364,12 @@ challenges:
     mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
     ```
 
+    There is a shortcut to do all the above steps, it looks like the below. You will use this going forward.
+
+    ```
+    make install
+    ```
+
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
     for the Terraform HashiCups provider.
 
@@ -420,8 +426,7 @@ challenges:
     contents: |-
       There are a few possible reasons for authoring a custom Terraform provider, including:
 
-      - An internal private cloud whose functionality is either proprietary or would not benefit the open source
-      community.
+      - An internal private cloud whose functionality is either proprietary or would not benefit the open source community.
       - Extending the capabilities of an existing provider (bug fixes, new features, or customizations)
   - type: text
     contents: |-
@@ -573,25 +578,10 @@ challenges:
 
     *Test the provider*
 
-    Build the provider binary.
+    Install the provider binary.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
-    make build
-    ```
-
-    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
-    exist already.
-
-    ```
-    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
-    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
-    ```
-
-    Next, move the binary to the appropriate subdirectory within your user plugins directory.
-
-    ```
-    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    make install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -862,25 +852,10 @@ challenges:
 
     *Test the provider*
 
-    Build the provider binary.
+    Install the provider binary.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
-    make build
-    ```
-
-    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
-    exist already.
-
-    ```
-    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
-    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
-    ```
-
-    Next, move the binary to the appropriate subdirectory within your user plugins directory.
-
-    ```
-    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    make install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1054,25 +1029,10 @@ challenges:
 
     Now that you've added a custom error message, verify that the provider returns your error message.
 
-    Build the provider binary.
+    Install the provider binary.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
-    make build
-    ```
-
-    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
-    exist already.
-
-    ```
-    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
-    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
-    ```
-
-    Next, move the binary to the appropriate subdirectory within your user plugins directory.
-
-    ```
-    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    make install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1151,27 +1111,13 @@ challenges:
     The Diagnostic's detail contains additional information about the warning message, including which function it was triggered in. This could provide handy while debugging.
 
     *Test warning message*
+
     Now that you've added a warning message and updated your Terraform log level, verify that the provider returns both your warning and error message.
 
-    Build the provider binary.
+    Install the provider binary.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
-    make build
-    ```
-
-    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
-    exist already.
-
-    ```
-    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
-    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
-    ```
-
-    Next, move the binary to the appropriate subdirectory within your user plugins directory.
-
-    ```
-    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    make install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1640,25 +1586,10 @@ challenges:
 
     Now that you've created the order resource with create and read capabilities, verify that it works.
 
-    Build the provider binary.
+    Install the provider binary.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
-    make build
-    ```
-
-    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
-    exist already.
-
-    ```
-    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
-    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
-    ```
-
-    Next, move the binary to the appropriate subdirectory within your user plugins directory.
-
-    ```
-    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    make install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1837,25 +1768,10 @@ challenges:
 
     Now that you've added update capabilities to the `order` resource, verify that it works.
 
-    Build the provider binary.
+    Install the provider binary.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
-    make build
-    ```
-
-    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
-    exist already.
-
-    ```
-    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
-    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
-    ```
-
-    Next, move the binary to the appropriate subdirectory within your user plugins directory.
-
-    ```
-    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    make install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1970,25 +1886,10 @@ challenges:
 
     Now that you've added delete capabilities to the `order` resource, verify that it works.
 
-    Build the provider binary.
+    Install the provider binary.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
-    make build
-    ```
-
-    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
-    exist already.
-
-    ```
-    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
-    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
-    ```
-
-    Next, move the binary to the appropriate subdirectory within your user plugins directory.
-
-    ```
-    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    make install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -2071,25 +1972,10 @@ challenges:
 
     Test the new provider capability by importing an order resource.
 
-    Build the provider binary.
+    Install the provider binary.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
-    make build
-    ```
-
-    Create the appropriate subdirectory within the user plugins directory for the HashiCups provider if it doesn't
-    exist already.
-
-    ```
-    export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
-    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
-    ```
-
-    Next, move the binary to the appropriate subdirectory within your user plugins directory.
-
-    ```
-    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    make install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -2254,4 +2140,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "9249348629032714953"
+checksum: "1095343546029796773"
