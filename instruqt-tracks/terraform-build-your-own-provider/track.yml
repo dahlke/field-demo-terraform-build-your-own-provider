@@ -578,21 +578,24 @@ challenges:
   assignment: |-
     *Create an order via API*
 
-    Before you can query a user's order, you must first create an order. Replace the authorization token with the token you generated in the sign in step.
+    Before you can query a user's order, you must first create an order. Replace the authorization token with the token
+    you generated in the sign in step.
 
     ```
     curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
     ```
 
-    Query the order using the order ID you received in the response above as a HTML parameter (localhost:19090/orders/{orderID}). The response should be the same as the response above.
+    Query the order using the order ID you received in the response above as a HTML parameter
+    (`localhost:19090/orders/{orderID}`). The response should be the same as the response above.
 
     ```
     curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
     ```
 
-    *Define order data resource*
+    *Define `order` data resource*
 
-    Now, create a file named hashicups/data_source_order.go in your hashicups directory and add the following snippet.
+    Now, create a file named `hashicups/data_source_order.go` in your `hashicups` directory and add the following
+    snippet.
 
     ```
     package hashicups
@@ -661,17 +664,19 @@ challenges:
     go fmt ./...
     ```
 
-    Notice how the schema mirrors the JSON response — only id and items exist on the top level.
+    Notice how the schema mirrors the JSON response — only `id` and `items` exist on the top level.
 
-      - The id is required because an order ID must be set so the data source knows which order to retrieve.
-      - The items schema is a computed list (schema.TypeList) of objects (schema.Resource) containing coffee attributes and quantity.
-      - The coffee attributes is flattened and mapped accordingly (coffee.id is mapped to coffee_id, etc...)
+      - The `id` is *required* because an order ID must be set so the data source knows which order to retrieve.
+      - The `items` schema is a [computed](https://www.terraform.io/docs/extend/schemas/schema-behaviors.html#computed) list (`schema.TypeList`) of objects (`schema.Resource`) containing `coffee` attributes and `quantity`.
+      - The `coffee` attributes is flattened and mapped accordingly (`coffee.id` is mapped to `coffee_id`, etc...)
 
-    You will learn an alternative method to nest maps in the Implement Create tutorial, when you create new orders.
+    You will learn an alternative method to nest maps in a later challenge "Implement Create", when you create new orders.
 
     *Implement complex read*
 
-    Now that you have defined  the order schema, add the dataSourceOrderRead function to hashicups/data_source_order.go. This function will retrieve the order and map its values to the order schema defined above.
+    Now that you have defined the `order` schema, add the `dataSourceOrderRead` function to
+    `hashicups/data_source_order.go`. This function will retrieve the `order` and map its values to the order schema
+    defined above.
 
     ```
     func dataSourceOrderRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -704,11 +709,16 @@ challenges:
     go fmt ./...
     ```
 
-    Notice the m (meta) input parameter contains the HashiCups API Client set by the ConfigureContextFunc defined above. If provider uses an unauthenticated API Client, this function will fail and return an error message.
+    Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined
+    above. If provider uses an unauthenticated API Client, this function will fail and return an error message.
 
-    The API Client's GetOrder function returns an order object. However, you must flatten this response to accurately map the response to the order schema. An order consists of an order ID and a list of coffee objects and their respective quantities. As a result, the order object must go through one flattening function to populate the list of coffee objects and their quantities.
+    The API Client's `GetOrder` function returns an order object. However, you must flatten this response to accurately
+    map the response to the `order` schema. An order consists of an order ID and a list of coffee objects and their
+    respective quantities. As a result, the order object must go through one flattening function to populate the list
+    of coffee objects and their quantities.
 
-    Add the flattenOrderItemsData function to your hashicups/data_source_order.go file. This returns a list of order items.
+    Add the `flattenOrderItemsData` function to your `hashicups/data_source_order.go` file. This returns a list of
+    order items.
 
     ```
     func flattenOrderItemsData(orderItems *[]hc.OrderItem) []interface{} {
@@ -742,13 +752,16 @@ challenges:
     go fmt ./...
     ```
 
-    The flattenOrderItemsData function takes an *[]hc.OrderItem as orderItems. If orderItems is not nil, it will iterate through the slice and map its values into a map[string]interface{}. Notice how the function assigns the coffee attributes directly to its corresponding flattened attribute (orderItem.Coffee.ID -> coffee_id).
+    The `flattenOrderItemsData` function takes an `*[]hc.OrderItem` as `orderItems`. If `orderItems` is not `nil`, it
+    will iterate through the slice and map its values into a `map[string]interface{}`. Notice how the function assigns
+    the coffee attributes directly to its corresponding flattened attribute (`orderItem.Coffee.ID` -> `coffee_id`).
 
     *Add data source to provider*
 
-    Now that you've defined the order data source, you can add it to your provider.
+    Now that you've defined the `order` data source, you can add it to your provider.
 
-    In your hashicups/provider.go file, add the order data source to the DataSourcesMap of your Provider() function. Resources and data sources names must follow the <provider>_<resource_name> convention.
+    In your `hashicups/provider.go` file, add the `order` data source to the `DataSourcesMap` of your `Provider()`
+    function. Resources and data sources names must follow the `<provider>_<resource_name>` convention.
 
     ```
     // Provider -
@@ -807,7 +820,7 @@ challenges:
     cd examples
     ```
 
-    Add the following Terraform configuration to main.tf.
+    Add the following Terraform configuration to `main.tf`.
 
     ```
     data "hashicups_order" "order" {
@@ -819,7 +832,8 @@ challenges:
     }
     ```
 
-    Finally, initialize your workspace to refresh your HashiCups provider, then apply. Notice how the coffee attributes are flattened.
+    Finally, initialize your workspace to refresh your HashiCups provider, then apply. Notice how the coffee attributes
+    are flattened.
 
     ```
     terraform init && terraform apply --auto-approve
@@ -872,6 +886,44 @@ challenges:
       - Define order schema.
       - Implement complex read.
       - Add order data source to the provider schema.
+  tabs:
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
+  - title: Terminal
+    type: terminal
+    hostname: workstation
+  difficulty: basic
+  timelimit: 600
+- slug: implement-complex-read
+  type: challenge
+  title: Implement Complex Read
+  teaser: TODO
+  assignment: |-
+    *TODO*
+  notes:
+  - type: text
+    contents: TODO
+  tabs:
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
+  - title: Terminal
+    type: terminal
+    hostname: workstation
+  difficulty: basic
+  timelimit: 600
+- slug: implement-create
+  type: challenge
+  title: Implement Create
+  teaser: TODO
+  assignment: |-
+    *TODO*
+  notes:
+  - type: text
+    contents: TODO
   tabs:
   - title: Text Editor
     type: code
