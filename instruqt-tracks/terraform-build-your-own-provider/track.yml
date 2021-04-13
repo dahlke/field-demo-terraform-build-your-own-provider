@@ -21,6 +21,40 @@ challenges:
   type: challenge
   title: Setup and Implement Read
   teaser: Learn to implement a read on a public endpoint with a Terraform Provider.
+  difficulty: basic
+  timelimit: 600
+  notes:
+  - type: text
+    contents: |-
+      In these challenges, you will write a custom provider against the API of a fictional coffee-shop application
+      called HashiCups using the Terraform Plugin SDKv2. Through the process, you will learn how to create data
+      sources, authenticate the provider to the HashiCups client, and create resources with CRUD functionality.
+  - type: text
+    contents: |-
+      There are a few possible reasons for authoring a custom Terraform provider, including:
+
+      - An internal private cloud whose functionality is either proprietary or would not benefit the open source community.
+      - Extending the capabilities of an existing provider (bug fixes, new features, or customizations)
+  - type: text
+    contents: |-
+      In this challenge, you will set up your Terraform provider development environment and create a coffees data
+      source that will return all coffees HashiCups serves. To do this, you will:
+
+      - Set up your development environment.
+      - Define the coffees data source.
+      - Define the coffees schema.
+      - Implement read.
+      - Add coffees data source to the provider schema.
+  tabs:
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root/github.com/hashicorp/terraform-provider-hashicups
+  - title: Terminal
+    type: terminal
+    hostname: workstation
+  difficulty: basic
+  timelimit: 900
   assignment: |-
     *Set up your development environment*
 
@@ -416,28 +450,23 @@ challenges:
 
     Congratulations! You created your first Terraform provider and data resource to reference information from an API
     in your Terraform configuration.
+- slug: add-authentication-to-a-provider
+  id: tn3cgrhoyknp
+  type: challenge
+  title: Add Authentication to a Provider
+  teaser: Learn to implement authentication in a Terraform Provider.
+  difficulty: basic
+  timelimit: 600
   notes:
   - type: text
     contents: |-
-      In these challenges, you will write a custom provider against the API of a fictional coffee-shop application
-      called HashiCups using the Terraform Plugin SDKv2. Through the process, you will learn how to create data
-      sources, authenticate the provider to the HashiCups client, and create resources with CRUD functionality.
+      In this challenge, you will add authentication to a Terraform provider that interacts with the API of a
+      fictional coffee-shop application, HashiCups, and access protected API endpoints.
   - type: text
     contents: |-
-      There are a few possible reasons for authoring a custom Terraform provider, including:
-
-      - An internal private cloud whose functionality is either proprietary or would not benefit the open source community.
-      - Extending the capabilities of an existing provider (bug fixes, new features, or customizations)
-  - type: text
-    contents: |-
-      In this challenge, you will set up your Terraform provider development environment and create a coffees data
-      source that will return all coffees HashiCups serves. To do this, you will:
-
-      - Set up your development environment.
-      - Define the coffees data source.
-      - Define the coffees schema.
-      - Implement read.
-      - Add coffees data source to the provider schema.
+      To do this, you will:
+      - Update provider schema.
+      - Define `providerConfigure`
   tabs:
   - title: Text Editor
     type: code
@@ -446,13 +475,6 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 900
-- slug: add-authentication-to-a-provider
-  id: tn3cgrhoyknp
-  type: challenge
-  title: Add Authentication to a Provider
-  teaser: Learn to implement authentication in a Terraform Provider.
   assignment: |-
     *Update provider schema*
 
@@ -478,6 +500,10 @@ challenges:
     ```
     export HASHICUPS_TOKEN=<YOUR_TOKEN_HERE>
     ```
+
+    Add this to your `.bashrc` for later usage.
+
+    echo "export HASHICUPS_TOKEN=${HASHICUPS_TOKEN}" >> ~/.bashrc
 
     In your `hashicups/provider.go` file, replace the `Provider()` function with the code snippet below. This defines
     the provider schema (`username`, `password`) and the `ConfigureContextFunc`.
@@ -626,16 +652,30 @@ challenges:
     ```
 
     Congratulations! You have added authentication to your HashiCups provider.
+- slug: implement-a-complex-read
+  id: eaos5eypeqtn
+  type: challenge
+  title: Implement a Complex Read
+  teaser: Learn to read from a auth protected endpoint with a Terraform Provider.
+  difficulty: basic
+  timelimit: 600
   notes:
   - type: text
     contents: |-
-      In this challenge, you will add authentication to a Terraform provider that interacts with the API of a
-      fictional coffee-shop application, HashiCups, and access protected API endpoints.
+      In this challenge, you will retrieve an order, a protected endpoint,
+      to verify whether a Terraform provider that interacts with the API of a fictional
+      coffee-shop application, HashiCups, has been authenticated to the API successfully.
+      The order schema contains nested objects, making it a more complicated data
+      structure than the previously defined coffee data source.
   - type: text
     contents: |-
       To do this, you will:
-      - Update provider schema.
-      - Define `providerConfigure`
+
+      - Create a new order via API
+      - Define order data source.
+      - Define order schema.
+      - Implement complex read.
+      - Add order data source to the provider schema.
   tabs:
   - title: Text Editor
     type: code
@@ -644,13 +684,6 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
-- slug: implement-a-complex-read
-  id: eaos5eypeqtn
-  type: challenge
-  title: Implement a Complex Read
-  teaser: Learn to read from a auth protected endpoint with a Terraform Provider.
   assignment: |-
     *Create an order via API*
 
@@ -933,20 +966,16 @@ challenges:
     ```
 
     Congratulations! You have implemented a nested read function.
+- slug: debug-a-terraform-provider
+  id: v9pfi6evmjkl
+  type: challenge
+  title: Debug a Terraform Provider
+  teaser: Learn to add custom error messages to a Terraform provider.
+  difficulty: basic
+  timelimit: 600
   notes:
   - type: text
-    contents: 'In this challenge, you will retrieve an order, a protected endpoint,
-      to verify whether a Terraform provider that interacts with the API of a fictional
-      coffee-shop application, HashiCups, has been authenticated to the API successfully.
-      The order schema contains nested objects, making it a more complicated data
-      structure than the previously defined coffee data source. To do this, you will:'
-  - type: text
-    contents: |-
-      - Create a new order via API
-      - Define order data source.
-      - Define order schema.
-      - Implement complex read.
-      - Add order data source to the provider schema.
+    contents: TODO
   tabs:
   - title: Text Editor
     type: code
@@ -955,13 +984,6 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
-- slug: debug-a-terraform-provider
-  id: v9pfi6evmjkl
-  type: challenge
-  title: Debug a Terraform Provider
-  teaser: Learn to add custom error messages to a Terraform provider.
   assignment: |-
     *Update error messages*
 
@@ -1222,9 +1244,28 @@ challenges:
     [Debugging Terraform Documentation](https://www.terraform.io/docs/internals/debugging.html).
 
     Congratulations! You have added error and warning messages to your HashiCups provider and implemented a nested read function.
+- slug: implement-create
+  id: r0fxk6mcj0j4
+  type: challenge
+  title: Implement Create
+  teaser: Learn to create an `order` resource with a Terraform provider.
+  difficulty: basic
+  timelimit: 600
   notes:
   - type: text
-    contents: TODO
+    contents: |-
+      In this challenge, you will create an `order` resource for a Terraform provider that interacts with the API of a
+      fictional coffee-shop application, HashiCups. Then, you will use the schema to create a new order and populate
+      the order.
+  - type: text
+    contents: |-
+      To do this, you will:
+
+      - Define `order` resource.
+      - Define `order` schema.
+      - Add create functionality.
+      - Add read functionality.
+      - Add `order` resource to the provider schema.
   tabs:
   - title: Text Editor
     type: code
@@ -1233,13 +1274,6 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
-- slug: implement-create
-  id: r0fxk6mcj0j4
-  type: challenge
-  title: Implement Create
-  teaser: Learn to create an `order` resource with a Terraform provider.
   assignment: |-
     *Define `order` resource*
 
@@ -1680,21 +1714,24 @@ challenges:
     ```
 
     Congratulations! You have created the order resource with create and read capabilities.
+- slug: implement-update
+  id: ha0jyuqtf69e
+  type: challenge
+  title: Implement Update
+  teaser: Learn to add update capabilities to the order resource of a Terraform provider.
+  difficulty: basic
+  timelimit: 600
   notes:
   - type: text
-    contents: |-
-      In this challenge, you will create an `order` resource for a Terraform provider that interacts with the API of a
-      fictional coffee-shop application, HashiCups. Then, you will use the schema to create a new order and populate
-      the order.
+    contents: 'In this challenge, you will add update capabilities to the order resource
+      of a provider that interacts with the API of a fictional coffee-shop application,
+      HashiCups. To do this, you will:'
   - type: text
     contents: |-
       To do this, you will:
 
-      - Define `order` resource.
-      - Define `order` schema.
-      - Add create functionality.
-      - Add read functionality.
-      - Add `order` resource to the provider schema.
+      - Update your schema
+      - Implement update
   tabs:
   - title: Text Editor
     type: code
@@ -1703,13 +1740,6 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
-- slug: implement-update
-  id: ha0jyuqtf69e
-  type: challenge
-  title: Implement Update
-  teaser: Learn to add update capabilities to the order resource of a Terraform provider.
   assignment: |-
     *Update schema*
 
@@ -1869,17 +1899,19 @@ challenges:
     ```
 
     Congratulations! You have added update capabilities to the order resource.
+- slug: implement-delete
+  id: x3lvijqrir1b
+  type: challenge
+  title: Implement Delete
+  teaser: Learn to add delete capabilities to the order resource for a Terraform provider.
+  difficulty: basic
+  timelimit: 600
   notes:
   - type: text
-    contents: 'In this challenge, you will add update capabilities to the order resource
-      of a provider that interacts with the API of a fictional coffee-shop application,
-      HashiCups. To do this, you will:'
-  - type: text
-    contents: |-
-      To do this, you will:
-
-      - Update your schema
-      - Implement update
+    contents: In this challenge, you will add delete capabilities to the `order` resource
+      for a Terraform provider that interacts with the API of a fictional coffee-shop
+      application, HashiCups. To do this, you will implement delete. This delete function
+      invokes a `DELETE` request to the `/orders/{orderId}` endpoint.
   tabs:
   - title: Text Editor
     type: code
@@ -1888,13 +1920,6 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
-- slug: implement-delete
-  id: x3lvijqrir1b
-  type: challenge
-  title: Implement Delete
-  teaser: Learn to add delete capabilities to the order resource for a Terraform provider.
   assignment: |-
     *Implement delete*
 
@@ -1976,12 +2001,20 @@ challenges:
     ```
 
     Congratulations! You have added delete capabilities to the order resource.
+- slug: implement-import
+  id: zilnjsye2znc
+  type: challenge
+  title: Implement Import
+  teaser: Learn to add import capabilities to the order resource for a Terraform provider.
+  difficulty: basic
+  timelimit: 600
   notes:
   - type: text
-    contents: In this challenge, you will add delete capabilities to the `order` resource
-      for a Terraform provider that interacts with the API of a fictional coffee-shop
-      application, HashiCups. To do this, you will implement delete. This delete function
-      invokes a `DELETE` request to the `/orders/{orderId}` endpoint.
+    contents: In this challenge, you will add import capabilities to the `order` resource
+      of the HashiCups Terraform provider, which interacts with the API of a fictional
+      coffee-shop application. To do this, you will implement a `ResourceImporter()`
+      function. This function retrieves an existing HashiCups order and brings it
+      into Terraform state, enabling Terraform to manage it.
   tabs:
   - title: Text Editor
     type: code
@@ -1990,13 +2023,6 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
-- slug: implement-import
-  id: zilnjsye2znc
-  type: challenge
-  title: Implement Import
-  teaser: Learn to add import capabilities to the order resource for a Terraform provider.
   assignment: |-
     *Implement import*
 
@@ -2197,21 +2223,4 @@ challenges:
     Over the course of this track, you re-created the HashiCups provider and learned how to create data sources,
     authenticate the provider to the HashiCups client, create resources with CRUD functionality, and import existing
     resources.
-  notes:
-  - type: text
-    contents: In this challenge, you will add import capabilities to the `order` resource
-      of the HashiCups Terraform provider, which interacts with the API of a fictional
-      coffee-shop application. To do this, you will implement a `ResourceImporter()`
-      function. This function retrieves an existing HashiCups order and brings it
-      into Terraform state, enabling Terraform to manage it.
-  tabs:
-  - title: Text Editor
-    type: code
-    hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
-  - title: Terminal
-    type: terminal
-    hostname: workstation
-  difficulty: basic
-  timelimit: 600
 checksum: "5501568913803260720"
