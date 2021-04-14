@@ -1,4 +1,6 @@
-# field-demo-vault-secrets-mgmt
-[![CircleCI](https://circleci.com/gh/hashicorp/field-demo-vault-secrets-mgmt.svg?style=svg&circle-token=36a4cfa68c43a5878926c8fc1b3e3f0bd5171e4d)](https://circleci.com/gh/hashicorp/field-demo-vault-secrets-mgmt)
+# field-demo-terraform-build-your-own-provider
 
-Vault Demos for Secrets Mgmt
+Terraform semo for building your own Terraform Provider from scratch.
+
+# TODO:
+- Add a CircleCI badge and add checks / tests to our test suite.
