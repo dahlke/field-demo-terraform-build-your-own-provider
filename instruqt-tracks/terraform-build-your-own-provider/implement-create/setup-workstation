@@ -1,0 +1,5 @@
+#!/bin/bash -l
+
+# TODO: git checkout debug-tf-providers
+
+exit 0

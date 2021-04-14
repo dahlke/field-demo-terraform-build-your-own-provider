@@ -433,11 +433,11 @@ challenges:
       In this challenge, you will set up your Terraform provider development environment and create a coffees data
       source that will return all coffees HashiCups serves. To do this, you will:
 
-      - Set up your development environment.
-      - Define the coffees data source.
-      - Define the coffees schema.
-      - Implement read.
-      - Add coffees data source to the provider schema.
+      - *Explore your development environment.*
+      - *Define the coffees data source.* You will add a scaffold that defines an empty schema and functions to retrieve a list of coffees.
+      - *Define the coffees schema.* The schema defines properties that allow Terraform to recognize, reference and store the coffees data resource.
+      - *Implement read.* This read function invokes a `GET` request to the `/coffees` endpoint, then maps its value to the schema defined above.
+      - *Add coffees data source to the provider schema.* This allows you to use the data source in your configuration.
   tabs:
   - title: Text Editor
     type: code
@@ -638,8 +638,9 @@ challenges:
   - type: text
     contents: |-
       To do this, you will:
-      - Update provider schema.
-      - Define `providerConfigure`
+
+      - *Update provider schema.* You will add `username` and `password` parameters to your provider schema. In addition, you will set the `ConfigureContextFunc` property to the the name of the function that will configure your provider, `providerConfigure`.
+      - *Define `providerConfigure`* This function actually configures your provider. If both the username and password are not empty, the function returns an authenticated API client; else, the function returns an unauthenticated API client. The authenticated API client is able to access protected endpoints, the unauthenticated one is not.
   tabs:
   - title: Text Editor
     type: code
@@ -949,11 +950,11 @@ challenges:
     contents: |-
       To do this, you will:
 
-      - Create a new order via API
-      - Define order data source.
-      - Define order schema.
-      - Implement complex read.
-      - Add order data source to the provider schema.
+      - *Create a new order via API* There must be an existing order for you to retrieve it.
+      - *Define order data source.* You will add a scaffold that defines an empty schema and functions to retrieve order information.
+      - *Define order schema.* The schema reflects the response from invoking the `/order/{orderId}` endpoint. The `order` schema is considered complex because it nests a list of `OrderItems`.
+      - *Implement complex read.*  This read functionality uses multiple nesting functions to flatten the response from `/order/{orderId}` and map it to the `order` schema.
+      - *Add order data source to the provider schema.* This allows you to use the data source in your configuration.
   tabs:
   - title: Text Editor
     type: code
@@ -1231,7 +1232,9 @@ challenges:
     Congratulations! You have added error and warning messages to your HashiCups provider and implemented a nested read function.
   notes:
   - type: text
-    contents: TODO
+    contents: |-
+      In this tutorial, you will add custom error messages to a Terraform provider that interacts with the API of a
+      fictional coffee-shop application, HashiCups and view detailed Terraform provider logs.
   tabs:
   - title: Text Editor
     type: code
@@ -1697,11 +1700,11 @@ challenges:
     contents: |-
       To do this, you will:
 
-      - Define `order` resource.
-      - Define `order` schema.
-      - Add create functionality.
-      - Add read functionality.
-      - Add `order` resource to the provider schema.
+      - *Define `order` resource.* You will add a scaffold that defines an empty schema and functions to create, read, update and delete orders.
+      - *Define `order` schema.* The schema contains fields used to create a new order and retrieved by the read functionality.
+      - *Add create functionality.* The create function invokes a `POST` request to `/orders` to create a new order.
+      - *Add read functionality.* The read function invokes a `GET` request to `/orders/{orderID}` to retrieve the order's data. The orders schema contains a nested object, therefore you will use multiple flattening functions to map the response to the `order` schema.
+      - *Add `order` resource to the provider schema.* This allows you to use the resource in your configuration.
   tabs:
   - title: Text Editor
     type: code
@@ -1878,15 +1881,15 @@ challenges:
     Congratulations! You have added update capabilities to the order resource.
   notes:
   - type: text
-    contents: 'In this challenge, you will add update capabilities to the order resource
-      of a provider that interacts with the API of a fictional coffee-shop application,
-      HashiCups. To do this, you will:'
+    contents: |-
+      In this challenge, you will add update capabilities to the order resource of a provider that interacts with the
+      API of a fictional coffee-shop application, HashiCups. To do this, you will:
   - type: text
     contents: |-
       To do this, you will:
 
-      - Update your schema
-      - Implement update
+      - *Update your schema.* Add a `last_updated` attribute to the `order` schema. This attribute will update to the current date time whenever the order resource is updated.
+      - *Implement update.* This update function invokes a `PUT` request to the `/orders/{orderId}` endpoint with the update order items in the request body. After the update function runs, it invokes `resourceOrderRead` to retrieve the order's updated values.
   tabs:
   - title: Text Editor
     type: code
@@ -2222,4 +2225,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "13298443286777095498"
+checksum: "15917437881434170620"
