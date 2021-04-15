@@ -1,6 +1,17 @@
 #!/bin/bash -l
 
+# Check out the branch with all the correct files
 cd /root/github.com/hashicorp/terraform-provider-hashicups/
 git checkout implement-create
+
+# Create an order.
+curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
+
+# Install the provider
+make install
+
+# Initialize and apply
+cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+terraform init && terraform apply -auto-approve
 
 exit 0
