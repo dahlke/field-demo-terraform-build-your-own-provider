@@ -481,7 +481,9 @@ challenges:
 
     Add this to your `.bashrc` for later usage.
 
+    ```
     echo "export HASHICUPS_TOKEN=${HASHICUPS_TOKEN}" >> ~/.bashrc
+    ```
 
     In your `hashicups/provider.go` file, replace the `Provider()` function with the code snippet below. This defines
     the provider schema (`username`, `password`) and the `ConfigureContextFunc`.
@@ -536,7 +538,7 @@ challenges:
     )
     ```
 
-    Once you have added the new imports, be sure to install //www.terraform.io/docs/extend/schemas/schema-types.html#typemap).
+    Once you have added the new imports, be sure to install the dependencies.
 
     ```
     cd /root/github.com/hashicorp/terraform-provider-hashicups
@@ -2225,4 +2227,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "11642163443211714634"
+checksum: "2461743408844760840"

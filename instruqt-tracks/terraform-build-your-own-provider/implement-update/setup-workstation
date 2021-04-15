@@ -3,4 +3,7 @@
 cd /root/github.com/hashicorp/terraform-provider-hashicups/
 git checkout implement-create
 
+cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+rm .terraform.lock.hcl
+
 exit 0
