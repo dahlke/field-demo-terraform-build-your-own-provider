@@ -1,5 +1,6 @@
 #!/bin/bash -l
 
-git checkout debug-tf-providers
+# cd /root/github.com/hashicorp/terraform-provider-hashicups/
+# git checkout debug-tf-providers
 
 exit 0

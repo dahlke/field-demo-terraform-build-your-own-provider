@@ -1,5 +1,6 @@
 #!/bin/bash -l
 
-git checkout auth-configuration
+# cd /root/github.com/hashicorp/terraform-provider-hashicups/
+# git checkout auth-configuration
 
 exit 0

@@ -1,7 +1,9 @@
 #!/bin/bash -l
 
-curl -X POST localhost:19090/signup -d '{"username":"education", "password":"test123"}'
+cd /root/github.com/hashicorp/terraform-provider-hashicups/
+git checkout auth-configuration
 
+# curl -X POST localhost:19090/signup -d '{"username":"education", "password":"test123"}'
 # export HASHICUPS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTEwNzgwODUsInVzZXJfaWQiOjIsInVzZXJuYW1lIjoiZWR1Y2F0aW9uIn0.CguceCNILKdjOQ7Gx0u4UAMlOTaH3Dw-fsll2iXDrYU
 
 exit 0

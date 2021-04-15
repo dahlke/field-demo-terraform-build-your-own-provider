@@ -1,10 +1,11 @@
 #!/bin/bash -l
 
-git checkout implement-read
+# cd /root/github.com/hashicorp/terraform-provider-hashicups/
+# git checkout implement-read
 
 # Remove the .terraform.lock.hcl file and statefile from the last challenge
-cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
-rm -rf .terraform
-rm .terraform.lock.hcl
+# cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+# rm -rf .terraform
+# rm .terraform.lock.hcl
 
 exit 0
