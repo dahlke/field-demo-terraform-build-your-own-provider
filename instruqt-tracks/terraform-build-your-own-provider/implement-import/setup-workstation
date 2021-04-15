@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-# cd /root/github.com/hashicorp/terraform-provider-hashicups/
-# git checkout implement-delete
+cd /root/github.com/hashicorp/terraform-provider-hashicups/
+git checkout implement-delete
 
 exit 0
