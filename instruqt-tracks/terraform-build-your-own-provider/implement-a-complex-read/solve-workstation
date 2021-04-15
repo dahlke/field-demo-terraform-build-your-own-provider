@@ -3,4 +3,17 @@
 cd /root/github.com/hashicorp/terraform-provider-hashicups/
 git checkout implement-complex-read
 
+# Create an order via the API
+curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
+
+# Read the order
+curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
+
+# Install the provider
+make install
+
+# Initialize and apply
+cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+terraform init && terraform apply -auto-approve
+
 exit 0
