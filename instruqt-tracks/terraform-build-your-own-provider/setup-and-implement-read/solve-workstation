@@ -11,4 +11,8 @@ go mod vendor
 # Install the provider
 make install
 
+# Initialize and apply
+cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+terraform init && terraform apply -auto-approve
+
 exit 0

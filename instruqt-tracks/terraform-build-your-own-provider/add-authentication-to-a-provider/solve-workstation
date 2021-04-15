@@ -1,9 +1,35 @@
 #!/bin/bash -l
 
+# Check out the branch with all the correct files
 cd /root/github.com/hashicorp/terraform-provider-hashicups/
 git checkout auth-configuration
 
-# curl -X POST localhost:19090/signup -d '{"username":"education", "password":"test123"}'
-# export HASHICUPS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTEwNzgwODUsInVzZXJfaWQiOjIsInVzZXJuYW1lIjoiZWR1Y2F0aW9uIn0.CguceCNILKdjOQ7Gx0u4UAMlOTaH3Dw-fsll2iXDrYU
+# Install the new dependencies
+go mod vendor
+
+# Create the user we need
+curl -X POST localhost:19090/signup -d '{"username":"education", "password":"test123"}'
+
+# Sign in as that user and set the HASHICUPS_TOKEN
+export HASHICUPS_TOKEN=$(curl -X POST localhost:19090/signin -d '{"username":"education", "password":"test123"}' | jq -r .token)
+
+# Put the HASHICUPS_TOKEN in our .bashrc file
+echo "export HASHICUPS_TOKEN=${HASHICUPS_TOKEN}" >> ~/.bashrc
+
+# Install the provider
+make install
+
+# Initialize and apply
+cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+
+# Set our username and password as env vars
+export HASHICUPS_USERNAME="education"
+export HASHICUPS_PASSWORD="test123"
+
+# Put the two env vars in our .bashrc file
+echo "export HASHICUPS_USERNAME=${HASHICUPS_USERNAME}" >> ~/.bashrc
+echo "export HASHICUPS_PASSWORD=${HASHICUPS_PASSWORD}" >> ~/.bashrc
+
+terraform init && terraform apply -auto-approve
 
 exit 0
