@@ -1,6 +1,24 @@
 #!/bin/bash -l
 
+# Check out the branch with all the correct files
 cd /root/github.com/hashicorp/terraform-provider-hashicups/
 git checkout implement-import
+
+# Install the provider
+make install
+
+# Initialize the terraform config
+cd /root/github.com/hashicorp/terraform-provider-hashicups/examples/import
+terraform init
+
+# Create a new order
+curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
+
+# Import the order that was created
+# TODO: get the right ID
+terraform import hashicups_order.sample 3
+
+# Confirm the order has been imported properly
+terraform state show hashicups_order.sample
 
 exit 0
