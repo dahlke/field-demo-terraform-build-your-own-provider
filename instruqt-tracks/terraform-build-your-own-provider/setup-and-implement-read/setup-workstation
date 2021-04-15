@@ -26,13 +26,21 @@ echo "export PATH=$PATH:/usr/bin/go/bin" >> /root/.bashrc
 echo "export GOPATH=/root" >> /root/.bashrc
 
 ###########
+# Install a Docker Compose version > 1.25.5
+###########
+rm /usr/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+sudo chmod +x /usr/bin/docker-compose
+
+
+###########
 # Set up the development environment
 ###########
 # git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
 
 mkdir -p /root/github.com/hashicorp/
 cd /root/github.com/hashicorp/
-git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hashicups
+git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
 
 ###########
 # Start the HashiCups Application

@@ -1,6 +1,6 @@
 # terraform-build-your-own-provider
 
-# TODO:
+## TODO:
 
 - change tutorial to challenge all over
 - make all the bullet points have the info from their sub-bullets
