@@ -1,5 +1,5 @@
 #!/bin/bash -l
 
-# TODO: git checkout implement-delete
+git checkout implement-delete
 
 exit 0

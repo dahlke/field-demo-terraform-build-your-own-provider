@@ -1,5 +1,5 @@
 #!/bin/bash -l
 
-# TODO: git checkout implement-complex-read
+git checkout implement-complex-read
 
 exit 0

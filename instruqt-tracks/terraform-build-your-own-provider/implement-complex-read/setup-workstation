@@ -1,5 +1,0 @@
-#!/bin/bash -l
-
-# TODO: git checkout auth-configuration
-
-exit 0
