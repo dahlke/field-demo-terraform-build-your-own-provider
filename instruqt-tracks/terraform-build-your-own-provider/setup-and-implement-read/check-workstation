@@ -1,4 +1,50 @@
 #!/bin/bash -l
 
+# TODO: check curl localhost:19090/health
+
+# Check go.mod exists
+MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
+if test -f "$MOD_FILE"; then
+    echo "$MOD_FILE exists."
+else
+    echo "$MOD_FILE does not exist."
+fi
+
+# Check go.sum exists as well as the vendor/modules.txt directory
+SUM_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
+if ! test -f "$SUM_FILE"; then
+    fail-message "You haven't run 'go mod init terraform-provider-hashicups' yet."
+fi
+
+MODTEXT_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/vendor/modules.txt
+if ! test -f "$MODTEXT_FILE"; then
+    fail-message "You haven't run 'go mod vendor' yet."
+fi
+
+# Check hashicups/provider.go
+PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+
+# Check hashicups/data_source_coffee.go for `func dataSourceCoffees()`
+DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
+
+if ! grep -q 'func dataSourceCoffees()' "$DATA_SOURCE_COFFEE_FILE"; then
+    fail-message "You need to define the 'dataSourceCoffees' function."
+fi
+
+if ! grep -q '"ingredients": &schema.Schema{' "$DATA_SOURCE_COFFEE_FILE"; then
+    fail-message "You need to define the correct schema for the 'dataSourceCoffees' function."
+fi
+
+# Check hashicups/data_source_coffee.go file exists
+
+# Check that the user read from the /coffees endpoint
+
+# Check hashicups/data_source_coffee.go has the updated schema
+
+# Check the provider has been built
+
+# Check the provider has been installed
+
+# Check that terraform init and apply have been run
 
  exit 0

@@ -19,6 +19,7 @@ sudo systemctl start docker
 # TODO: parameterize this or bake it into the image
 wget https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
 rm -rf /usr/bin/go && tar -C /usr/bin -xzf go1.16.3.linux-amd64.tar.gz
+rm go1.16.3.linux-amd64.tar.gz
 
 export PATH=$PATH:/usr/bin/go/bin
 export GOPATH=/root
