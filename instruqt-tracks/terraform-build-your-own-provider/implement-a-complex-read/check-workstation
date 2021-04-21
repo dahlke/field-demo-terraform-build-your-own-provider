@@ -1,0 +1,25 @@
+#!/bin/bash -l
+
+# TODO: Check the order was created
+
+# TODO: Check that the order was looked up
+
+# TODO: Check that the `hashicups/data_source_order.go` file exists
+
+# TODO: Check the contents of the `hashicups/data_source_order.go` file.
+
+# TODO: Check the code has been formatted at least once.
+
+# TODO: Check the function `dataSourceRead` has been added to `hashicups/data_source_order.go`
+
+# TODO: Check the function `flattenOrderItemsData` has been added to `hashicups/data_source_order.go`
+
+# TODO: Check the DataSourceMap is updated in hashicups/provider.go
+
+# TODO: Check the provider was built and installed
+
+# TODO: Check the main.tf file was updated correctly
+
+# TODO: Check that terraform apply has been run
+
+# TODO: Check the outputs from teraform outputs matches what we expect

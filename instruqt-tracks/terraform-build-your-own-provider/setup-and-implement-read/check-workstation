@@ -1,6 +1,7 @@
 #!/bin/bash -l
 
-# TODO: check curl localhost:19090/health
+# Check that the user read from the /health endpoint
+grep -q "curl localhost:19090/health" /root/.bash_history || fail-message "You haven't run 'curl localhost:19090/health' yet."
 
 # Check go.mod exists
 MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
@@ -22,8 +23,12 @@ if ! test -f "$MODTEXT_FILE"; then
     exit 1
 fi
 
-# Check hashicups/provider.go
+# Check hashicups/provider.go has the correct updates
 PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+if ! grep -q 'hashicups_coffees' "$PROVIDER_FILE"; then
+    fail-message "You need to add 'hashicup_coffees' data source in 'hashicups/provider.go'."
+    exit 1
+fi
 
 # Check hashicups/data_source_coffee.go for `func dataSourceCoffees()`
 DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
@@ -58,5 +63,6 @@ if ! test -f "$PROVIDER_BINARY_FILE"; then
 fi
 
 # Check that terraform init and apply have been run
+grep -q "go fmt" /root/.bash_history || fail-message "You haven't run 'go fmt' yet."
 grep -q "terraform init" /root/.bash_history || fail-message "You haven't run 'terraform init' yet."
 grep -q "terraform apply" /root/.bash_history || fail-message "You haven't run 'terraform apply' yet."

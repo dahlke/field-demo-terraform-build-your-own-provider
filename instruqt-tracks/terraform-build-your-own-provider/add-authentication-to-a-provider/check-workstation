@@ -1,0 +1,32 @@
+#!/bin/bash -l
+
+# TODO: Check curl -X POST localhost:19090/signup -d '{"username":"education", "password":"test123"}' | jq
+
+# TODO: Check curl -X POST localhost:19090/signin -d '{"username":"education", "password":"test123"}'
+
+# TODO: Check export HASHICUPS_TOKEN=<YOUR_TOKEN_HERE>
+
+# TODO: Check echo "export HASHICUPS_TOKEN=${HASHICUPS_TOKEN}" >> ~/.bashrc
+
+# TODO: Check hashicups/provider.go has the username and password schemas
+
+# TODO: Check hashicups/provider.go has the new imports
+
+# TODO: Check that the new dependencies were installed with go mod vendor
+
+# TODO: Check hashicups/provider.go has the new providerConfigure function
+
+# TODO: Check the formatting
+
+# Check the provider has been built and installed
+PROVIDER_BINARY_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
+if ! test -f "$PROVIDER_BINARY_FILE"; then
+    fail-message "You haven't built and installed the provider binary."
+    exit 1
+fi
+
+# Check that terraform init and apply have been run
+grep -q "terraform init" /root/.bash_history || fail-message "You haven't run 'terraform init' yet."
+grep -q "terraform apply" /root/.bash_history || fail-message "You haven't run 'terraform apply' yet."
+
+# TODO: Check the login was attempted in the docker compose logs
