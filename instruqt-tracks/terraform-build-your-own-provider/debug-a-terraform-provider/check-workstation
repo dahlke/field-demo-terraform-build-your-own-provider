@@ -1,1 +1,21 @@
 #!/bin/bash -l
+
+PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+
+# Check `hashicups/provider.go` for `diags` variable.
+if ! grep -q 'diags = append' "$PROVIDER_FILE"; then
+    fail-message "You need to add the 'diags' variable to your `providerConfigure` function in 'hashicups/provider.go'."
+    exit 1
+fi
+
+# ---
+
+# TODO: Check env vars were changed to bad ones
+
+# TODO: Check for a bad signin after changing the provider setup? In the output?
+
+# ---
+
+# TODO: Check env vars were changed to good vars
+
+# TODO: Check for a good signin after changing the provider setup? In the output?

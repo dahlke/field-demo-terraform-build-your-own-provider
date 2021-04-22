@@ -1,1 +1,5 @@
 #!/bin/bash -l
+
+# Check `hashicups/resource_order.go` exists
+
+# Check the contents of `hashicups/resource_order.go`

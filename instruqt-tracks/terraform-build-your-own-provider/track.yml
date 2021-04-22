@@ -1084,6 +1084,8 @@ challenges:
 
     Update your HashiCups provider configuration so it uses the wrong credentials.
 
+    # TODO: do this with env vars instead?
+
     ```
     provider "hashicups" {
       username = "education"
@@ -1121,9 +1123,11 @@ challenges:
       Summary:  "Warning Message Summary",
       Detail:   "This is the detailed warning message from providerConfigure",
     })
-    Copy
-    Your providerConfigure function should look like the following.
+    ```
 
+    Your `providerConfigure` function should look like the following.
+
+    ```
     func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
       ...
 
@@ -1217,6 +1221,9 @@ challenges:
 
     Fix your Terraform configuration to use the correct credentials.
 
+    TODO: change this to env vars again
+
+
     ```
     provider "hashicups" {
       username = "education"
@@ -1239,10 +1246,10 @@ challenges:
 
     There should be no errors or warning messages.
 
-    Tip: You can also retrieve detailed Terraform and provider logs by setting the environment variable `TF_LOG`.
+    _Tip: You can also retrieve detailed Terraform and provider logs by setting the environment variable `TF_LOG`.
     Please include a detailed logs with any bug reports so the author can identify and address the bug. To learn more
     about log levels and how to interpret a crash log, refer to the
-    [Debugging Terraform Documentation](https://www.terraform.io/docs/internals/debugging.html).
+    [Debugging Terraform Documentation](https://www.terraform.io/docs/internals/debugging.html)._
 
     Congratulations! You have added error and warning messages to your HashiCups provider and implemented a nested read function.
   notes:
@@ -1329,6 +1336,8 @@ challenges:
     ```
 
     *Define `order` schema*
+
+    # TODO: didn't we already do this? Rework this.
 
     To create a HashiCups order, you would send a POST request to the `/orders` endpoint with a list of `OrderItems`,
     containing the coffee object and its respective quantity.
