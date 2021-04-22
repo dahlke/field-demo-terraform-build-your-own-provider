@@ -479,6 +479,12 @@ challenges:
     export HASHICUPS_TOKEN=<YOUR_TOKEN_HERE>
     ```
 
+    Or to make setting this a little simpler, use this one-liner.
+
+    ```
+    export HASHICUPS_TOKEN=$(curl -X POST localhost:19090/signin -d '{"username":"education", "password":"test123"}' | jq -r .token)
+    ```
+
     Add this to your `.bashrc` for later usage.
 
     ```
@@ -612,6 +618,13 @@ challenges:
     export HASHICUPS_PASSWORD=test123
     ```
 
+    Add these to your `.bashrc` for later usage.
+
+    ```
+    echo "export HASHICUPS_USERNAME=education" >> ~/.bashrc
+    echo "export HASHICUPS_PASSWORD=test123" >> ~/.bashrc
+    ```
+
     Finally, initialize your workspace to refresh your HashiCups provider, then apply.
 
     ```
@@ -665,7 +678,7 @@ challenges:
     you generated in the sign in step.
 
     ```
-    curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
+    curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
     ```
 
     Query the order using the order ID you received in the response above as a HTML parameter
@@ -1235,7 +1248,7 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this tutorial, you will add custom error messages to a Terraform provider that interacts with the API of a
+      In this challenge, you will add custom error messages to a Terraform provider that interacts with the API of a
       fictional coffee-shop application, HashiCups and view detailed Terraform provider logs.
   tabs:
   - title: Text Editor
@@ -2226,4 +2239,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "2567932351914314048"
+checksum: "4351901935379375486"

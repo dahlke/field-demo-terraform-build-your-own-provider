@@ -1,52 +1,51 @@
 #!/bin/bash -l
 
-# Check that the user read from the /health endpoint
+MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
+MODTEXT_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/vendor/modules.txt
+PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
+PROVIDER_BINARY_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
+
+# Check that the user read from the `/health` endpoint
 grep -q "curl localhost:19090/health" /root/.bash_history || fail-message "You haven't run 'curl localhost:19090/health' yet."
 
-# Check go.mod exists
-MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
+# Check `go.mod` exists
 if ! test -f "$MOD_FILE"; then
     fail-message "You haven't run 'go mod init terraform-provider-hashicups' yet."
     exit 1
 fi
 
-# Check go.sum exists as well as the vendor/modules.txt directory
-SUM_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
-if ! test -f "$SUM_FILE"; then
-    fail-message "You haven't run 'go mod init terraform-provider-hashicups' yet."
-    exit 1
-fi
-
-MODTEXT_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/vendor/modules.txt
+# Check the `vendor/modules.txt` file exists
 if ! test -f "$MODTEXT_FILE"; then
     fail-message "You haven't run 'go mod vendor' yet."
     exit 1
 fi
 
-# Check hashicups/provider.go has the correct updates
-PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+# Check `hashicups/provider.go` has the correct updates
 if ! grep -q 'hashicups_coffees' "$PROVIDER_FILE"; then
     fail-message "You need to add 'hashicup_coffees' data source in 'hashicups/provider.go'."
     exit 1
 fi
 
-# Check hashicups/data_source_coffee.go for `func dataSourceCoffees()`
-DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
+# Check hashicups/data_source_coffee.go file exists
 if ! test -f "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You haven't created the 'hashicups/data_source_coffee.go' file yet."
     exit 1
 fi
 
+# Check hashicups/data_source_coffee.go for `func dataSourceCoffees()`
 if ! grep -q 'func dataSourceCoffees()' "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You need to define the 'dataSourceCoffees' function."
     exit 1
 fi
 
+# Check hashicups/data_source_coffee.go for `func dataSourceCoffeesRead()`
 if ! grep -q 'func dataSourceCoffeesRead()' "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You need to define the 'dataSourceCoffeesRead' function."
     exit 1
 fi
 
+# Check hashicups/data_source_coffee.go for `ingredients` schema
 if ! grep -q '"ingredients": &schema.Schema{' "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You need to define the correct schema for the 'dataSourceCoffees' function."
     exit 1
@@ -56,13 +55,11 @@ fi
 grep -q "curl localhost:19090/coffees" /root/.bash_history || fail-message "You haven't run 'curl localhost:19090/coffees' yet."
 
 # Check the provider has been built and installed
-PROVIDER_BINARY_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
 if ! test -f "$PROVIDER_BINARY_FILE"; then
     fail-message "You haven't built and installed the provider binary."
     exit 1
 fi
 
 # Check that terraform init and apply have been run
-grep -q "go fmt" /root/.bash_history || fail-message "You haven't run 'go fmt' yet."
 grep -q "terraform init" /root/.bash_history || fail-message "You haven't run 'terraform init' yet."
 grep -q "terraform apply" /root/.bash_history || fail-message "You haven't run 'terraform apply' yet."

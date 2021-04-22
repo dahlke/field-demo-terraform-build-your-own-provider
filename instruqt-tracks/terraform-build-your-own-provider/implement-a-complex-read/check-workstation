@@ -1,8 +1,7 @@
 #!/bin/bash -l
 
-# TODO: Check the order was created
-
-# TODO: Check that the order was looked up
+# TODO: Check that the order was created by looking it up
+# curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
 
 # TODO: Check that the `hashicups/data_source_order.go` file exists
 
