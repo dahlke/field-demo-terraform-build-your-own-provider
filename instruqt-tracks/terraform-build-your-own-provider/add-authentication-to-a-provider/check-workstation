@@ -12,18 +12,18 @@ grep -q "curl localhost:19090/signup" '$BASH_HISTORY_FILE' || fail-message "You 
 # Check the user signed in
 grep -q "curl localhost:19090/signin" '$BASH_HISTORY_FILE' || fail-message "You haven't run 'curl localhost:19090/signin' yet."
 
-# Check the HASHICUPS_TOKEN env var was set
+# Check the `HASHICUPS_TOKEN` env var was set
 if [ "$HASHICUPS_TOKEN" = "" ]; then
     fail-message "You did not set the 'HASHICUPS_TOKEN' env var."
 fi
 
-# Check the HASHICUPS_TOKEN env var was added to the bashrc
+# Check the `HASHICUPS_TOKEN` env var was added to the bashrc
 if ! grep -q 'HASHICUPS_TOKEN' "$BASHRC_FILE"; then
     fail-message "You need to add the 'HASHICUPS_TOKEN' env var export to your '~/.bashrc' file."
     exit 1
 fi
 
-# Check hashicups/provider.go has the username and password schemas
+# Check `hashicups/provider.go` has the `username` and `password` schemas
 if ! grep -q 'username' "$PROVIDER_FILE"; then
     fail-message "You need to add the 'username' schema in 'hashicups/provider.go'."
     exit 1
@@ -34,7 +34,7 @@ if ! grep -q 'password' "$PROVIDER_FILE"; then
     exit 1
 fi
 
-# Check hashicups/provider.go has the new imports
+# Check `hashicups/provider.go` has the new imports
 if ! grep -q 'github.com/hashicorp-demoapp/hashicups-client-go' "$PROVIDER_FILE"; then
     fail-message "You need to add the 'github.com/hashicorp-demoapp/hashicups-client-go' import to 'hashicups/provider.go'."
     exit 1
@@ -47,7 +47,7 @@ fi
 
 # TODO: Check that the new dependencies were installed with go mod vendor
 
-# Check hashicups/provider.go has the new providerConfigure function
+# Check `hashicups/provider.go` has the new `providerConfigure` function
 if ! grep -q 'providerConfigure' "$PROVIDER_FILE"; then
     fail-message "You need to add the 'providerConfigure' function to 'hashicups/provider.go'."
     exit 1
@@ -59,37 +59,34 @@ if ! test -f "$PROVIDER_BINARY_FILE"; then
     exit 1
 fi
 
-# Check the HASHICUPS_USERNAME env var was set
+# Check the `HASHICUPS_USERNAME` env var was set
 if [ "$HASHICUPS_USERNAME" = "" ]; then
     fail-message "You did not set the 'HASHICUPS_USERNAME' env var."
 fi
 
-# Check the HASHICUPS_PASSWORD env var was set
+# Check the `HASHICUPS_PASSWORD` env var was set
 if [ "$HASHICUPS_PASSWORD" = "" ]; then
     fail-message "You did not set the 'HASHICUPS_PASSWORD' env var."
 fi
 
-# Check the HASHICUPS_USERNAME env var was added to ~/.bashrc
+# Check the `HASHICUPS_USERNAME` env var was added to `~/.bashrc`
 if ! grep -q 'HASHICUPS_USERNAME' "$BASHRC_FILE"; then
     fail-message "You need to add the 'HASHICUPS_USERNAME' env var export to your '~/.bashrc' file."
     exit 1
 fi
 
-# Check the HASHICUPS_PASSWORD env var was added to ~/.bashrc
+# Check the `HASHICUPS_PASSWORD` env var was added to `~/.bashrc`
 if ! grep -q 'HASHICUPS_PASSWORD' "$BASHRC_FILE"; then
     fail-message "You need to add the 'HASHICUPS_PASSWORD' env var export to your '~/.bashrc' file."
     exit 1
 fi
 
-# Check that terraform init and apply have been run
-# TODO: these tests are pretty useless after the first init / apply. ALso - the constant init-ing?
-grep -q "terraform init" /root/.bash_history || fail-message "You haven't run 'terraform init' yet."
-grep -q "terraform apply" /root/.bash_history || fail-message "You haven't run 'terraform apply' yet."
-
-# Check the login was attempted in the docker compose logs
+# Check the login was attempted in the `docker-compose` logs
 cd ../docker_compose
 DOCKER_COMPOSE_SIGNIN_LOGS=$(docker-compose logs | grep signin)
 if ! grep -q 'Handle User | signin' "$DOCKER_COMPOSE_SIGNIN_LOGS"; then
     fail-message "There was not a successful login attempt to HashiCups."
     exit 1
 fi
+
+# TODO: check the state file and outputs

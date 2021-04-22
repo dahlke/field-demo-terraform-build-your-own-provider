@@ -21,37 +21,37 @@ if ! test -f "$MODTEXT_FILE"; then
     exit 1
 fi
 
-# Check `hashicups/provider.go` has the correct updates
+# Check `hashicups/provider.go` has `hashicup_coffees` as a data source
 if ! grep -q 'hashicups_coffees' "$PROVIDER_FILE"; then
     fail-message "You need to add 'hashicup_coffees' data source in 'hashicups/provider.go'."
     exit 1
 fi
 
-# Check hashicups/data_source_coffee.go file exists
+# Check `hashicups/data_source_coffee.go` file exists
 if ! test -f "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You haven't created the 'hashicups/data_source_coffee.go' file yet."
     exit 1
 fi
 
-# Check hashicups/data_source_coffee.go for `func dataSourceCoffees()`
+# Check `hashicups/data_source_coffee.go` for `func dataSourceCoffees()`
 if ! grep -q 'func dataSourceCoffees()' "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You need to define the 'dataSourceCoffees' function."
     exit 1
 fi
 
-# Check hashicups/data_source_coffee.go for `func dataSourceCoffeesRead()`
+# Check `hashicups/data_source_coffee.go` for `func dataSourceCoffeesRead()`
 if ! grep -q 'func dataSourceCoffeesRead()' "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You need to define the 'dataSourceCoffeesRead' function."
     exit 1
 fi
 
-# Check hashicups/data_source_coffee.go for `ingredients` schema
+# Check `hashicups/data_source_coffee.go` for `ingredients` schema
 if ! grep -q '"ingredients": &schema.Schema{' "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You need to define the correct schema for the 'dataSourceCoffees' function."
     exit 1
 fi
 
-# Check that the user read from the /coffees endpoint
+# Check that the user read from the `/coffees` endpoint
 grep -q "curl localhost:19090/coffees" /root/.bash_history || fail-message "You haven't run 'curl localhost:19090/coffees' yet."
 
 # Check the provider has been built and installed
@@ -60,6 +60,4 @@ if ! test -f "$PROVIDER_BINARY_FILE"; then
     exit 1
 fi
 
-# Check that terraform init and apply have been run
-grep -q "terraform init" /root/.bash_history || fail-message "You haven't run 'terraform init' yet."
-grep -q "terraform apply" /root/.bash_history || fail-message "You haven't run 'terraform apply' yet."
+# TODO: check the state file and outputs

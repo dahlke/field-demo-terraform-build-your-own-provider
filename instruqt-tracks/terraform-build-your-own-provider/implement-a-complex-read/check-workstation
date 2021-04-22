@@ -1,24 +1,53 @@
 #!/bin/bash -l
 
+PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+DATA_SOURCE_ORDERS_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_order.go
+TF_MAIN_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/examples/main.tf
+
 # TODO: Check that the order was created by looking it up
 # curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
 
-# TODO: Check that the `hashicups/data_source_order.go` file exists
+# Check that the `hashicups/data_source_order.go` file exists
+if ! test -f "$DATA_SOURCE_ORDERS_FILE"; then
+    fail-message "You haven't created the 'hashicups/data_source_order.go' file yet."
+    exit 1
+fi
 
-# TODO: Check the contents of the `hashicups/data_source_order.go` file.
+# Check the contents of the `hashicups/data_source_order.go` file.
+if ! grep -q 'func dataSourceOrder' "$DATA_SOURCE_ORDERS_FILE"; then
+    fail-message "You need to define the 'dataSourceOrders' function in 'hashicups/data_source_order.go'."
+    exit 1
+fi
 
-# TODO: Check the code has been formatted at least once.
+# Check the function `dataSourceOrderRead` has been added to `hashicups/data_source_order.go`
+if ! grep -q 'func dataSourceOrderRead' "$DATA_SOURCE_ORDERS_FILE"; then
+    fail-message "You need to define the 'dataSourceRead' function in 'hashicups/data_source_order.go'."
+    exit 1
+fi
 
-# TODO: Check the function `dataSourceRead` has been added to `hashicups/data_source_order.go`
+# Check the function `flattenOrderItemsData` has been added to `hashicups/data_source_order.go`
+if ! grep -q 'func flattenOrderItemsData' "$DATA_SOURCE_ORDERS_FILE"; then
+    fail-message "You need to define the 'flattenOrderItemsData' function in 'hashicups/data_source_order.go'."
+    exit 1
+fi
 
-# TODO: Check the function `flattenOrderItemsData` has been added to `hashicups/data_source_order.go`
+# Check `hashicups/provider.go` has `hashicup_order` as a data source
+if ! grep -q 'hashicups_orders' "$PROVIDER_FILE"; then
+    fail-message "You need to add 'hashicup_order' data source in 'hashicups/provider.go'."
+    exit 1
+fi
 
-# TODO: Check the DataSourceMap is updated in hashicups/provider.go
+# Check the `main.tf` file has the new data source and output
+if ! grep -q 'data "hashicups_order" "order"' "$PROVIDER_FILE"; then
+    fail-message "You need to add the 'hashicups_order' data source in 'examples/main.tf'."
+    exit 1
+fi
 
-# TODO: Check the provider was built and installed
+if ! grep -q 'output "order"' "$PROVIDER_FILE"; then
+    fail-message "You need to add the 'order' output in 'examples/main.tf'."
+    exit 1
+fi
 
-# TODO: Check the main.tf file was updated correctly
+# TODO: Check the outputs from `teraform output` matches what we expect
 
-# TODO: Check that terraform apply has been run
-
-# TODO: Check the outputs from teraform outputs matches what we expect
+# TODO: check the state file and outputs
