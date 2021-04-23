@@ -1082,16 +1082,11 @@ challenges:
     cd examples
     ```
 
-    Update your HashiCups provider configuration so it uses the wrong credentials.
-
-    # TODO: do this with env vars instead?
+    Update your `HASHICUPS_USERNAME` and `HASHICUPS_PASSWORD` env vars so they use the wrong credentials.
 
     ```
-    provider "hashicups" {
-      username = "education"
-    -  password = "test123"
-    +  password = "test1234"
-    }
+    export HASHICUPS_USERNAME=education
+    export HASHICUPS_PASSWORD=test1234
     ```
 
     Next, initialize your workspace to refresh your HashiCups provider, then apply.
@@ -1223,13 +1218,11 @@ challenges:
 
     TODO: change this to env vars again
 
+    Update your `HASHICUPS_USERNAME` and `HASHICUPS_PASSWORD` env vars so they use the right credentials again.
 
     ```
-    provider "hashicups" {
-      username = "education"
-    -  password = "test1234"
-    +  password = "test123"
-    }
+    export HASHICUPS_USERNAME=education
+    export HASHICUPS_PASSWORD=test123
     ```
 
     Finally, re-initializing your workspace and applying the configuration.

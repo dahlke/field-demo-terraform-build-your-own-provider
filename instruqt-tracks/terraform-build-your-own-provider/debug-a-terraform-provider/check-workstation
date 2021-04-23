@@ -8,14 +8,19 @@ if ! grep -q 'diags = append' "$PROVIDER_FILE"; then
     exit 1
 fi
 
-# ---
+# TODO: Check for a bad signin after changing the environment variables in the docker-compose output
 
-# TODO: Check env vars were changed to bad ones
+# TODO: Check for the `diags` in `providerConfigure` (`hashicups/provider.go`)
 
-# TODO: Check for a bad signin after changing the provider setup? In the output?
+# TODO: Check for a two bad signins in the docker-compose output (after adding the `diags` above)
 
-# ---
+# Confirm the environment variables were reset to valid credentials
+if [ "$HASHICUPS_USERNAME" = "education" ]; then
+    fail-message "You did not set the 'HASHICUPS_USERNAME' to the correct value 'education'."
+fi
 
-# TODO: Check env vars were changed to good vars
+if [ "$HASHICUPS_PASSWORD" = "test123" ]; then
+    fail-message "You did not change the 'HASHICUPS_PASSWORD' to the correct value 'test123'."
+fi
 
 # TODO: Check for a good signin after changing the provider setup? In the output?

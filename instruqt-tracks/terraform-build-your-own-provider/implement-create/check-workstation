@@ -1,5 +1,39 @@
 #!/bin/bash -l
 
-# Check `hashicups/resource_order.go` exists
+RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
 
-# Check the contents of `hashicups/resource_order.go`
+# Check `hashicups/resource_order.go` exists
+if ! test -f "$RESOURCE_ORDER_FILE"; then
+    fail-message "You haven't created 'hashicups/resource_order.go' yet."
+    exit 1
+fi
+
+# Check all the expected functions are in `hashicups/resource_order.go`
+if ! grep -q 'resourceOrder' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to add the 'resourceOrder' function to 'hashicups/resource_order.go'."
+    exit 1
+fi
+
+if ! grep -q 'resourceOrderCreate' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to add the 'resourceOrderCreate' function to 'hashicups/resource_order.go'."
+    exit 1
+fi
+
+if ! grep -q 'resourceOrderRead' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to add the 'resourceOrderRead' function to 'hashicups/resource_order.go'."
+    exit 1
+fi
+
+if ! grep -q 'resourceOrderUpdate' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to add the 'resourceOrderUpdate' function to 'hashicups/resource_order.go'."
+    exit 1
+fi
+
+if ! grep -q 'resourceOrderDelete' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to add the 'resourceOrderDelete' function to 'hashicups/resource_order.go'."
+    exit 1
+fi
+
+# Check all the expected functions are in `hashicups/resource_order.go`
+
+# "items": &schema.Schema{

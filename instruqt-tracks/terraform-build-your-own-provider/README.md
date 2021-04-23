@@ -13,3 +13,5 @@
 - best way to check init / apply were used - statefiles and output?
 - review all scripts and make sure the comments are standardized
 - parameterize the file paths in the fail-messages?
+- add copy paste commands to create all the files
+- Integrate with VS Code
