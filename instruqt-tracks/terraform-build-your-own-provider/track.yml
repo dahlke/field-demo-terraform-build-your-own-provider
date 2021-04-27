@@ -130,9 +130,14 @@ challenges:
     Now that you have created the provider, add the coffees data resource. The coffees data source will pull information
     on all coffees served by HashiCups.
 
-    Create a new file named `data_source_coffee.go` in the `hashicups` directory and add the following code snippet. As a
-    general convention, Terraform providers put each data source in their own file, named after the resource, prefixed
-    with data_source_.
+    Create a new file named `data_source_coffee.go` in the `hashicups` directory and
+
+    ```
+    touch hashicups/data_source_coffee.go
+    ```
+
+    Add the following code snippet. As a general convention, Terraform providers put each data source in their own
+    file, named after the resource, prefixed with data_source_.
 
     The libraries imported here will be used in `dataSourceCoffeesRead`.
 

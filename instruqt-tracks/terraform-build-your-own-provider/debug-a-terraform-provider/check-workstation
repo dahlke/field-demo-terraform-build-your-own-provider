@@ -2,17 +2,21 @@
 
 PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
 
-# Check `hashicups/provider.go` for `diags` variable.
+# TODO: Check for a bad signin after changing the environment variables in the docker-compose output
+
+# Check for the `diags` in `providerConfigure` (`hashicups/provider.go`)
 if ! grep -q 'diags = append' "$PROVIDER_FILE"; then
     fail-message "You need to add the 'diags' variable to your `providerConfigure` function in 'hashicups/provider.go'."
     exit 1
 fi
 
-# TODO: Check for a bad signin after changing the environment variables in the docker-compose output
-
-# TODO: Check for the `diags` in `providerConfigure` (`hashicups/provider.go`)
-
 # TODO: Check for a two bad signins in the docker-compose output (after adding the `diags` above)
+cd ../docker_compose
+DOCKER_COMPOSE_SIGNIN_LOGS=$(docker-compose logs | grep signin)
+# if ! grep -q 'Handle User | signin' "$DOCKER_COMPOSE_SIGNIN_LOGS"; then
+    # fail-message "There was not a successful login attempt to HashiCups."
+    # exit 1
+# fi
 
 # Confirm the environment variables were reset to valid credentials
 if [ "$HASHICUPS_USERNAME" = "education" ]; then
@@ -24,3 +28,7 @@ if [ "$HASHICUPS_PASSWORD" = "test123" ]; then
 fi
 
 # TODO: Check for a good signin after changing the provider setup? In the output?
+# if ! grep -q 'Handle User | signin' "$DOCKER_COMPOSE_SIGNIN_LOGS"; then
+    # fail-message "There was not a successful login attempt to HashiCups."
+    # exit 1
+# fi

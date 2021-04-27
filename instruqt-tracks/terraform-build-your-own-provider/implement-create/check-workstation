@@ -8,7 +8,7 @@ if ! test -f "$RESOURCE_ORDER_FILE"; then
     exit 1
 fi
 
-# Check all the expected functions are in `hashicups/resource_order.go`
+# Check all the expected updates have been mamde to `hashicups/resource_order.go`
 if ! grep -q 'resourceOrder' "$RESOURCE_ORDER_FILE"; then
     fail-message "You need to add the 'resourceOrder' function to 'hashicups/resource_order.go'."
     exit 1
@@ -34,6 +34,7 @@ if ! grep -q 'resourceOrderDelete' "$RESOURCE_ORDER_FILE"; then
     exit 1
 fi
 
-# Check all the expected functions are in `hashicups/resource_order.go`
-
-# "items": &schema.Schema{
+if ! grep -q 'items' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to add the 'items' schema to 'hashicups/resource_order.go'."
+    exit 1
+fi

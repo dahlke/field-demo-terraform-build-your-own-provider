@@ -49,6 +49,25 @@ git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hash
 cd /root/github.com/hashicorp/terraform-provider-hashicups/docker_compose
 docker-compose up -d
 
+cat <<-EOF > /etc/systemd/system/code-server.service
+[Unit]
+Description=Code Server
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/code-server --host 0.0.0.0 --port 8443 --cert --auth none /root/github.com/hashicorp/terraform-provider-hashicups/
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# TODO: install code-server
+# Start VSC
+# systemctl enable code-server
+# systemctl start code-server
 
 # TODO: set the cwd to the provider repo
 

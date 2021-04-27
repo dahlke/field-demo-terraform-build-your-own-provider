@@ -4,6 +4,8 @@
 cd /root/github.com/hashicorp/terraform-provider-hashicups
 git checkout implement-read
 
+# TODO: will this work with staged changes.
+
 # Initialize the module for our provider and install the dependencies.
 go mod init terraform-provider-hashicups
 go mod vendor

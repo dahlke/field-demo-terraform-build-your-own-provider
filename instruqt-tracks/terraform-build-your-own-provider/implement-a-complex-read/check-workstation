@@ -53,5 +53,7 @@ if ! grep -q 'output "order"' "$PROVIDER_FILE"; then
 fi
 
 # TODO: Check the outputs from `teraform output` matches what we expect
+TF_OUTPUT_JSON=$(terraform outputs -format=json | jq -r .)
+echo $TF_OUTPUT_JSON
 
 # TODO: check the state file and outputs

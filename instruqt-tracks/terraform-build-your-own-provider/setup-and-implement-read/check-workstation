@@ -34,13 +34,13 @@ if ! test -f "$DATA_SOURCE_COFFEE_FILE"; then
 fi
 
 # Check `hashicups/data_source_coffee.go` for `func dataSourceCoffees()`
-if ! grep -q 'func dataSourceCoffees()' "$DATA_SOURCE_COFFEE_FILE"; then
+if ! grep -q 'func dataSourceCoffees' "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You need to define the 'dataSourceCoffees' function."
     exit 1
 fi
 
 # Check `hashicups/data_source_coffee.go` for `func dataSourceCoffeesRead()`
-if ! grep -q 'func dataSourceCoffeesRead()' "$DATA_SOURCE_COFFEE_FILE"; then
+if ! grep -q 'func dataSourceCoffeesRead' "$DATA_SOURCE_COFFEE_FILE"; then
     fail-message "You need to define the 'dataSourceCoffeesRead' function."
     exit 1
 fi
