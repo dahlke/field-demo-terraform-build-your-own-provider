@@ -13,6 +13,7 @@ tags:
 owner: hashicorp
 developers:
 - neil@hashicorp.com
+- nyoung@hashicorp.com
 private: true
 published: false
 challenges:
