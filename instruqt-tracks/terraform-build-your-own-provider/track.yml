@@ -445,6 +445,10 @@ challenges:
       - *Implement read.* This read function invokes a `GET` request to the `/coffees` endpoint, then maps its value to the schema defined above.
       - *Add coffees data source to the provider schema.* This allows you to use the data source in your configuration.
   tabs:
+  - title: VS Code
+    type: service
+    hostname: workstation
+    port: 8443
   - title: Text Editor
     type: code
     hostname: workstation
@@ -2247,4 +2251,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "4351901935379375486"
+checksum: "8942607140656137485"
