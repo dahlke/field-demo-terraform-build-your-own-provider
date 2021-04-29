@@ -131,14 +131,9 @@ challenges:
     Now that you have created the provider, add the coffees data resource. The coffees data source will pull information
     on all coffees served by HashiCups.
 
-    Create a new file named `data_source_coffee.go` in the `hashicups` directory and
-
-    ```
-    touch hashicups/data_source_coffee.go
-    ```
-
-    Add the following code snippet. As a general convention, Terraform providers put each data source in their own
-    file, named after the resource, prefixed with data_source_.
+    Create a new file named `data_source_coffee.go` in the `hashicups` directory and add the following code snippet.
+    As a general convention, Terraform providers put each data source in their own file, named after the resource,
+    prefixed with data_source_.
 
     The libraries imported here will be used in `dataSourceCoffeesRead`.
 
@@ -449,10 +444,6 @@ challenges:
     type: service
     hostname: workstation
     port: 8443
-  - title: Text Editor
-    type: code
-    hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
   - title: Terminal
     type: terminal
     hostname: workstation
@@ -667,10 +658,10 @@ challenges:
       - *Update provider schema.* You will add `username` and `password` parameters to your provider schema. In addition, you will set the `ConfigureContextFunc` property to the the name of the function that will configure your provider, `providerConfigure`.
       - *Define `providerConfigure`* This function actually configures your provider. If both the username and password are not empty, the function returns an authenticated API client; else, the function returns an unauthenticated API client. The authenticated API client is able to access protected endpoints, the unauthenticated one is not.
   tabs:
-  - title: Text Editor
-    type: code
+  - title: VS Code
+    type: service
     hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
+    port: 8443
   - title: Terminal
     type: terminal
     hostname: workstation
@@ -981,10 +972,10 @@ challenges:
       - *Implement complex read.*  This read functionality uses multiple nesting functions to flatten the response from `/order/{orderId}` and map it to the `order` schema.
       - *Add order data source to the provider schema.* This allows you to use the data source in your configuration.
   tabs:
-  - title: Text Editor
-    type: code
+  - title: VS Code
+    type: service
     hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
+    port: 8443
   - title: Terminal
     type: terminal
     hostname: workstation
@@ -1261,10 +1252,10 @@ challenges:
       In this challenge, you will add custom error messages to a Terraform provider that interacts with the API of a
       fictional coffee-shop application, HashiCups and view detailed Terraform provider logs.
   tabs:
-  - title: Text Editor
-    type: code
+  - title: VS Code
+    type: service
     hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
+    port: 8443
   - title: Terminal
     type: terminal
     hostname: workstation
@@ -1733,10 +1724,10 @@ challenges:
       - *Add read functionality.* The read function invokes a `GET` request to `/orders/{orderID}` to retrieve the order's data. The orders schema contains a nested object, therefore you will use multiple flattening functions to map the response to the `order` schema.
       - *Add `order` resource to the provider schema.* This allows you to use the resource in your configuration.
   tabs:
-  - title: Text Editor
-    type: code
+  - title: VS Code
+    type: service
     hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
+    port: 8443
   - title: Terminal
     type: terminal
     hostname: workstation
@@ -1918,10 +1909,10 @@ challenges:
       - *Update your schema.* Add a `last_updated` attribute to the `order` schema. This attribute will update to the current date time whenever the order resource is updated.
       - *Implement update.* This update function invokes a `PUT` request to the `/orders/{orderId}` endpoint with the update order items in the request body. After the update function runs, it invokes `resourceOrderRead` to retrieve the order's updated values.
   tabs:
-  - title: Text Editor
-    type: code
+  - title: VS Code
+    type: service
     hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
+    port: 8443
   - title: Terminal
     type: terminal
     hostname: workstation
@@ -2021,10 +2012,10 @@ challenges:
       application, HashiCups. To do this, you will implement delete. This delete function
       invokes a `DELETE` request to the `/orders/{orderId}` endpoint.
   tabs:
-  - title: Text Editor
-    type: code
+  - title: VS Code
+    type: service
     hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
+    port: 8443
   - title: Terminal
     type: terminal
     hostname: workstation
@@ -2242,10 +2233,10 @@ challenges:
       function. This function retrieves an existing HashiCups order and brings it
       into Terraform state, enabling Terraform to manage it.
   tabs:
-  - title: Text Editor
-    type: code
+  - title: VS Code
+    type: service
     hostname: workstation
-    path: /root/github.com/hashicorp/terraform-provider-hashicups
+    port: 8443
   - title: Terminal
     type: terminal
     hostname: workstation
