@@ -1,9 +1,13 @@
 #!/bin/sh
 
+export PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
+echo "export PROJECT_HOME_DIR=$PROJECT_HOME_DIR" >> /root/.bashrc
+
+set-workdir $PROJECT_HOME_DIR
+
 ###########
 # Install Docker Compose and Docker
 ###########
-
 # TODO: need to change the compose version to  match the Docker version
 # https://docs.docker.com/compose/compose-file/compose-versioning/
 
@@ -33,7 +37,6 @@ rm /usr/bin/docker-compose
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
 sudo chmod +x /usr/bin/docker-compose
 
-
 ###########
 # Set up the development environment
 ###########
@@ -46,9 +49,8 @@ git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hash
 ###########
 # Start the HashiCups Application
 ###########
-cd /root/github.com/hashicorp/terraform-provider-hashicups/docker_compose
+cd $PROJECT_HOME_DIR/docker_compose
 docker-compose up -d
-
 
 ###########
 # Install VS Code Server
@@ -75,6 +77,7 @@ EOF
 systemctl enable code-server
 systemctl start code-server
 
-# TODO: set the cwd to the provider repo
+# Set the working directory to the project home
+set-workdir $PROJECT_HOME_DIR
 
 exit 0

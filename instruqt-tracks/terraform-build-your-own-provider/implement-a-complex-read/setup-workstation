@@ -1,9 +1,12 @@
 #!/bin/bash -l
 
-cd /root/github.com/hashicorp/terraform-provider-hashicups/
+cd $PROJECT_HOME_DIR
 git checkout auth-configuration
 
-cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+cd $PROJECT_HOME_DIR/examples
 rm .terraform.lock.hcl
+
+# Set the working directory to the project home
+set-workdir $PROJECT_HOME_DIR
 
 exit 0
