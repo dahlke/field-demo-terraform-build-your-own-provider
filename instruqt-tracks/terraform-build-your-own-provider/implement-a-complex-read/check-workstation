@@ -36,7 +36,7 @@ if ! grep -q 'func flattenOrderItemsData' "$DATA_SOURCE_ORDERS_FILE"; then
 fi
 
 # Check `hashicups/provider.go` has `hashicup_order` as a data source
-if ! grep -q 'hashicups_orders' "$PROVIDER_FILE"; then
+if ! grep -q 'hashicups_order' "$PROVIDER_FILE"; then
     fail-message "You need to add 'hashicup_order' data source in 'hashicups/provider.go'."
     exit 1
 fi

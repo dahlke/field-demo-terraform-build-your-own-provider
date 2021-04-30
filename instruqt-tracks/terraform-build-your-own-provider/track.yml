@@ -881,7 +881,7 @@ challenges:
             "hashicups_coffees":     dataSourceCoffees(),
     +       "hashicups_order":       dataSourceOrder(),
         },
-        ConfigureFunc: providerConfigure,
+        ConfigureContextFunc: providerConfigure,
       }
     }
     ```
@@ -2241,4 +2241,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "12484644649736902292"
+checksum: "1000583685309703597"
