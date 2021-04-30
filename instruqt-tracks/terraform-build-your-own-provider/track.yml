@@ -15,6 +15,7 @@ developers:
 - nyoung@hashicorp.com
 private: true
 published: false
+show_timer: true
 challenges:
 - slug: setup-and-implement-read
   id: 6hlpvruj8qob
@@ -2082,16 +2083,10 @@ challenges:
     cd examples
     ```
 
-    Then, create a new directory named import.
+    Then, create a new directory named import and navigate to it.
 
     ```
     mkdir import && cd import
-    ```
-
-    Navigate into the import directory.
-
-    ```
-    cd import
     ```
 
     Create a new file named `main.tf` with the following configuration. You will import an existing HashiCups order
@@ -2241,4 +2236,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "1000583685309703597"
+checksum: "15480029126959410978"

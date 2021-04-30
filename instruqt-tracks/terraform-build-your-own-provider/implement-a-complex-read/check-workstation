@@ -42,18 +42,18 @@ if ! grep -q 'hashicups_order' "$PROVIDER_FILE"; then
 fi
 
 # Check the `main.tf` file has the new data source and output
-if ! grep -q 'data "hashicups_order" "order"' "$PROVIDER_FILE"; then
+if ! grep -q 'data "hashicups_order" "order"' "$TF_MAIN_FILE"; then
     fail-message "You need to add the 'hashicups_order' data source in 'examples/main.tf'."
     exit 1
 fi
 
-if ! grep -q 'output "order"' "$PROVIDER_FILE"; then
+if ! grep -q 'output "order"' "$TF_MAIN_FILE"; then
     fail-message "You need to add the 'order' output in 'examples/main.tf'."
     exit 1
 fi
 
 # TODO: Check the outputs from `teraform output` matches what we expect
-TF_OUTPUT_JSON=$(terraform outputs -format=json | jq -r .)
+TF_OUTPUT_JSON=$(terraform output -json | jq -r .)
 echo $TF_OUTPUT_JSON
 
 # TODO: check the state file and outputs
