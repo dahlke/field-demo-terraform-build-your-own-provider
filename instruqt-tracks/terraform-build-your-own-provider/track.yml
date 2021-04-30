@@ -12,6 +12,7 @@ tags:
 - terraform
 owner: hashicorp
 developers:
+- neil@hashicorp.com
 - nyoung@hashicorp.com
 private: true
 published: false
@@ -2236,4 +2237,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "15480029126959410978"
+checksum: "9762620863743245151"
