@@ -61,6 +61,7 @@ if ! test -f "$PROVIDER_BINARY_FILE"; then
 fi
 
 # Check the terraform output, looking for a "Packer Spiced Latte"
+cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
 TF_OUTPUT=$(terraform output -json | jq -r .psl.value[].name)
 if [ "$TF_OUTPUT" != "Packer Spiced Latte" ]; then
     fail-message "You need to run 'terraform apply --auto-approve' to return the Packer Spice Latte's properties."
