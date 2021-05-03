@@ -81,13 +81,6 @@ if ! grep -q 'HASHICUPS_PASSWORD' "$BASHRC_FILE"; then
     exit 1
 fi
 
-# Check the login was attempted in the `docker-compose` logs
-cd /root/github.com/hashicorp/terraform-provider-hashicups/docker_compose
-DOCKER_COMPOSE_SIGNIN_LOGS=$(docker-compose logs | grep signin)
-if ! grep -q 'Handle User | signin' "$DOCKER_COMPOSE_SIGNIN_LOGS"; then
-    fail-message "There were no successful login attempts to HashiCups."
-    exit 1
-fi
 
 # Check the terraform output looking for a "Packer Spiced Latte"
 cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
@@ -96,3 +89,12 @@ if [ "$TF_OUTPUT" != "Packer Spiced Latte" ]; then
     fail-message "You need to run 'terraform init && terraform apply --auto-approve' to refresh your HashiCups provider."
     exit 1
 fi
+
+# Check the login was attempted in the `docker-compose` logs
+cd /root/github.com/hashicorp/terraform-provider-hashicups/docker_compose
+DOCKER_COMPOSE_SIGNIN_LOGS=$(docker-compose logs | grep signin)
+if grep -q 'Handle User | signin' "$DOCKER_COMPOSE_SIGNIN_LOGS"; then
+    fail-message "There were no successful login attempts to HashiCups."
+    exit 1
+fi
+
