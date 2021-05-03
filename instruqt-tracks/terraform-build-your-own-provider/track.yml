@@ -42,7 +42,6 @@ challenges:
     create a `vendor` directory that contains all the provider's dependencies.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
     go mod init terraform-provider-hashicups
     go mod vendor
     ```
@@ -347,7 +346,6 @@ challenges:
     Build the provider binary.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
     make build
     ```
 
@@ -548,7 +546,6 @@ challenges:
     Once you have added the new imports, be sure to install the dependencies.
 
     ```
-    cd /root/github.com/hashicorp/terraform-provider-hashicups
     go mod vendor
     ```
 
@@ -2242,4 +2239,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "6019747885609214392"
+checksum: "14620397187990187997"
