@@ -1,1 +1,28 @@
 #!/bin/bash -l
+
+BASH_HISTORY_FILE=/root/.bash_history
+RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
+TF_IMPORT_MAIN_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/examples/import/main.tf
+
+# Check that updates have been made to `hashicups/resource_order.go`
+if ! grep -q 'ResourceImporter' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to update the 'resourceOrder' function in 'hashicups/resource_order.go' using the code example."
+    exit 1
+fi
+
+
+
+if [ ! -f $TF_IMPORT_MAIN_FILE ]; then
+    fail-message "You have not created the 'main.tf' file under the 'examples/import' directory yet."
+    exit 1
+fi
+
+
+# Check the user ran 'terraform destroy'
+grep -q "mkdir import && cd import" '$BASH_HISTORY_FILE' || fail-message "You have not run 'mkdir import' yet."
+
+# Check the user ran 'terraform import'
+grep -q "terraform import hashicups_order.sample" '$BASH_HISTORY_FILE' || fail-message "You have not run 'terraform import hashicups_order.sample <ID>' yet.  Reference the instructions to find the appropriate ID number."
+
+# Check the user ran 'terraform state show'
+grep -q "terraform state show hashicups_order.sample" '$BASH_HISTORY_FILE' || fail-message "You have not run 'terraform state show hashicups_order.sample' yet."
