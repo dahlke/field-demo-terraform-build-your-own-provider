@@ -3,7 +3,8 @@
 cd $PROJECT_HOME_DIR
 git checkout implement-read
 
-cd $PROJECT_HOME_DIR/examples
+# Remove terraform lock from previous challenge
+cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
 rm .terraform.lock.hcl
 
 # Set the working directory to the project home
