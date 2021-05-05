@@ -2,32 +2,55 @@
 
 PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
 
-# TODO: Check for a bad signin after changing the environment variables in the docker-compose output
-
 # Check for the `diags` in `providerConfigure` (`hashicups/provider.go`)
+# TODO: they have to do this twice, do we check for both?
 if ! grep -q 'diags = append' "$PROVIDER_FILE"; then
     fail-message "You need to add the 'diags' variable to your `providerConfigure` function in 'hashicups/provider.go'."
     exit 1
 fi
 
-# TODO: Check for a two bad signins in the docker-compose output (after adding the `diags` above)
 cd ../docker_compose
 DOCKER_COMPOSE_SIGNIN_LOGS=$(docker-compose logs | grep signin)
+
+# TODO: Check for a bad signin after changing the environment variables in the docker-compose output (after adding the `diags` above)
+# api_1  | 2021-05-05T17:39:03.904Z [INFO]  Handle User | signin
+# api_1  | 2021/05/05 17:39:03 http: panic serving 172.18.0.1:54008: runtime error: index out of range [0] with length 0
+# api_1  | goroutine 47 [running]:
+# api_1  | net/http.(*conn).serve.func1(0xc0002760a0)
+# api_1  |        /usr/local/go/src/net/http/server.go:1767 +0x139
+# api_1  | panic(0x93a740, 0xc000025e20)
+# api_1  |        /usr/local/go/src/runtime/panic.go:679 +0x1b2
+# api_1  | github.com/hashicorp-demoapp/product-api-go/data.(*PostgresSQL).AuthUser(0xc00000e068, 0xc000229620, 0x9, 0xc000229618, 0x8, 0x0, 0x0, 0x0, 0x0, 0x0, ...)
+# api_1  |        /go/src/github.com/hashicorpdemoapp/product-api-go/data/connection.go:126 +0x26f
+# api_1  | github.com/hashicorp-demoapp/product-api-go/handlers.(*User).SignIn(0xc00000d260, 0xa2be60, 0xc000137420, 0xc00024fa00)
+# api_1  |        /go/src/github.com/hashicorpdemoapp/product-api-go/handlers/user.go:97 +0x298
+# api_1  | net/http.HandlerFunc.ServeHTTP(0xc00001e750, 0xa2be60, 0xc000137420, 0xc00024fa00)
+# api_1  |        /usr/local/go/src/net/http/server.go:2007 +0x44
+# api_1  | github.com/gorilla/mux.(*Router).ServeHTTP(0xc0001b60c0, 0xa2be60, 0xc000137420, 0xc00024f800)
+# api_1  |        /go/pkg/mod/github.com/gorilla/mux@v1.7.3/mux.go:212 +0xe2
+# api_1  | net/http.serverHandler.ServeHTTP(0xc0001e4000, 0xa2be60, 0xc000137420, 0xc00024f800)
+# api_1  |        /usr/local/go/src/net/http/server.go:2802 +0xa4
+# api_1  | net/http.(*conn).serve(0xc0002760a0, 0xa2d520, 0xc000085680)
+# api_1  |        /usr/local/go/src/net/http/server.go:1890 +0x875
+# api_1  | created by net/http.(*Server).Serve
+# api_1  |        /usr/local/go/src/net/http/server.go:2928 +0x384
+
 # if ! grep -q 'Handle User | signin' "$DOCKER_COMPOSE_SIGNIN_LOGS"; then
     # fail-message "There was not a successful login attempt to HashiCups."
     # exit 1
 # fi
 
 # Confirm the environment variables were reset to valid credentials
-if [ "$HASHICUPS_USERNAME" = "education" ]; then
-    fail-message "You did not set the 'HASHICUPS_USERNAME' to the correct value 'education'."
+if ! [ "$HASHICUPS_USERNAME" = "education" ]; then
+    fail-message "You did not reset the 'HASHICUPS_USERNAME' to the correct value 'education'."
+    exit 1
 fi
 
-if [ "$HASHICUPS_PASSWORD" = "test123" ]; then
-    fail-message "You did not change the 'HASHICUPS_PASSWORD' to the correct value 'test123'."
+if ! [ "$HASHICUPS_PASSWORD" = "test123" ]; then
+    fail-message "You did not reset the 'HASHICUPS_PASSWORD' to the correct value 'test123'."
 fi
 
-# TODO: Check for a good signin after changing the provider setup? In the output?
+# TODO: Check for a good signin after changing the provider setup - there will already be multiple? tail?
 # if ! grep -q 'Handle User | signin' "$DOCKER_COMPOSE_SIGNIN_LOGS"; then
     # fail-message "There was not a successful login attempt to HashiCups."
     # exit 1

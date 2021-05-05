@@ -6,6 +6,7 @@ PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/
 DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
 PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
 
+# TODO: these do not fail properly
 # Check the user signed up
 grep -q "curl localhost:19090/signup" '$BASH_HISTORY_FILE' || fail-message "You haven't run 'curl localhost:19090/signup' yet."
 
@@ -45,7 +46,7 @@ if ! grep -q 'github.com/hashicorp/terraform-plugin-sdk/v2/diag' "$PROVIDER_FILE
     exit 1
 fi
 
-# TODO: Check that the new dependencies were installed with go mod vendor
+# TODO: Check that the new dependencies were installed with go mod vendor?
 
 # Check `hashicups/provider.go` has the new `providerConfigure` function
 if ! grep -q 'providerConfigure' "$PROVIDER_FILE"; then
@@ -62,11 +63,13 @@ fi
 # Check the `HASHICUPS_USERNAME` env var was set
 if [ "$HASHICUPS_USERNAME" = "" ]; then
     fail-message "You did not set the 'HASHICUPS_USERNAME' env var."
+    exit 1
 fi
 
 # Check the `HASHICUPS_PASSWORD` env var was set
 if [ "$HASHICUPS_PASSWORD" = "" ]; then
     fail-message "You did not set the 'HASHICUPS_PASSWORD' env var."
+    exit 1
 fi
 
 # Check the `HASHICUPS_USERNAME` env var was added to `~/.bashrc`
@@ -81,6 +84,7 @@ if ! grep -q 'HASHICUPS_PASSWORD' "$BASHRC_FILE"; then
     exit 1
 fi
 
+# TODO: the check will pass on this because of past attempts - do we need to check something else or clear out the statefile?
 
 # Check the terraform output looking for a "Packer Spiced Latte"
 cd /root/github.com/hashicorp/terraform-provider-hashicups/examples

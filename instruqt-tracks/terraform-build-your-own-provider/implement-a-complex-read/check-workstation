@@ -25,7 +25,7 @@ fi
 
 # Check the function `dataSourceOrderRead` has been added to `hashicups/data_source_order.go`
 if ! grep -q 'func dataSourceOrderRead' "$DATA_SOURCE_ORDERS_FILE"; then
-    fail-message "You need to define the 'dataSourceRead' function in 'hashicups/data_source_order.go'."
+    fail-message "You need to define the 'dataSourceOrderRead' function in 'hashicups/data_source_order.go'."
     exit 1
 fi
 
@@ -52,8 +52,6 @@ if ! grep -q 'output "order"' "$TF_MAIN_FILE"; then
     exit 1
 fi
 
-# TODO: Check the outputs from `teraform output` matches what we expect
+# TODO: Check the outputs from `teraform output` matches what we expect - this will work because of previous challenges
 TF_OUTPUT_JSON=$(terraform output -json | jq -r .)
 echo $TF_OUTPUT_JSON
-
-# TODO: check the state file and outputs

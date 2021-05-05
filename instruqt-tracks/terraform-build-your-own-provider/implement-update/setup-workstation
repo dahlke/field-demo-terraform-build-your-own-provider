@@ -1,5 +1,7 @@
 #!/bin/bash -l
 
+export PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
+
 cd $PROJECT_HOME_DIR
 git checkout implement-create
 

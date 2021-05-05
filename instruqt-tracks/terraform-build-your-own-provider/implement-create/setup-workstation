@@ -1,8 +1,11 @@
 #!/bin/bash -l
 
+export PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
+
 cd $PROJECT_HOME_DIR
 git checkout debug-tf-providers
 
+# Remove terraform lock from previous challenge
 cd $PROJECT_HOME_DIR/examples
 rm .terraform.lock.hcl
 

@@ -1,9 +1,6 @@
 #!/bin/sh
 
 export PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
-echo "export PROJECT_HOME_DIR=$PROJECT_HOME_DIR" >> /root/.bashrc
-
-set-workdir $PROJECT_HOME_DIR
 
 ###########
 # Install Docker Compose and Docker

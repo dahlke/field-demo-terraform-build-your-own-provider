@@ -1,7 +1,7 @@
-slug: terraform-build-your-own-provider-nicks-changes
-id: 0uftzauri7mu
+slug: terraform-build-your-own-provider
+id: h1tpybfmtmve
 type: track
-title: Build Your Own Terraform Provider (Nick's Changes)
+title: Build Your Own Terraform Provider
 teaser: Learn how to create your own Terraform Provider to perform CRUD operations.
 description: |-
   In this track, you will create a Terraform provider to interact with a fictional coffee-shop application, HashiCups.
@@ -12,14 +12,14 @@ tags:
 - terraform
 owner: hashicorp
 developers:
-- nyoung@hashicorp.com
 - neil@hashicorp.com
+- nyoung@hashicorp.com
 private: true
 published: false
 show_timer: true
 challenges:
 - slug: setup-and-implement-read
-  id: 6hlpvruj8qob
+  id: urdnvy0p0y1w
   type: challenge
   title: Setup and Implement Read
   teaser: Learn to implement a read on a public endpoint with a Terraform Provider.
@@ -449,7 +449,7 @@ challenges:
   difficulty: basic
   timelimit: 9000
 - slug: add-authentication-to-a-provider
-  id: 5v3hboriiy7n
+  id: 1bxvxvprv1gx
   type: challenge
   title: Add Authentication to a Provider
   teaser: Learn to implement authentication in a Terraform Provider.
@@ -666,7 +666,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: implement-a-complex-read
-  id: gchwzc8rxdcp
+  id: bcwthxrik7le
   type: challenge
   title: Implement a Complex Read
   teaser: Learn to read from a auth protected endpoint with a Terraform Provider.
@@ -980,7 +980,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: debug-a-terraform-provider
-  id: d1vaasiyvp0o
+  id: pq4kpsszirwi
   type: challenge
   title: Debug a Terraform Provider
   teaser: Learn to add custom error messages to a Terraform provider.
@@ -1002,7 +1002,7 @@ challenges:
 
     Replace the `return nil, diag.FromError(err)` line in your `providerConfigure` function with the following code
     snippet. There should be two replacements — one where the user's HashiCups credentials provided and the other
-    where its not. Notice how this appends a `diag.Diagnostic` type to the existing diags variable; this allows your
+    where its not. Notice how this appends a `diag.Diagnostic` type to the existing `diags` variable; this allows your
     provider to return multiple error message. This will produce an error message containing Summary and Detail contents.
 
     ```
@@ -1215,8 +1215,6 @@ challenges:
 
     Fix your Terraform configuration to use the correct credentials.
 
-    TODO: change this to env vars again
-
     Update your `HASHICUPS_USERNAME` and `HASHICUPS_PASSWORD` env vars so they use the right credentials again.
 
     ```
@@ -1260,7 +1258,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: implement-create
-  id: xdbhygalebbi
+  id: sfluifh0t6vq
   type: challenge
   title: Implement Create
   teaser: Learn to create an `order` resource with a Terraform provider.
@@ -1732,7 +1730,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: implement-update
-  id: qf2jkp2z3f4t
+  id: on5qwvfur9xr
   type: challenge
   title: Implement Update
   teaser: Learn to add update capabilities to the order resource of a Terraform provider.
@@ -1917,7 +1915,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: implement-delete
-  id: xxyvswnbzxmw
+  id: pjionakyoqpj
   type: challenge
   title: Implement Delete
   teaser: Learn to add delete capabilities to the order resource for a Terraform provider.
@@ -2020,7 +2018,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: implement-import
-  id: deransqzzosr
+  id: wwco2dpljowt
   type: challenge
   title: Implement Import
   teaser: Learn to add import capabilities to the order resource for a Terraform provider.
@@ -2233,9 +2231,5 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: basic
-<<<<<<< HEAD
   timelimit: 600
-=======
-  timelimit: 600
-checksum: "2901733730479122497"
->>>>>>> nicks-changes-v2
+checksum: "8744380565841064857"
