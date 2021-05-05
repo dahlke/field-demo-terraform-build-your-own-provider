@@ -1327,10 +1327,9 @@ challenges:
 
     *Define `order` schema*
 
-    # TODO: didn't we already do this? Rework this.
-
     To create a HashiCups order, you would send a POST request to the `/orders` endpoint with a list of `OrderItems`,
-    containing the coffee object and its respective quantity.
+    containing the coffee object and its respective quantity. You have some experience creating orders from a previous
+    challenge.
 
     ```
     curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
@@ -2232,4 +2231,4 @@ challenges:
     hostname: workstation
   difficulty: basic
   timelimit: 600
-checksum: "8744380565841064857"
+checksum: "635392909573247056"

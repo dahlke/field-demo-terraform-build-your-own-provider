@@ -34,7 +34,31 @@ if ! grep -q 'resourceOrderDelete' "$RESOURCE_ORDER_FILE"; then
     exit 1
 fi
 
+# TODO: Check that the schema was updated properly
+
+# TODO: check that the resourceOrderCreate function was implemented (not just present)
+# TODO: check that the resourceOrderRead function was implemented (not just present)
+# TODO: check that the flattenOrderItems function was implemented (not just present)
+# TODO: check that the flattenCoffee function was implemented (not just present)
+# TODO: check that resourceOrderRead is in the resourceOrderCreate function
+# TODO: checl that the order resource has been added to the provider`
+
+
+# Check `hashicups/resource_order.go` has the new imports
+if ! grep -q 'github.com/hashicorp-demoapp/hashicups-client-go' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to add the 'github.com/hashicorp-demoapp/hashicups-client-go' import to 'hashicups/resource_order.go'."
+    exit 1
+fi
+
+if ! grep -q 'strconv' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to add the 'strconv' import to 'hashicups/resource_order.go'."
+    exit 1
+fi
+
 if ! grep -q 'items' "$RESOURCE_ORDER_FILE"; then
     fail-message "You need to add the 'items' schema to 'hashicups/resource_order.go'."
     exit 1
 fi
+
+
+# TODO: check that the new resource was created in the TF state ouptputs

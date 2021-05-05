@@ -33,3 +33,23 @@
     -[/] Check
     -[ ] Solve
     -[ ] Cleanup
+- Implement Create
+    -[ ] Setup
+    -[ ] Check
+    -[ ] Solve
+    -[ ] Cleanup
+- Implement Update
+    -[ ] Setup
+    -[ ] Check
+    -[ ] Solve
+    -[ ] Cleanup
+- Implement Delete
+    -[ ] Setup
+    -[ ] Check
+    -[ ] Solve
+    -[ ] Cleanup
+- Implement Import
+    -[ ] Setup
+    -[ ] Check
+    -[ ] Solve
+    -[ ] Cleanup
