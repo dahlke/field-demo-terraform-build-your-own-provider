@@ -20,29 +20,29 @@ fi
 
 # Check the `HASHICUPS_TOKEN` env var was added to the bashrc
 if ! grep -q 'HASHICUPS_TOKEN' "$BASHRC_FILE"; then
-    fail-message "You need to add the 'HASHICUPS_TOKEN' env var export to your '~/.bashrc' file."
+    fail-message "You need to add the 'HASHICUPS_TOKEN' env var export to your '$BASHRC_FILE' file."
     exit 1
 fi
 
 # Check `hashicups/provider.go` has the `username` and `password` schemas
 if ! grep -q 'username' "$PROVIDER_FILE"; then
-    fail-message "You need to add the 'username' schema in 'hashicups/provider.go'."
+    fail-message "You need to add the 'username' schema in '$PROVIDER_FILE'."
     exit 1
 fi
 
 if ! grep -q 'password' "$PROVIDER_FILE"; then
-    fail-message "You need to add the 'password' schema in 'hashicups/provider.go'."
+    fail-message "You need to add the 'password' schema in '$PROVIDER_FILE'."
     exit 1
 fi
 
 # Check `hashicups/provider.go` has the new imports
 if ! grep -q 'github.com/hashicorp-demoapp/hashicups-client-go' "$PROVIDER_FILE"; then
-    fail-message "You need to add the 'github.com/hashicorp-demoapp/hashicups-client-go' import to 'hashicups/provider.go'."
+    fail-message "You need to add the 'github.com/hashicorp-demoapp/hashicups-client-go' import to '$PROVIDER_FILE'."
     exit 1
 fi
 
 if ! grep -q 'github.com/hashicorp/terraform-plugin-sdk/v2/diag' "$PROVIDER_FILE"; then
-    fail-message "You need to add the 'github.com/hashicorp/terraform-plugin-sdk/v2/diag' import to 'hashicups/provider.go'."
+    fail-message "You need to add the 'github.com/hashicorp/terraform-plugin-sdk/v2/diag' import to '$PROVIDER_FILE'."
     exit 1
 fi
 
@@ -50,7 +50,7 @@ fi
 
 # Check `hashicups/provider.go` has the new `providerConfigure` function
 if ! grep -q 'providerConfigure' "$PROVIDER_FILE"; then
-    fail-message "You need to add the 'providerConfigure' function to 'hashicups/provider.go'."
+    fail-message "You need to add the 'providerConfigure' function to '$PROVIDER_FILE'."
     exit 1
 fi
 
@@ -74,13 +74,13 @@ fi
 
 # Check the `HASHICUPS_USERNAME` env var was added to `~/.bashrc`
 if ! grep -q 'HASHICUPS_USERNAME' "$BASHRC_FILE"; then
-    fail-message "You need to add the 'HASHICUPS_USERNAME' env var export to your '~/.bashrc' file."
+    fail-message "You need to add the 'HASHICUPS_USERNAME' env var export to your '$BASHRC_FILE' file."
     exit 1
 fi
 
 # Check the `HASHICUPS_PASSWORD` env var was added to `~/.bashrc`
 if ! grep -q 'HASHICUPS_PASSWORD' "$BASHRC_FILE"; then
-    fail-message "You need to add the 'HASHICUPS_PASSWORD' env var export to your '~/.bashrc' file."
+    fail-message "You need to add the 'HASHICUPS_PASSWORD' env var export to your '$BASHRC_FILE' file."
     exit 1
 fi
 
