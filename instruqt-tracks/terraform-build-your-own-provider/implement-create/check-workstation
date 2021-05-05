@@ -47,37 +47,6 @@ if ! grep -q 'o, err := c.CreateOrder(ois)' "$RESOURCE_ORDER_FILE"; then
     exit 1
 fi
 
-# Check that the resourceOrderRead function was implemented (not just present)
-if ! grep -q 'orderItems := flattenOrderItems(&order.Items)' "$RESOURCE_ORDER_FILE"; then
-    fail-message "You need to implement the resourceOrderRead function in '$RESOURCE_ORDER_FILE'."
-    exit 1
-fi
-
-# Check that the flattenOrderItems function was implemented (not just present)
-if ! grep -q 'func flattenOrderItems(orderItems *[]hc.OrderItem)' "$RESOURCE_ORDER_FILE"; then
-    fail-message "You need to implement the flattenOrderItems function in '$RESOURCE_ORDER_FILE'."
-    exit 1
-fi
-
-# Check that the flattenCoffee function was implemented (not just present)
-if ! grep -q 'func flattenCoffee(coffee hc.Coffee)' "$RESOURCE_ORDER_FILE"; then
-    fail-message "You need to implement the flattenCoffee function in '$RESOURCE_ORDER_FILE'."
-    exit 1
-fi
-
-# Check that resourceOrderRead is in the resourceOrderCreate function
-if ! grep -q '' "$RESOURCE_ORDER_FILE"; then
-    fail-message "You need to implement the resourceOrderRead function in '$RESOURCE_ORDER_FILE'."
-    exit 1
-fi
-
-# Check that the order resource has been added to the provider
-if ! grep -q '"hashicups_order": resourceOrder()' "$PROVIDER_FILE"; then
-    fail-message "You need to implement the resourceOrderRead function in '$PROVIDER_FILE'."
-    exit 1
-fi
-
-
 # Check `hashicups/resource_order.go` has the new imports
 if ! grep -q 'github.com/hashicorp-demoapp/hashicups-client-go' "$RESOURCE_ORDER_FILE"; then
     fail-message "You need to add the 'github.com/hashicorp-demoapp/hashicups-client-go' import to 'hashicups/resource_order.go'."
@@ -94,4 +63,27 @@ if ! grep -q 'items' "$RESOURCE_ORDER_FILE"; then
     exit 1
 fi
 
-# TODO: check that the new resource was created in the TF state ouptputs
+# Check that the resourceOrderRead function was implemented (not just present)
+if ! grep -q 'orderItems := flattenOrderItems(&order.Items)' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to implement the resourceOrderRead function in '$RESOURCE_ORDER_FILE'."
+    exit 1
+fi
+
+# Check that the flattenOrderItems function was implemented (not just present)
+if ! grep -q 'func flattenOrderItems' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to implement the flattenOrderItems function in '$RESOURCE_ORDER_FILE'."
+fi
+
+# Check that the flattenCoffee function was implemented (not just present)
+if ! grep -q 'func flattenCoffee(coffee hc.Coffee)' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to implement the flattenCoffee function in '$RESOURCE_ORDER_FILE'."
+    exit 1
+fi
+
+# Check that the order resource has been added to the provider
+if ! grep -q '"hashicups_order": resourceOrder()' "$PROVIDER_FILE"; then
+    fail-message "You need to implement the resourceOrderRead function in '$PROVIDER_FILE'."
+    exit 1
+fi
+
+# TODO: check that the new resource was created in the TF state outputs
