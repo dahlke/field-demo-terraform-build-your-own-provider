@@ -4,10 +4,13 @@ BASH_HISTORY_FILE=/root/.bash_history
 RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
 
 # Check that updates have been made to `hashicups/resource_order.go`
-if ! grep -q 'DeleteOrder' "$RESOURCE_ORDER_FILE"; then
-    fail-message "You need to update 'resourceOrderDelete' function in 'hashicups/resource_order.go' using the code example."
+if ! grep -q 'c.DeleteOrder(orderID)' "$RESOURCE_ORDER_FILE"; then
+    fail-message "You need to update 'resourceOrderDelete' function in '$RESOURCE_ORDER_FILE' using the code example."
     exit 1
 fi
 
 # Check the user ran 'terraform destroy'
 grep -q "terraform destroy --auto-approve" '$BASH_HISTORY_FILE' || fail-message "You haven't run 'terraform destroy --auto-approve' yet."
+
+# TODO: confirm the order has been destroyed
+# curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1

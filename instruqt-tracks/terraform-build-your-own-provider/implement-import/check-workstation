@@ -10,8 +10,6 @@ if ! grep -q 'ResourceImporter' "$RESOURCE_ORDER_FILE"; then
     exit 1
 fi
 
-
-
 if [ ! -f $TF_IMPORT_MAIN_FILE ]; then
     fail-message "You have not created the 'main.tf' file under the 'examples/import' directory yet."
     exit 1
@@ -26,3 +24,5 @@ grep -q "terraform import hashicups_order.sample" '$BASH_HISTORY_FILE' || fail-m
 
 # Check the user ran 'terraform state show'
 grep -q "terraform state show hashicups_order.sample" '$BASH_HISTORY_FILE' || fail-message "You have not run 'terraform state show hashicups_order.sample' yet."
+
+# TODO: check the state file and see that something has been imported
