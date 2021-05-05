@@ -446,8 +446,8 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 9000
+  difficulty: advanced
+  timelimit: 720
 - slug: add-authentication-to-a-provider
   id: 1bxvxvprv1gx
   type: challenge
@@ -663,8 +663,8 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
+  difficulty: advanced
+  timelimit: 480
 - slug: implement-a-complex-read
   id: bcwthxrik7le
   type: challenge
@@ -977,7 +977,7 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
+  difficulty: advanced
   timelimit: 600
 - slug: debug-a-terraform-provider
   id: pq4kpsszirwi
@@ -1255,7 +1255,7 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
+  difficulty: advanced
   timelimit: 600
 - slug: implement-create
   id: sfluifh0t6vq
@@ -1726,8 +1726,8 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
+  difficulty: advanced
+  timelimit: 840
 - slug: implement-update
   id: on5qwvfur9xr
   type: challenge
@@ -1911,8 +1911,8 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
+  difficulty: advanced
+  timelimit: 480
 - slug: implement-delete
   id: pjionakyoqpj
   type: challenge
@@ -2014,8 +2014,8 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
+  difficulty: advanced
+  timelimit: 480
 - slug: implement-import
   id: wwco2dpljowt
   type: challenge
@@ -2229,6 +2229,6 @@ challenges:
   - title: Terminal
     type: terminal
     hostname: workstation
-  difficulty: basic
-  timelimit: 600
-checksum: "16660180798866653556"
+  difficulty: advanced
+  timelimit: 540
+checksum: "17930935667093918421"
