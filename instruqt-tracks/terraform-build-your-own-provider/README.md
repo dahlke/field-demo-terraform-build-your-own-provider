@@ -2,10 +2,12 @@
 
 ## TODO
 
-- create a new image for this so the setup on the first stage doesn't take as long
+- Create a new image for the project so the setup on the first challenge doesn't take so long
+    - Golang and Docker Compose especially
 - Remove the terraform lock file w/ the install Make directive?
+- Define all the file path env vars in the first setup and add them to the bashrc file
+- Use the actual hashicorp version of hashicups instead of my version (git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups)
 - Check the test suite runs successfully
-- Can I set env vars in setup that can be used in every subsequent script?
 
 # Challenge Work
 

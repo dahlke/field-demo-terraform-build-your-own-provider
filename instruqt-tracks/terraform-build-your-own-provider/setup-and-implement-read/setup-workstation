@@ -1,13 +1,36 @@
 #!/bin/sh
 
-export PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
+PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
+
+MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
+MODTEXT_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/vendor/modules.txt
+
+PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+
+DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
+
+RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
+PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+
+PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
+
+BASH_HISTORY_FILE=/root/.bash_history
+BASHRC_FILE=/root/.bashrc
+PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
+PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
+
+MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
+MODTEXT_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/vendor/modules.txt
+PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
+DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
+PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
+
+# TODO: put these in bashrc along with all other file paths used in the scripts
 
 ###########
 # Install Docker Compose and Docker
 ###########
-# TODO: need to change the compose version to  match the Docker version
-# https://docs.docker.com/compose/compose-file/compose-versioning/
-
 apt-get update
 apt install -y docker-compose docker.io
 
@@ -17,21 +40,22 @@ sudo systemctl start docker
 ###########
 # Install Golang 1.11+ to use with Go Modules
 ###########
-# TODO: parameterize this or bake it into the image
-wget https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
-rm -rf /usr/bin/go && tar -C /usr/bin -xzf go1.16.3.linux-amd64.tar.gz
-rm go1.16.3.linux-amd64.tar.gz
+GO_VERSION="1.16.3"
+wget https://golang.org/dl/go$GO_VERSION.linux-amd64.tar.gz
+rm -rf /usr/bin/go && tar -C /usr/bin -xzf go$GO_VERSION.linux-amd64.tar.gz
+rm go$GO_VERSION.linux-amd64.tar.gz
 
-export PATH=$PATH:/usr/bin/go/bin
-export GOPATH=/root
+PATH=$PATH:/usr/bin/go/bin
+GOPATH=/root
 echo "export PATH=$PATH:/usr/bin/go/bin" >> /root/.bashrc
-echo "export GOPATH=/root" >> /root/.bashrc
+echo "export GOPATH=$GOPATH" >> /root/.bashrc
 
 ###########
 # Install a Docker Compose version > 1.25.5
 ###########
+DOCKER_COMPOSE_VERSION="1.29.1"
 rm /usr/bin/docker-compose
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
 sudo chmod +x /usr/bin/docker-compose
 
 ###########
@@ -40,7 +64,7 @@ sudo chmod +x /usr/bin/docker-compose
 
 mkdir -p /root/github.com/hashicorp/
 cd /root/github.com/hashicorp/
-# TODO: git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
+# git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
 git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hashicups
 
 ###########

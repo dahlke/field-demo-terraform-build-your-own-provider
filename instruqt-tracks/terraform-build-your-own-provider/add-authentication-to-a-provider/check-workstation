@@ -1,17 +1,23 @@
 #!/bin/bash -l
 
+MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
 BASH_HISTORY_FILE=/root/.bash_history
 BASHRC_FILE=/root/.bashrc
 PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
 DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
 PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
 
-# TODO: these do not fail properly
 # Check the user signed up
-grep -q "curl localhost:19090/signup" '$BASH_HISTORY_FILE' || fail-message "You haven't run 'curl localhost:19090/signup' yet."
+if ! grep -q 'curl localhost:19090/signup' "$BASH_HISTORY_FILE"; then
+    fail-message "You haven't run 'curl localhost:19090/signup' yet."
+    exit 1
+fi
 
 # Check the user signed in
-grep -q "curl localhost:19090/signin" '$BASH_HISTORY_FILE' || fail-message "You haven't run 'curl localhost:19090/signin' yet."
+if ! grep -q 'curl localhost:19090/signin' "$BASH_HISTORY_FILE"; then
+    fail-message "You haven't run 'curl localhost:19090/signin' yet."
+    exit 1
+fi
 
 # Check the `HASHICUPS_TOKEN` env var was set
 if [ "$HASHICUPS_TOKEN" = "" ]; then
@@ -46,17 +52,15 @@ if ! grep -q 'github.com/hashicorp/terraform-plugin-sdk/v2/diag' "$PROVIDER_FILE
     exit 1
 fi
 
-# TODO: Check that the new dependencies were installed with go mod vendor?
+# Check the mod file to confirm that the new dependencies were installed
+if ! grep -q 'github.com/hashicorp-demoapp/hashicups-client-go' "$MOD_FILE"; then
+    fail-message "You haven't run 'go mod vendor' again to install the new dependencies."
+    exit 1
+fi
 
 # Check `hashicups/provider.go` has the new `providerConfigure` function
 if ! grep -q 'providerConfigure' "$PROVIDER_FILE"; then
     fail-message "You need to add the 'providerConfigure' function to '$PROVIDER_FILE'."
-    exit 1
-fi
-
-# Check the provider has been built and installed
-if ! test -f "$PROVIDER_BINARY_FILE"; then
-    fail-message "You haven't built and installed the provider binary."
     exit 1
 fi
 
@@ -84,21 +88,9 @@ if ! grep -q 'HASHICUPS_PASSWORD' "$BASHRC_FILE"; then
     exit 1
 fi
 
-# TODO: the check will pass on this because of past attempts - do we need to check something else or clear out the statefile?
-
-# Check the terraform output looking for a "Packer Spiced Latte"
-cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
-TF_OUTPUT=$(terraform output -json | jq -r .psl.value[].name)
-if [ "$TF_OUTPUT" != "Packer Spiced Latte" ]; then
-    fail-message "You need to run 'terraform init && terraform apply --auto-approve' to refresh your HashiCups provider."
+# Check the apply output is successful when checked, which means auth worked
+TF_APPLY_OUTPUT=$(terraform init && terraform apply --auto-approve | grep "Apply complete")
+if ! [[ "$TF_APPLY_OUTPUT" == *"Apply complete"* ]]; then
+    fail-message "The 'terraform apply' is not working successfully. Double check your credential env vars."
     exit 1
 fi
-
-# Check the login was attempted in the `docker-compose` logs
-cd /root/github.com/hashicorp/terraform-provider-hashicups/docker_compose
-DOCKER_COMPOSE_SIGNIN_LOGS=$(docker-compose logs | grep signin)
-if grep -q 'Handle User | signin' "$DOCKER_COMPOSE_SIGNIN_LOGS"; then
-    fail-message "There were no successful login attempts to HashiCups."
-    exit 1
-fi
-
