@@ -1,32 +1,36 @@
 #!/bin/sh
 
+# TODO: put these in bashrc along with all other file paths used in the scripts
 PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
+echo "export PROJECT_HOME_DIR=$PROJECT_HOME_DIR" >> /root/.bashrc
 
 MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
 MODTEXT_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/vendor/modules.txt
-
-PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-
-DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
-
-RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
-PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-
-PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
+echo "export MOD_FILE=$MOD_FILE" >> /root/.bashrc
+echo "export MODTEXT_FILE=$MODTEXT_FILE" >> /root/.bashrc
 
 BASH_HISTORY_FILE=/root/.bash_history
 BASHRC_FILE=/root/.bashrc
-PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
-PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
+echo "export BASH_HISTORY_FILE=$BASH_HISTORY_FILE" >> /root/.bashrc
+echo "export BASHRC_FILE=$BASHRC_FILE" >> /root/.bashrc
 
-MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
-MODTEXT_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/vendor/modules.txt
 PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
 PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
+echo "export PROVIDER_FILE=$PROVIDER_FILE" >> /root/.bashrc
+echo "export PROVIDER_BINARY_FILE=$PROVIDER_BINARY_FILE" >> /root/.bashrc
 
-# TODO: put these in bashrc along with all other file paths used in the scripts
+DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
+DATA_SOURCE_ORDERS_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_order.go
+echo "export DATA_SOURCE_COFFEE_FILE=$DATA_SOURCE_COFFEE_FILE" >> /root/.bashrc
+echo "export DATA_SOURCE_ORDERS_FILE=$DATA_SOURCE_ORDERS_FILE" >> /root/.bashrc
+
+RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
+echo "export RESOURCE_ORDER_FILE=$RESOURCE_ORDER_FILE" >> /root/.bashrc
+
+TF_DIR=/root/github.com/hashicorp/terraform-provider-hashicups/examples
+TF_MAIN_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/examples/main.tf
+echo "export TF_DIR=$TF_DIR" >> /root/.bashrc
+echo "export TF_MAIN_FILE=$TF_MAIN_FILE" >> /root/.bashrc
 
 ###########
 # Install Docker Compose and Docker
