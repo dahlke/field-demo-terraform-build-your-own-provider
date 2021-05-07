@@ -1881,7 +1881,7 @@ challenges:
     Apply the configuration. This should update your order and set the `last_updated` attribute.
 
     ```
-    terraform apply --auto-approve
+    terraform init && terraform apply --auto-approve
     ```
 
     Verify that the provider updated your order by invoking the HashiCups API. Substitute the order number with your
@@ -1896,7 +1896,7 @@ challenges:
   - type: text
     contents: |-
       In this challenge, you will add update capabilities to the order resource of a provider that interacts with the
-      API of a fictional coffee-shop application, HashiCups. To do this, you will:
+      API of a fictional coffee-shop application, HashiCups.
   - type: text
     contents: |-
       To do this, you will:
@@ -2024,7 +2024,7 @@ challenges:
   assignment: |-
     *Implement import*
 
-    In `hashicups/resource_order.go, add the following `Importer` attribute to the end of the `resourceOrder()` schema.
+    In `hashicups/resource_order.go`, add the following `Importer` attribute to the end of the `resourceOrder()` schema.
 
     ```
     func resourceOrder() *schema.Resource {

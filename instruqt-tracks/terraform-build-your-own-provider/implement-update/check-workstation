@@ -23,6 +23,9 @@ if ! grep -q 'quantity = 3' "$TF_MAIN_FILE"; then
     exit 1
 fi
 
-# TODO: Check that the order was successfully updated
-# curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
-# terraform output -json | jq -r '.edu_order.value.items[1].quantity'
+# Check that the order was successfully updated to the new quantity
+SECOND_COFFEE_QUANTITY=$(terraform output -json | jq -r .edu_order.value.items[1].quantity)
+if ! [ "$SECOND_COFFEE_QUANTITY" = "3" ]; then
+    fail-message "You did not successfully add the new outputs to your Terraform configuration."
+    exit 1
+fi

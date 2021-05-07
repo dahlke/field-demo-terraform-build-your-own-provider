@@ -11,14 +11,6 @@ if [ ! -f $TF_IMPORT_MAIN_FILE ]; then
     exit 1
 fi
 
+# TODO: check the contents of the main.tf file
 
-# Check the user ran 'terraform destroy'
-grep -q "mkdir import && cd import" '$BASH_HISTORY_FILE' || fail-message "You have not run 'mkdir import' yet."
-
-# Check the user ran 'terraform import'
-grep -q "terraform import hashicups_order.sample" '$BASH_HISTORY_FILE' || fail-message "You have not run 'terraform import hashicups_order.sample <ID>' yet.  Reference the instructions to find the appropriate ID number."
-
-# Check the user ran 'terraform state show'
-grep -q "terraform state show hashicups_order.sample" '$BASH_HISTORY_FILE' || fail-message "You have not run 'terraform state show hashicups_order.sample' yet."
-
-# TODO: check the state file and see that something has been imported
+# TODO: check the state file and see that something has been imported - currently this stage does not work
