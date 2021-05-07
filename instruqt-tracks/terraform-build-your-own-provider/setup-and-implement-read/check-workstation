@@ -1,8 +1,10 @@
 #!/bin/bash -l
 
-# TODO: this doesn't work
-# Check that the user read from the `/health` endpoint
-grep -q "curl localhost:19090/health" /root/.bash_history || fail-message "You haven't run 'curl localhost:19090/health' yet."
+# Check the user looked up the health of the app
+if ! grep -q 'curl localhost:19090/health' "$BASH_HISTORY_FILE"; then
+    fail-message "You haven't run 'curl localhost:19090/health' yet."
+    exit 1
+fi
 
 # Check `go.mod` exists
 if ! test -f "$MOD_FILE"; then

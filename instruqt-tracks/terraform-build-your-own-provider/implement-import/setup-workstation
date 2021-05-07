@@ -1,7 +1,6 @@
 #!/bin/bash -l
 
-export PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
-
+# Check out the previous branch to make sure everything is as we expect
 cd $PROJECT_HOME_DIR
 git checkout implement-delete
 

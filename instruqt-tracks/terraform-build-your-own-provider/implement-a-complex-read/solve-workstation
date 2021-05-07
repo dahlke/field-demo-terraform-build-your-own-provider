@@ -1,6 +1,7 @@
 #!/bin/bash -l
 
-cd /root/github.com/hashicorp/terraform-provider-hashicups/
+# Check out the branch with all the correct files
+cd $PROJECT_HOME_DIR
 git checkout implement-complex-read
 
 # Create an order via the API
@@ -13,7 +14,7 @@ curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
 make install
 
 # Initialize and apply
-cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+cd $PROJECT_HOME_DIR/examples
 terraform init && terraform apply -auto-approve
 
 exit 0

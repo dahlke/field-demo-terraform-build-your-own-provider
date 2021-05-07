@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 # Check out the branch with all the correct files
-cd /root/github.com/hashicorp/terraform-provider-hashicups
+cd $PROJECT_HOME_DIR
 git checkout implement-read
 
 # Initialize the module for our provider and install the dependencies.
@@ -12,7 +12,7 @@ go mod vendor
 make install
 
 # Initialize and apply
-cd /root/github.com/hashicorp/terraform-provider-hashicups/examples
+cd $PROJECT_HOME_DIR/examples
 terraform init && terraform apply -auto-approve
 
 exit 0

@@ -18,7 +18,7 @@
     -[?] Cleanup
 - Add Authentication to a Provider
     -[x] Setup
-    -[/] Check
+    -[x] Check
     -[x] Solve
     -[?] Cleanup
 - Implement a Complex Read
