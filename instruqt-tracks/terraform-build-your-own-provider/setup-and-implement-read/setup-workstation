@@ -1,7 +1,30 @@
 #!/bin/sh
 
-# TODO: put these in bashrc along with all other file paths used in the scripts
 PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
+
+###########
+# Install Docker Compose and Docker
+###########
+apt-get update
+apt install -y docker-compose docker.io
+
+sudo systemctl unmask docker
+sudo systemctl start docker
+
+###########
+# Install Golang 1.11+ to use with Go Modules
+###########
+
+cat ~/.bashrc
+
+GO_VERSION="1.16.3"
+wget https://golang.org/dl/go$GO_VERSION.linux-amd64.tar.gz
+rm -rf /usr/bin/go && tar -C /usr/bin -xzf go$GO_VERSION.linux-amd64.tar.gz
+rm go$GO_VERSION.linux-amd64.tar.gz
+
+###########
+# Add all our relevant env vars to the bashrc
+###########
 echo "export PROJECT_HOME_DIR=$PROJECT_HOME_DIR" >> /root/.bashrc
 
 MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
@@ -10,9 +33,7 @@ echo "export MOD_FILE=$MOD_FILE" >> /root/.bashrc
 echo "export MODTEXT_FILE=$MODTEXT_FILE" >> /root/.bashrc
 
 BASH_HISTORY_FILE=/root/.bash_history
-BASHRC_FILE=/root/.bashrc
 echo "export BASH_HISTORY_FILE=$BASH_HISTORY_FILE" >> /root/.bashrc
-echo "export BASHRC_FILE=$BASHRC_FILE" >> /root/.bashrc
 
 PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
 PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
@@ -31,23 +52,6 @@ TF_DIR=/root/github.com/hashicorp/terraform-provider-hashicups/examples
 TF_MAIN_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/examples/main.tf
 echo "export TF_DIR=$TF_DIR" >> /root/.bashrc
 echo "export TF_MAIN_FILE=$TF_MAIN_FILE" >> /root/.bashrc
-
-###########
-# Install Docker Compose and Docker
-###########
-apt-get update
-apt install -y docker-compose docker.io
-
-sudo systemctl unmask docker
-sudo systemctl start docker
-
-###########
-# Install Golang 1.11+ to use with Go Modules
-###########
-GO_VERSION="1.16.3"
-wget https://golang.org/dl/go$GO_VERSION.linux-amd64.tar.gz
-rm -rf /usr/bin/go && tar -C /usr/bin -xzf go$GO_VERSION.linux-amd64.tar.gz
-rm go$GO_VERSION.linux-amd64.tar.gz
 
 PATH=$PATH:/usr/bin/go/bin
 GOPATH=/root
@@ -104,5 +108,6 @@ systemctl start code-server
 
 # Set the working directory to the project home
 set-workdir $PROJECT_HOME_DIR
+
 
 exit 0
