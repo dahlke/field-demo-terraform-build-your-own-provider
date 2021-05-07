@@ -1,11 +1,5 @@
 #!/bin/bash -l
 
-MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
-MODTEXT_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/vendor/modules.txt
-PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-DATA_SOURCE_COFFEE_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_coffee.go
-PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
-
 # Check that the user read from the `/health` endpoint
 grep -q "curl localhost:19090/health" /root/.bash_history || fail-message "You haven't run 'curl localhost:19090/health' yet."
 
