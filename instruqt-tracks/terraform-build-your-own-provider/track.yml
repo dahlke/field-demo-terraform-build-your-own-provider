@@ -1959,7 +1959,7 @@ challenges:
     The function retrieves the order ID using `d.ID()` and deletes the order.
 
     - If the `destroy` callback returns *without* an error, the provider assumes the resource is destroyed and all state is removed.
-    - If the destroy callback returns *with* an error, the provider assumes the resource still exists and all prior state is preserved.
+    - If the `destroy` callback returns *with* an error, the provider assumes the resource still exists and all prior state is preserved.
 
     The `destroy` callback should never update any state on the resource. In addition, the destroy callback should
     always handle the case where the resource might already be destroyed. If the resource is already destroyed, the
@@ -2231,4 +2231,4 @@ challenges:
     hostname: workstation
   difficulty: advanced
   timelimit: 540
-checksum: "15529507784877336580"
+checksum: "11293290875297122310"
