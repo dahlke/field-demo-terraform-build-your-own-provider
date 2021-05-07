@@ -8,6 +8,10 @@ git checkout debug-tf-providers
 cd $PROJECT_HOME_DIR/examples
 rm .terraform.lock.hcl
 
+# Install the provider
+cd $PROJECT_HOME_DIR
+make install
+
 # Set the working directory to the project home
 set-workdir $PROJECT_HOME_DIR
 
