@@ -48,6 +48,9 @@ if ! grep -q 'output "order"' "$TF_MAIN_FILE"; then
     exit 1
 fi
 
-# TODO: Check the outputs from `teraform output` matches what we expect - this will work because of previous challenges
-TF_OUTPUT_JSON=$(terraform output -json | jq -r .)
-echo $TF_OUTPUT_JSON
+# Check the outputs from `teraform output` match what is expected
+OUTPUT_ORDER_ID=$(terraform output -json | jq -r .order.value.id)
+if ! [ "$OUTPUT_ORDER_ID" = "1" ]; then
+    fail-message "You did not successfully add the new outputs to your Terraform configuration."
+    exit 1
+fi

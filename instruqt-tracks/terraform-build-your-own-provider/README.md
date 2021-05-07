@@ -23,7 +23,7 @@
     -[?] Cleanup
 - Implement a Complex Read
     -[x] Setup
-    -[/] Check
+    -[x] Check
     -[x] Solve
     -[?] Cleanup
 - Debug a Terraform Provider
