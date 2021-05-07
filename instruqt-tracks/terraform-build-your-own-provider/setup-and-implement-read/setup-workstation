@@ -33,7 +33,9 @@ echo "export MOD_FILE=$MOD_FILE" >> /root/.bashrc
 echo "export MODTEXT_FILE=$MODTEXT_FILE" >> /root/.bashrc
 
 BASH_HISTORY_FILE=/root/.bash_history
+BASHRC_FILE=/root/.bashrc
 echo "export BASH_HISTORY_FILE=$BASH_HISTORY_FILE" >> /root/.bashrc
+echo "export BASHRC_FILE=$BASHRC_FILE" >> /root/.bashrc
 
 PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
 PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
@@ -50,8 +52,10 @@ echo "export RESOURCE_ORDER_FILE=$RESOURCE_ORDER_FILE" >> /root/.bashrc
 
 TF_DIR=/root/github.com/hashicorp/terraform-provider-hashicups/examples
 TF_MAIN_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/examples/main.tf
+TF_IMPORT_MAIN_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/examples/import/main.tf
 echo "export TF_DIR=$TF_DIR" >> /root/.bashrc
 echo "export TF_MAIN_FILE=$TF_MAIN_FILE" >> /root/.bashrc
+echo "export TF_IMPORT_MAIN_FILE=$TF_IMPORT_MAIN_FILE" >> /root/.bashrc
 
 PATH=$PATH:/usr/bin/go/bin
 GOPATH=/root

@@ -1,9 +1,5 @@
 #!/bin/bash -l
 
-PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-DATA_SOURCE_ORDERS_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/data_source_order.go
-TF_MAIN_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/examples/main.tf
-
 # Confirm that an order was created.
 LOOKED_UP_ORDER=$(curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1 | jq -r .id)
 if [ "$LOOKED_UP_ORDER" = "null" ]; then

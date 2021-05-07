@@ -1,8 +1,5 @@
 #!/bin/bash -l
 
-BASH_HISTORY_FILE=/root/.bash_history
-RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
-
 # Check that updates have been made to `hashicups/resource_order.go`
 if ! grep -q 'c.DeleteOrder(orderID)' "$RESOURCE_ORDER_FILE"; then
     fail-message "You need to update 'resourceOrderDelete' function in '$RESOURCE_ORDER_FILE' using the code example."

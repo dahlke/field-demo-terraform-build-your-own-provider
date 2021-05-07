@@ -1,7 +1,5 @@
 #!/bin/bash -l
 
-PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-
 # Check for the `diags` in `providerConfigure` (`hashicups/provider.go`)
 # TODO: they have to do this twice, do we check for both?
 if ! grep -q 'diags = append' "$PROVIDER_FILE"; then

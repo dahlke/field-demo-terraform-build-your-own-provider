@@ -1,8 +1,5 @@
 #!/bin/bash -l
 
-RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
-TF_MAIN_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/examples/main.tf
-
 if ! grep -q 'last_updated' "$RESOURCE_ORDER_FILE"; then
     fail-message "You need to add the 'last_updated' schema to the 'resourceOrder' in '$RESOURCE_ORDER_FILE'."
     exit 1

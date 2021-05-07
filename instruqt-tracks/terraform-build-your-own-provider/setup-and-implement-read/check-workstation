@@ -1,5 +1,6 @@
 #!/bin/bash -l
 
+# TODO: this doesn't work
 # Check that the user read from the `/health` endpoint
 grep -q "curl localhost:19090/health" /root/.bash_history || fail-message "You haven't run 'curl localhost:19090/health' yet."
 

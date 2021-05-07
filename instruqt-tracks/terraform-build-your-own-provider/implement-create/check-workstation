@@ -1,8 +1,5 @@
 #!/bin/bash -l
 
-RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
-PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-
 # Check `hashicups/resource_order.go` exists
 if ! test -f "$RESOURCE_ORDER_FILE"; then
     fail-message "You haven't created '$RESOURCE_ORDER_FILE' yet."

@@ -1,9 +1,5 @@
 #!/bin/bash -l
 
-BASH_HISTORY_FILE=/root/.bash_history
-RESOURCE_ORDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/resource_order.go
-TF_IMPORT_MAIN_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/examples/import/main.tf
-
 # Check that updates have been made to `hashicups/resource_order.go`
 if ! grep -q 'ResourceImporter' "$RESOURCE_ORDER_FILE"; then
     fail-message "You need to update the 'resourceOrder' function in 'hashicups/resource_order.go' using the code example."
