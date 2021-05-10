@@ -10,6 +10,7 @@ fi
 grep -q "terraform destroy --auto-approve" '$BASH_HISTORY_FILE' || fail-message "You haven't run 'terraform destroy --auto-approve' yet."
 
 # Confirm the order has been destroyed
+cd $PROJECT_HOME_DIR/examples
 TF_OUT_JSON=$(terraform output -json)
 if ! [ "$TF_OUT_JSON" = "{}" ]; then
     fail-message "You did not successfully run terraform destroy."

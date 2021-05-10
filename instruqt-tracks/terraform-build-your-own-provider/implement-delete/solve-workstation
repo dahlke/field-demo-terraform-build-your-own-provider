@@ -9,6 +9,6 @@ make install
 
 # Initialize and apply
 cd $PROJECT_HOME_DIR/examples
-terraform init && terraform apply -auto-approve
+terraform init && terraform destroy -auto-approve
 
 exit 0

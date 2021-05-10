@@ -83,6 +83,8 @@ if ! grep -q '"hashicups_order": resourceOrder()' "$PROVIDER_FILE"; then
     exit 1
 fi
 
+# Check the outputs are as expected
+cd $PROJECT_HOME_DIR/examples
 COFFEE_QUANTITY=$(terraform output -json | jq -r .edu_order.value.items[0].quantity)
 if ! [ "$COFFEE_QUANTITY" = "2" ]; then
     fail-message "You did not successfully add the new outputs to your Terraform configuration."

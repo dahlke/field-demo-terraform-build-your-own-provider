@@ -23,12 +23,12 @@
 - Implement a Complex Read
     -[x] Setup
     -[x] Check
-    -[ ] Solve
+    -[x] Solve
     -[?] Cleanup
 - Debug a Terraform Provider
     -[x] Setup
     -[x] Check
-    -[ ] Solve
+    -[x] Solve
     -[?] Cleanup
 - Implement Create
     -[x] Setup
