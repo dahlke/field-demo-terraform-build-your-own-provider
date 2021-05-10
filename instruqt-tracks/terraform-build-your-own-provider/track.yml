@@ -14,7 +14,7 @@ owner: hashicorp
 developers:
 - neil@hashicorp.com
 - nyoung@hashicorp.com
-private: true
+private: false
 published: false
 show_timer: true
 challenges:
@@ -2231,4 +2231,4 @@ challenges:
     hostname: workstation
   difficulty: advanced
   timelimit: 540
-checksum: "11293290875297122310"
+checksum: "1979114505412500178"
