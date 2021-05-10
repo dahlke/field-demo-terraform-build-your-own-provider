@@ -82,7 +82,9 @@ if ! grep -q 'HASHICUPS_PASSWORD' "$BASHRC_FILE"; then
 fi
 
 # Check the apply output is successful when checked, which means auth worked
+cd $PROJECT_HOME_DIR/examples
 TF_APPLY_OUTPUT=$(terraform init && terraform apply --auto-approve | grep "Apply complete")
+
 if ! [[ "$TF_APPLY_OUTPUT" == *"Apply complete"* ]]; then
     fail-message "The 'terraform apply' is not working successfully. Double check your credential env vars."
     exit 1

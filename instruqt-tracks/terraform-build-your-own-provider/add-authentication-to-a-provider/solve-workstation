@@ -23,9 +23,6 @@ echo "export HASHICUPS_TOKEN=${HASHICUPS_TOKEN}" >> ~/.bashrc
 # Install the provider
 make install
 
-# Initialize and apply
-cd $PROJECT_HOME_DIR/examples
-
 # Set our username and password as env vars
 export HASHICUPS_USERNAME="education"
 export HASHICUPS_PASSWORD="test123"
@@ -34,6 +31,8 @@ export HASHICUPS_PASSWORD="test123"
 echo "export HASHICUPS_USERNAME=${HASHICUPS_USERNAME}" >> ~/.bashrc
 echo "export HASHICUPS_PASSWORD=${HASHICUPS_PASSWORD}" >> ~/.bashrc
 
+# Initialize and apply
+cd $PROJECT_HOME_DIR/examples
 terraform init && terraform apply -auto-approve
 
 exit 0
