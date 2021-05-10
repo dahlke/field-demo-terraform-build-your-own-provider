@@ -11,6 +11,28 @@ if [ ! -f $TF_IMPORT_MAIN_FILE ]; then
     exit 1
 fi
 
-# TODO: check the contents of the main.tf file
+# Check the `main.tf` file has the new sample resource
+if ! grep -q 'resource "hashicups_order" "sample"' "$TF_IMPORT_MAIN_FILE"; then
+    fail-message "You need to add the Terraform configuration for the 'hashicups_order' sample resource in the 'examples/import/main.tf' file."
+    exit 1
+fi
+
+# Check that an order was created
+if ! grep -q 'terraform import hashicups_order.sample' "$BASH_HISTORY_FILE"; then
+    fail-message "You haven't run `terraform import hashicups_order.sample <ID>` yet.  Be sure to reference the order ID based on the output following the order creation."
+    exit 1
+fi
+
+# Check that order was imported into terraform
+if ! grep -q 'localhost:19090/orders' "$BASH_HISTORY_FILE"; then
+    fail-message "You haven't created the order via HashiCups API yet.  Find the 'curl -X POST' command to create the order."
+    exit 1
+fi
+
+# Check if user used the 'terrafrom state' command
+if ! grep -q 'terraform state show hashicups_order.sample' "$BASH_HISTORY_FILE"; then
+    fail-message "You haven't created the order via HashiCups API yet.  Find the 'curl -X POST' command to create the order."
+    exit 1
+fi
 
 # TODO: check the state file and see that something has been imported - currently this stage does not work

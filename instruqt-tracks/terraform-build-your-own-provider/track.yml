@@ -1091,6 +1091,7 @@ challenges:
     Next, initialize your workspace to refresh your HashiCups provider, then apply.
 
     ```
+    rm .terraform.lock.hcl
     terraform init && terraform apply --auto-approve
     ```
 

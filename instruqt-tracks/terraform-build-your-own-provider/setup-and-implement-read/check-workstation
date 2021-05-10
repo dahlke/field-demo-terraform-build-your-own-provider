@@ -20,7 +20,7 @@ fi
 
 # Check `hashicups/provider.go` has `hashicup_coffees` as a data source
 if ! grep -q 'hashicups_coffees' "$PROVIDER_FILE"; then
-    fail-message "You need to add 'hashicup_coffees' data source in '$PROVIDER_FILE'."
+    fail-message "You need to add 'hashicups_coffees' data source in '$PROVIDER_FILE'."
     exit 1
 fi
 
