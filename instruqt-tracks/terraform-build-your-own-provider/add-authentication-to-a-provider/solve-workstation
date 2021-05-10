@@ -1,5 +1,9 @@
 #!/bin/bash -l
 
+# Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
 # Check out the branch with all the correct files
 cd $PROJECT_HOME_DIR
 git checkout auth-configuration

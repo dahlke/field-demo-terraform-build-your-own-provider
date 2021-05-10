@@ -1,13 +1,13 @@
 #!/bin/bash -l
 
 # Check the user signed up
-if ! grep -q 'curl localhost:19090/signup' "$BASH_HISTORY_FILE"; then
+if ! grep -q 'localhost:19090/signup' "$BASH_HISTORY_FILE"; then
     fail-message "You haven't run 'curl localhost:19090/signup' yet."
     exit 1
 fi
 
 # Check the user signed in
-if ! grep -q 'curl localhost:19090/signin' "$BASH_HISTORY_FILE"; then
+if ! grep -q 'localhost:19090/signin' "$BASH_HISTORY_FILE"; then
     fail-message "You haven't run 'curl localhost:19090/signin' yet."
     exit 1
 fi

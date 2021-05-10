@@ -1,5 +1,12 @@
 #!/bin/bash -l
 
+# Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Run the check for curl
+curl localhost:19090/health
+
 # Check out the branch with all the correct files
 cd $PROJECT_HOME_DIR
 git checkout implement-read
