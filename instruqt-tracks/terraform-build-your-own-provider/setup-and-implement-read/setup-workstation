@@ -1,5 +1,10 @@
 #!/bin/sh
 
+###########
+# Requires Golang version 1.16.3
+# Requires Docker Compose version 1.29.1
+###########
+
 PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
 
 ###########
@@ -10,17 +15,6 @@ apt install -y docker-compose docker.io
 
 sudo systemctl unmask docker
 sudo systemctl start docker
-
-###########
-# Install Golang 1.11+ to use with Go Modules
-###########
-
-cat ~/.bashrc
-
-GO_VERSION="1.16.3"
-wget https://golang.org/dl/go$GO_VERSION.linux-amd64.tar.gz
-rm -rf /usr/bin/go && tar -C /usr/bin -xzf go$GO_VERSION.linux-amd64.tar.gz
-rm go$GO_VERSION.linux-amd64.tar.gz
 
 ###########
 # Add all our relevant env vars to the bashrc
@@ -63,17 +57,8 @@ echo "export PATH=$PATH:/usr/bin/go/bin" >> /root/.bashrc
 echo "export GOPATH=$GOPATH" >> /root/.bashrc
 
 ###########
-# Install a Docker Compose version > 1.25.5
-###########
-DOCKER_COMPOSE_VERSION="1.29.1"
-rm /usr/bin/docker-compose
-sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
-sudo chmod +x /usr/bin/docker-compose
-
-###########
 # Set up the development environment
 ###########
-
 mkdir -p /root/github.com/hashicorp/
 cd /root/github.com/hashicorp/
 # git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
@@ -112,6 +97,5 @@ systemctl start code-server
 
 # Set the working directory to the project home
 set-workdir $PROJECT_HOME_DIR
-
 
 exit 0
