@@ -1,5 +1,11 @@
 #!/bin/sh
 
+###########
+# Requires Golang version 1.16.3
+# Requires Docker Compose version 1.29.1
+###########
+
+
 PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
 
 ###########
@@ -12,19 +18,13 @@ sudo systemctl unmask docker
 sudo systemctl start docker
 
 ###########
-# Install Golang 1.11+ to use with Go Modules
-###########
-
-cat ~/.bashrc
-
-GO_VERSION="1.16.3"
-wget https://golang.org/dl/go$GO_VERSION.linux-amd64.tar.gz
-rm -rf /usr/bin/go && tar -C /usr/bin -xzf go$GO_VERSION.linux-amd64.tar.gz
-rm go$GO_VERSION.linux-amd64.tar.gz
-
-###########
 # Add all our relevant env vars to the bashrc
 ###########
+PATH=$PATH:/usr/bin/go/bin
+GOPATH=/root
+echo "export PATH=$PATH:/usr/bin/go/bin" >> /root/.bashrc
+echo "export GOPATH=$GOPATH" >> /root/.bashrc
+
 echo "export PROJECT_HOME_DIR=$PROJECT_HOME_DIR" >> /root/.bashrc
 
 MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
@@ -57,23 +57,10 @@ echo "export TF_DIR=$TF_DIR" >> /root/.bashrc
 echo "export TF_MAIN_FILE=$TF_MAIN_FILE" >> /root/.bashrc
 echo "export TF_IMPORT_MAIN_FILE=$TF_IMPORT_MAIN_FILE" >> /root/.bashrc
 
-PATH=$PATH:/usr/bin/go/bin
-GOPATH=/root
-echo "export PATH=$PATH:/usr/bin/go/bin" >> /root/.bashrc
-echo "export GOPATH=$GOPATH" >> /root/.bashrc
-
-###########
-# Install a Docker Compose version > 1.25.5
-###########
-DOCKER_COMPOSE_VERSION="1.29.1"
-rm /usr/bin/docker-compose
-sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
-sudo chmod +x /usr/bin/docker-compose
 
 ###########
 # Set up the development environment
 ###########
-
 mkdir -p /root/github.com/hashicorp/
 cd /root/github.com/hashicorp/
 # git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
@@ -85,33 +72,8 @@ git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hash
 cd $PROJECT_HOME_DIR/docker_compose
 docker-compose up -d
 
-###########
-# Install VS Code Server
-###########
-curl -fsSL https://code-server.dev/install.sh | sh
-
-# Create a unit file for VS Code server
-cat <<-EOF > /etc/systemd/system/code-server.service
-[Unit]
-Description=Code Server
-After=network.target
-StartLimitIntervalSec=0
-[Service]
-Type=simple
-Restart=always
-RestartSec=1
-User=root
-ExecStart=/usr/bin/code-server --host 0.0.0.0 --port 8443 --cert --auth none /root/github.com/hashicorp/terraform-provider-hashicups/
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# Enable and start VS Code server
-systemctl enable code-server
-systemctl start code-server
 
 # Set the working directory to the project home
 set-workdir $PROJECT_HOME_DIR
-
 
 exit 0
