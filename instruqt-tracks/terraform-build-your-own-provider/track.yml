@@ -15,7 +15,7 @@ developers:
 - neil@hashicorp.com
 - nyoung@hashicorp.com
 private: false
-published: false
+published: true
 show_timer: true
 challenges:
 - slug: setup-and-implement-read
