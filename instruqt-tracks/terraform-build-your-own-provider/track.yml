@@ -14,7 +14,7 @@ owner: hashicorp
 developers:
 - neil@hashicorp.com
 - nyoung@hashicorp.com
-private: false
+private: true
 published: true
 show_timer: true
 challenges:
@@ -447,7 +447,7 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: advanced
-  timelimit: 720
+  timelimit: 600
 - slug: add-authentication-to-a-provider
   id: 1bxvxvprv1gx
   type: challenge
@@ -664,7 +664,7 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: advanced
-  timelimit: 480
+  timelimit: 600
 - slug: implement-a-complex-read
   id: bcwthxrik7le
   type: challenge
@@ -1727,7 +1727,7 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: advanced
-  timelimit: 840
+  timelimit: 600
 - slug: implement-update
   id: on5qwvfur9xr
   type: challenge
@@ -1912,7 +1912,7 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: advanced
-  timelimit: 480
+  timelimit: 600
 - slug: implement-delete
   id: pjionakyoqpj
   type: challenge
@@ -2015,7 +2015,7 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: advanced
-  timelimit: 480
+  timelimit: 600
 - slug: implement-import
   id: wwco2dpljowt
   type: challenge
@@ -2230,5 +2230,5 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: advanced
-  timelimit: 540
+  timelimit: 600
 checksum: "3404221035365017944"
