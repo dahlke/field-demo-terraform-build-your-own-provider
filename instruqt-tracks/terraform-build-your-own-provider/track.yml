@@ -17,6 +17,7 @@ developers:
 private: true
 published: true
 show_timer: true
+skipping_enabled: true
 challenges:
 - slug: setup-and-implement-read
   id: urdnvy0p0y1w
@@ -2231,4 +2232,4 @@ challenges:
     hostname: workstation
   difficulty: advanced
   timelimit: 600
-checksum: "3404221035365017944"
+checksum: "1645906924278518481"
