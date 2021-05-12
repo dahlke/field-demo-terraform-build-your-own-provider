@@ -7,6 +7,7 @@
 - Use the actual hashicorp version of hashicups instead of my version (git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups)
 - Check the test suite runs successfully
 - `last_updated` is being set to `tostring` not the actual timestamp
+- https://www.terraform.io/docs/extend/resources/import.html
 
 ### Challenge Work
 
@@ -33,20 +34,20 @@
 - Implement Create
     -[x] Setup
     -[x] Check
-    -[ ] Solve
+    -[x] Solve
     -[?] Cleanup
 - Implement Update
     -[x] Setup
     -[x] Check
-    -[ ] Solve
+    -[x] Solve
     -[?] Cleanup
 - Implement Delete
     -[x] Setup
-    -[/] Check
-    -[ ] Solve
+    -[x] Check
+    -[x] Solve
     -[?] Cleanup
 - Implement Import
     -[x] Setup
-    -[/] Check
+    -[ ] Check
     -[ ] Solve
     -[?] Cleanup
