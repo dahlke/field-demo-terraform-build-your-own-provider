@@ -5,6 +5,7 @@
 # Requires Docker Compose version 1.29.1
 ###########
 
+
 PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
 
 ###########
@@ -19,6 +20,11 @@ sudo systemctl start docker
 ###########
 # Add all our relevant env vars to the bashrc
 ###########
+PATH=$PATH:/usr/bin/go/bin
+GOPATH=/root
+echo "export PATH=$PATH:/usr/bin/go/bin" >> /root/.bashrc
+echo "export GOPATH=$GOPATH" >> /root/.bashrc
+
 echo "export PROJECT_HOME_DIR=$PROJECT_HOME_DIR" >> /root/.bashrc
 
 MOD_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/go.mod
@@ -65,6 +71,7 @@ git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hash
 ###########
 cd $PROJECT_HOME_DIR/docker_compose
 docker-compose up -d
+
 
 # Set the working directory to the project home
 set-workdir $PROJECT_HOME_DIR
