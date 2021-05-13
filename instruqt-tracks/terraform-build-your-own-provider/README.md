@@ -2,10 +2,11 @@
 
 ## TODO
 
-- New image for the project with baked in deps (Golang and Docker COmpose)
-- Remove the terraform lock file w/ the install Make directive?
-- Use the actual hashicorp version of hashicups instead of my version (git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups)
 - Check the test suite runs successfully
+- Merge Nick Polish
+- Address Kawsar Feedback
+- Remove the terraform lock file w/ the install Make directive (on every branch)
+- Use the actual hashicorp version of hashicups instead of my version (git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups)
 - `last_updated` is being set to `tostring` not the actual timestamp
 - https://www.terraform.io/docs/extend/resources/import.html
 
