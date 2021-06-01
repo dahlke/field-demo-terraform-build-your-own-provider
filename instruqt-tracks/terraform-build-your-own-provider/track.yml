@@ -30,7 +30,7 @@ challenges:
     The Terraform HashiCups Provider repository has been cloned for you. It will serve as the boilerplate for your
     provider workspace. Change into the cloned repository.
 
-    The HashiCups provider requires an instance of HashiCups. This has been started for you using `docker-compose` and
+    The HashiCups provider requires an instance of HashiCups, a server application with a simple REST API. This has been started for you using `docker-compose` and
     the service is run on port `:19090`. Confirm the service is running.
 
     ```
@@ -94,8 +94,9 @@ challenges:
     }
     ```
 
-    The `helper/schema` library is part of Terraform Core. It abstracts many of the complexities and ensures
-    consistency between providers. The `*schema.Provider` type can accept:
+    The [`helper/schema` library](https://www.terraform.io/docs/extend/schemas/index.html) is part of Terraform Core.
+    It abstracts many of the complexities and ensures consistency between providers. The `*schema.Provider` type can
+    accept:
 
     - the resources it supports (`ResourcesMap` and `DataSourcesMap`)
     - configuration keys (properties in `*schema.Schema{}`)
@@ -164,11 +165,11 @@ challenges:
     *Define `coffees` schema*
 
     ```
-    curl localhost:19090/coffees
+    curl localhost:19090/coffees | jq  .
     ```
 
     Since the response returns a list of coffees, the coffees schema should reflect that. Update your coffees data
-    source's schema with the following code snippet.
+    source's schema with the following code snippet, by placing it inside the `dataSourceCoffees()` function.
 
     ```
     Schema: map[string]*schema.Schema{
@@ -322,17 +323,16 @@ challenges:
     `hashicups/data_source_coffee.go`. Resources and data sources names must follow the `<provider>_<resource_name>`
     convention.
 
-    Change your `DataSourcesMap` to contain our new data source.
+    Update your `Provider()` to contain the new data source in your `DataSourcesMap`.
 
     ```
     // Provider -
     func Provider() *schema.Provider {
       return &schema.Provider{
-          ResourcesMap: map[string]*schema.Resource{},
-    -       DataSourcesMap: map[string]*schema.Resource{},
-    +       DataSourcesMap: map[string]*schema.Resource{
-    +            "hashicups_coffees":     dataSourceCoffees(),
-    +       },
+        ResourcesMap: map[string]*schema.Resource{},
+        DataSourcesMap: map[string]*schema.Resource{
+            "hashicups_coffees":     dataSourceCoffees(),
+        },
       }
     }
     ```
@@ -429,14 +429,17 @@ challenges:
 
       - An internal private cloud whose functionality is either proprietary or would not benefit the open source community.
       - Extending the capabilities of an existing provider (bug fixes, new features, or customizations)
+
+      Terraform Core is a statically-compiled binary written in the Go programming language and plugins are also written
+      in Go and are executable binaries invoked by Terraform Core over RPC.
   - type: text
     contents: |-
       In this challenge, you will set up your Terraform provider development environment and create a coffees data
       source that will return all coffees HashiCups serves. To do this, you will:
 
       - *Explore your development environment.*
-      - *Define the coffees data source.* You will add a scaffold that defines an empty schema and functions to retrieve a list of coffees.
-      - *Define the coffees schema.* The schema defines properties that allow Terraform to recognize, reference and store the coffees data resource.
+      - *Define the _coffees_ data source.* You will add a scaffold that defines an empty schema and functions to retrieve a list of coffees.
+      - *Define the _coffees_ schema.* The schema defines properties that allow Terraform to recognize, reference and store the coffees data resource.
       - *Implement read.* This read function invokes a `GET` request to the `/coffees` endpoint, then maps its value to the schema defined above.
       - *Add coffees data source to the provider schema.* This allows you to use the data source in your configuration.
   tabs:
@@ -545,7 +548,8 @@ challenges:
     )
     ```
 
-    Once you have added the new imports, be sure to install the dependencies.
+    Once you have added the new imports, be sure to install the dependencies. The below command will create a `vendor`
+    directory, and install all dependencies inside it.
 
     ```
     go mod vendor
@@ -608,6 +612,12 @@ challenges:
 
     ```
     cd examples
+    ```
+
+    Take a look at the `main.tf` file.
+
+    ```
+    cat main.tf
     ```
 
     Then, authenticate your provider. You can either set them via environment variables (recommended) or update your
@@ -674,8 +684,7 @@ challenges:
   assignment: |-
     *Create an order via API*
 
-    Before you can query a user's order, you must first create an order. Replace the authorization token with the token
-    you generated in the sign in step.
+    Before you can query a user's order, you must first create an order.
 
     ```
     curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
@@ -2084,6 +2093,8 @@ challenges:
     ```
     mkdir import && cd import
     ```
+
+    In order to import into a Terraform configuration, you'll need to have the Terraform configuration already written.
 
     Create a new file named `main.tf` with the following configuration. You will import an existing HashiCups order
     into the `hashicups_order.sample` resource.

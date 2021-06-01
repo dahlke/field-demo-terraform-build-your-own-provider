@@ -6,7 +6,7 @@
 - Merge Nick Polish
 - Address Kawsar Feedback
 - Remove the terraform lock file w/ the install Make directive (on every branch)
-- Use the actual hashicorp version of hashicups instead of my version (git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups)
+- Use the actual hashicorp version of HashiCorp HashiCups instead of my version (git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups)
 - `last_updated` is being set to `tostring` not the actual timestamp
 - https://www.terraform.io/docs/extend/resources/import.html
 
