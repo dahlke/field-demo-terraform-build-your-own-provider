@@ -25,6 +25,31 @@ challenges:
   type: challenge
   title: Setup and Implement Read
   teaser: Learn to implement a read on a public endpoint with a Terraform Provider.
+  notes:
+  - type: text
+    contents: |-
+      In these challenges, you will write a custom provider against the API of a fictional coffee-shop application
+      called HashiCups using the Terraform Plugin SDKv2. Through the process, you will learn how to create data
+      sources, authenticate the provider to the HashiCups client, and create resources with CRUD functionality.
+  - type: text
+    contents: |-
+      There are a few possible reasons for authoring a custom Terraform provider, including:
+
+      - An internal private cloud whose functionality is either proprietary or would not benefit the open source community.
+      - Extending the capabilities of an existing provider (bug fixes, new features, or customizations)
+
+      Terraform Core is a statically-compiled binary written in the Go programming language and plugins are also written
+      in Go and are executable binaries invoked by Terraform Core over RPC.
+  - type: text
+    contents: |-
+      In this challenge, you will set up your Terraform provider development environment and create a coffees data
+      source that will return all coffees HashiCups serves. To do this, you will:
+
+      - *Explore your development environment.*
+      - *Define the _coffees_ data source.* You will add a scaffold that defines an empty schema and functions to retrieve a list of coffees.
+      - *Define the _coffees_ schema.* The schema defines properties that allow Terraform to recognize, reference and store the coffees data resource.
+      - *Implement read.* This read function invokes a `GET` request to the `/coffees` endpoint, then maps its value to the schema defined above.
+      - *Add coffees data source to the provider schema.* This allows you to use the data source in your configuration.
   assignment: |-
     *Set up your development environment*
 
@@ -234,7 +259,7 @@ challenges:
 
     - The coffee's `id` is `1`, a `schema.TypeInt`.
     - The coffee's `name` is `"Packer Spiced Latte"`, a `schema.TypeString`.
-    - The coffee ingredients is an array of ingredient objects, a `schema.TypeList` with elements `map[string]*schema.Schema{}`.
+    - The coffee ingredients is an slice of ingredient objects, a `schema.TypeList` with elements `map[string]*schema.Schema{}`.
 
     You can use various [schema types](https://www.terraform.io/docs/extend/schemas/schema-types.html) to define complex
     data models. You will implement a complex read in the later challenges.
@@ -418,31 +443,6 @@ challenges:
 
     Congratulations! You created your first Terraform provider and data resource to reference information from an API
     in your Terraform configuration.
-  notes:
-  - type: text
-    contents: |-
-      In these challenges, you will write a custom provider against the API of a fictional coffee-shop application
-      called HashiCups using the Terraform Plugin SDKv2. Through the process, you will learn how to create data
-      sources, authenticate the provider to the HashiCups client, and create resources with CRUD functionality.
-  - type: text
-    contents: |-
-      There are a few possible reasons for authoring a custom Terraform provider, including:
-
-      - An internal private cloud whose functionality is either proprietary or would not benefit the open source community.
-      - Extending the capabilities of an existing provider (bug fixes, new features, or customizations)
-
-      Terraform Core is a statically-compiled binary written in the Go programming language and plugins are also written
-      in Go and are executable binaries invoked by Terraform Core over RPC.
-  - type: text
-    contents: |-
-      In this challenge, you will set up your Terraform provider development environment and create a coffees data
-      source that will return all coffees HashiCups serves. To do this, you will:
-
-      - *Explore your development environment.*
-      - *Define the _coffees_ data source.* You will add a scaffold that defines an empty schema and functions to retrieve a list of coffees.
-      - *Define the _coffees_ schema.* The schema defines properties that allow Terraform to recognize, reference and store the coffees data resource.
-      - *Implement read.* This read function invokes a `GET` request to the `/coffees` endpoint, then maps its value to the schema defined above.
-      - *Add coffees data source to the provider schema.* This allows you to use the data source in your configuration.
   tabs:
   - title: VS Code
     type: service
@@ -458,6 +458,17 @@ challenges:
   type: challenge
   title: Add Authentication to a Provider
   teaser: Learn to implement authentication in a Terraform Provider.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will add authentication to a Terraform provider that interacts with the API of a
+      fictional coffee-shop application, HashiCups, and access protected API endpoints.
+  - type: text
+    contents: |-
+      To do this, you will:
+
+      - *Update provider schema.* You will add `username` and `password` parameters to your provider schema. In addition, you will set the `ConfigureContextFunc` property to the the name of the function that will configure your provider, `providerConfigure`.
+      - *Define `providerConfigure`* This function actually configures your provider. If both the username and password are not empty, the function returns an authenticated API client; else, the function returns an unauthenticated API client. The authenticated API client is able to access protected endpoints, the unauthenticated one is not.
   assignment: |-
     *Update provider schema*
 
@@ -656,17 +667,6 @@ challenges:
     ```
 
     Congratulations! You have added authentication to your HashiCups provider.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will add authentication to a Terraform provider that interacts with the API of a
-      fictional coffee-shop application, HashiCups, and access protected API endpoints.
-  - type: text
-    contents: |-
-      To do this, you will:
-
-      - *Update provider schema.* You will add `username` and `password` parameters to your provider schema. In addition, you will set the `ConfigureContextFunc` property to the the name of the function that will configure your provider, `providerConfigure`.
-      - *Define `providerConfigure`* This function actually configures your provider. If both the username and password are not empty, the function returns an authenticated API client; else, the function returns an unauthenticated API client. The authenticated API client is able to access protected endpoints, the unauthenticated one is not.
   tabs:
   - title: VS Code
     type: service
@@ -682,6 +682,23 @@ challenges:
   type: challenge
   title: Implement a Complex Read
   teaser: Learn to read from a auth protected endpoint with a Terraform Provider.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will retrieve an order, a protected endpoint,
+      to verify whether a Terraform provider that interacts with the API of a fictional
+      coffee-shop application, HashiCups, has been authenticated to the API successfully.
+      The order schema contains nested objects, making it a more complicated data
+      structure than the previously defined coffee data source.
+  - type: text
+    contents: |-
+      To do this, you will:
+
+      - *Create a new order via API* There must be an existing order for you to retrieve it.
+      - *Define order data source.* You will add a scaffold that defines an empty schema and functions to retrieve order information.
+      - *Define order schema.* The schema reflects the response from invoking the `/order/{orderId}` endpoint. The `order` schema is considered complex because it nests a list of `OrderItems`.
+      - *Implement complex read.*  This read functionality uses multiple nesting functions to flatten the response from `/order/{orderId}` and map it to the `order` schema.
+      - *Add order data source to the provider schema.* This allows you to use the data source in your configuration.
   assignment: |-
     *Create an order via API*
 
@@ -963,23 +980,6 @@ challenges:
     ```
 
     Congratulations! You have implemented a nested read function.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will retrieve an order, a protected endpoint,
-      to verify whether a Terraform provider that interacts with the API of a fictional
-      coffee-shop application, HashiCups, has been authenticated to the API successfully.
-      The order schema contains nested objects, making it a more complicated data
-      structure than the previously defined coffee data source.
-  - type: text
-    contents: |-
-      To do this, you will:
-
-      - *Create a new order via API* There must be an existing order for you to retrieve it.
-      - *Define order data source.* You will add a scaffold that defines an empty schema and functions to retrieve order information.
-      - *Define order schema.* The schema reflects the response from invoking the `/order/{orderId}` endpoint. The `order` schema is considered complex because it nests a list of `OrderItems`.
-      - *Implement complex read.*  This read functionality uses multiple nesting functions to flatten the response from `/order/{orderId}` and map it to the `order` schema.
-      - *Add order data source to the provider schema.* This allows you to use the data source in your configuration.
   tabs:
   - title: VS Code
     type: service
@@ -995,6 +995,11 @@ challenges:
   type: challenge
   title: Debug a Terraform Provider
   teaser: Learn to add custom error messages to a Terraform provider.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will add custom error messages to a Terraform provider that interacts with the API of a
+      fictional coffee-shop application, HashiCups and view detailed Terraform provider logs.
   assignment: |-
     *Update error messages*
 
@@ -1253,11 +1258,6 @@ challenges:
     [Debugging Terraform Documentation](https://www.terraform.io/docs/internals/debugging.html)._
 
     Congratulations! You have added error and warning messages to your HashiCups provider and implemented a nested read function.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will add custom error messages to a Terraform provider that interacts with the API of a
-      fictional coffee-shop application, HashiCups and view detailed Terraform provider logs.
   tabs:
   - title: VS Code
     type: service
@@ -1273,6 +1273,21 @@ challenges:
   type: challenge
   title: Implement Create
   teaser: Learn to create an `order` resource with a Terraform provider.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will create an `order` resource for a Terraform provider that interacts with the API of a
+      fictional coffee-shop application, HashiCups. Then, you will use the schema to create a new order and populate
+      the order.
+  - type: text
+    contents: |-
+      To do this, you will:
+
+      - *Define `order` resource.* You will add a scaffold that defines an empty schema and functions to create, read, update and delete orders.
+      - *Define `order` schema.* The schema contains fields used to create a new order and retrieved by the read functionality.
+      - *Add create functionality.* The create function invokes a `POST` request to `/orders` to create a new order.
+      - *Add read functionality.* The read function invokes a `GET` request to `/orders/{orderID}` to retrieve the order's data. The orders schema contains a nested object, therefore you will use multiple flattening functions to map the response to the `order` schema.
+      - *Add `order` resource to the provider schema.* This allows you to use the resource in your configuration.
   assignment: |-
     *Define `order` resource*
 
@@ -1714,21 +1729,6 @@ challenges:
     ```
 
     Congratulations! You have created the order resource with create and read capabilities.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will create an `order` resource for a Terraform provider that interacts with the API of a
-      fictional coffee-shop application, HashiCups. Then, you will use the schema to create a new order and populate
-      the order.
-  - type: text
-    contents: |-
-      To do this, you will:
-
-      - *Define `order` resource.* You will add a scaffold that defines an empty schema and functions to create, read, update and delete orders.
-      - *Define `order` schema.* The schema contains fields used to create a new order and retrieved by the read functionality.
-      - *Add create functionality.* The create function invokes a `POST` request to `/orders` to create a new order.
-      - *Add read functionality.* The read function invokes a `GET` request to `/orders/{orderID}` to retrieve the order's data. The orders schema contains a nested object, therefore you will use multiple flattening functions to map the response to the `order` schema.
-      - *Add `order` resource to the provider schema.* This allows you to use the resource in your configuration.
   tabs:
   - title: VS Code
     type: service
@@ -1744,6 +1744,17 @@ challenges:
   type: challenge
   title: Implement Update
   teaser: Learn to add update capabilities to the order resource of a Terraform provider.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will add update capabilities to the order resource of a provider that interacts with the
+      API of a fictional coffee-shop application, HashiCups.
+  - type: text
+    contents: |-
+      To do this, you will:
+
+      - *Update your schema.* Add a `last_updated` attribute to the `order` schema. This attribute will update to the current date time whenever the order resource is updated.
+      - *Implement update.* This update function invokes a `PUT` request to the `/orders/{orderId}` endpoint with the update order items in the request body. After the update function runs, it invokes `resourceOrderRead` to retrieve the order's updated values.
   assignment: |-
     *Update schema*
 
@@ -1903,17 +1914,6 @@ challenges:
     ```
 
     Congratulations! You have added update capabilities to the order resource.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will add update capabilities to the order resource of a provider that interacts with the
-      API of a fictional coffee-shop application, HashiCups.
-  - type: text
-    contents: |-
-      To do this, you will:
-
-      - *Update your schema.* Add a `last_updated` attribute to the `order` schema. This attribute will update to the current date time whenever the order resource is updated.
-      - *Implement update.* This update function invokes a `PUT` request to the `/orders/{orderId}` endpoint with the update order items in the request body. After the update function runs, it invokes `resourceOrderRead` to retrieve the order's updated values.
   tabs:
   - title: VS Code
     type: service
@@ -1929,6 +1929,13 @@ challenges:
   type: challenge
   title: Implement Delete
   teaser: Learn to add delete capabilities to the order resource for a Terraform provider.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will add delete capabilities to the `order` resource
+      for a Terraform provider that interacts with the API of a fictional coffee-shop
+      application, HashiCups. To do this, you will implement delete. This delete function
+      invokes a `DELETE` request to the `/orders/{orderId}` endpoint.
   assignment: |-
     *Implement delete*
 
@@ -2010,13 +2017,6 @@ challenges:
     ```
 
     Congratulations! You have added delete capabilities to the order resource.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will add delete capabilities to the `order` resource
-      for a Terraform provider that interacts with the API of a fictional coffee-shop
-      application, HashiCups. To do this, you will implement delete. This delete function
-      invokes a `DELETE` request to the `/orders/{orderId}` endpoint.
   tabs:
   - title: VS Code
     type: service
@@ -2032,6 +2032,13 @@ challenges:
   type: challenge
   title: Implement Import
   teaser: Learn to add import capabilities to the order resource for a Terraform provider.
+  notes:
+  - type: text
+    contents: In this challenge, you will add import capabilities to the `order` resource
+      of the HashiCups Terraform provider, which interacts with the API of a fictional
+      coffee-shop application. To do this, you will implement a `ResourceImporter()`
+      function. This function retrieves an existing HashiCups order and brings it
+      into Terraform state, enabling Terraform to manage it.
   assignment: |-
     *Implement import*
 
@@ -2227,13 +2234,6 @@ challenges:
     Over the course of this track, you re-created the HashiCups provider and learned how to create data sources,
     authenticate the provider to the HashiCups client, create resources with CRUD functionality, and import existing
     resources.
-  notes:
-  - type: text
-    contents: In this challenge, you will add import capabilities to the `order` resource
-      of the HashiCups Terraform provider, which interacts with the API of a fictional
-      coffee-shop application. To do this, you will implement a `ResourceImporter()`
-      function. This function retrieves an existing HashiCups order and brings it
-      into Terraform state, enabling Terraform to manage it.
   tabs:
   - title: VS Code
     type: service
@@ -2244,4 +2244,4 @@ challenges:
     hostname: workstation
   difficulty: advanced
   timelimit: 900
-checksum: "5485641062416910850"
+checksum: "9645477910377628993"
