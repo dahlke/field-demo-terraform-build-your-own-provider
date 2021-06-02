@@ -6,7 +6,8 @@ teaser: Learn how to create your own Terraform Provider to perform CRUD operatio
 description: |-
   In this track, you will create a Terraform provider to interact with a fictional coffee-shop application, HashiCups.
   In the process, you will learn how providers map target APIs to Terraform in order to create, read, update, and delete
-  resources.
+  resources. It is recommended that you have some familiarity with the Go language, as well as some general software
+  development background. This track is designed for advanced Terraform users.
 icon: https://storage.googleapis.com/instruqt-frontend/assets/hashicorp/tracks/terraform.png
 tags:
 - terraform
