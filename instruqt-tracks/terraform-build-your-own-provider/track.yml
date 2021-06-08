@@ -979,6 +979,12 @@ challenges:
     }
     ```
 
+    At any time, you can see the provider schema using the `terraform` command below as well.
+
+    ```
+    terraform providers schema -json | jq .
+    ```
+
     Congratulations! You have implemented a nested read function.
   tabs:
   - title: VS Code
