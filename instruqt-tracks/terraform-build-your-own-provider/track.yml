@@ -17,6 +17,7 @@ developers:
 - nyoung@hashicorp.com
 private: true
 published: true
+maintenance: true
 show_timer: true
 skipping_enabled: true
 challenges:
@@ -382,13 +383,13 @@ challenges:
 
     ```
     export OS_ARCH="$(go env GOHOSTOS)_$(go env GOHOSTARCH)"
-    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    mkdir -p ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.3/$OS_ARCH
     ```
 
     Next, move the binary to the appropriate subdirectory within your user plugins directory.
 
     ```
-    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/$OS_ARCH
+    mv terraform-provider-hashicups ~/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.3/$OS_ARCH
     ```
 
     There is a shortcut to do all the above steps, it looks like the below. You will use this going forward.
@@ -2117,7 +2118,7 @@ challenges:
     terraform {
       required_providers {
         hashicups = {
-          version = "0.2"
+          version = "0.3"
           source  = "hashicorp.com/edu/hashicups"
         }
       }
@@ -2250,4 +2251,4 @@ challenges:
     hostname: workstation
   difficulty: advanced
   timelimit: 900
-checksum: "9645477910377628993"
+checksum: "634238712845187523"

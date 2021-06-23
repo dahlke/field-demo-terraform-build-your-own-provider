@@ -5,7 +5,6 @@
 # Requires Docker Compose version 1.29.1
 ###########
 
-
 PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
 
 ###########
@@ -38,7 +37,7 @@ echo "export BASH_HISTORY_FILE=$BASH_HISTORY_FILE" >> /root/.bashrc
 echo "export BASHRC_FILE=$BASHRC_FILE" >> /root/.bashrc
 
 PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.2/linux_amd64/terraform-provider-hashicups
+PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.3/linux_amd64/terraform-provider-hashicups
 echo "export PROVIDER_FILE=$PROVIDER_FILE" >> /root/.bashrc
 echo "export PROVIDER_BINARY_FILE=$PROVIDER_BINARY_FILE" >> /root/.bashrc
 
