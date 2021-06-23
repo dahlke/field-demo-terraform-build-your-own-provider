@@ -66,6 +66,7 @@ cd /root/github.com/hashicorp/
 # git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups
 git clone --branch boilerplate https://github.com/dahlke/terraform-provider-hashicups
 
+
 ###########
 # Start the HashiCups Application
 ###########
@@ -73,7 +74,9 @@ cd $PROJECT_HOME_DIR/docker_compose
 docker-compose up -d
 
 
+###########
 # Set the working directory to the project home
+###########
 set-workdir $PROJECT_HOME_DIR
 
 exit 0

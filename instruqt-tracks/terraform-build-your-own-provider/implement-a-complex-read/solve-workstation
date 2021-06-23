@@ -8,7 +8,7 @@ git checkout implement-complex-read
 curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'curl -X POST -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders -d '[{"coffee": { "id":1 }, "quantity":4}, {"coffee": { "id":3 }, "quantity":3}]'
 
 # Install the provider
-make install
+make instruqt_install
 
 # Initialize and apply
 cd $PROJECT_HOME_DIR/examples

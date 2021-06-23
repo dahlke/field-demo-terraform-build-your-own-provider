@@ -21,7 +21,7 @@ export HASHICUPS_TOKEN=$(curl -X POST localhost:19090/signin -d '{"username":"ed
 echo "export HASHICUPS_TOKEN=${HASHICUPS_TOKEN}" >> ~/.bashrc
 
 # Install the provider
-make install
+make instruqt_install
 
 # Set our username and password as env vars
 export HASHICUPS_USERNAME="education"

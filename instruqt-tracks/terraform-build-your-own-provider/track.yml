@@ -395,7 +395,7 @@ challenges:
     There is a shortcut to do all the above steps, it looks like the below. You will use this going forward.
 
     ```
-    make install
+    make instruqt_install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -617,7 +617,7 @@ challenges:
     Install the provider binary.
 
     ```
-    make install
+    make instruqt_install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -919,7 +919,7 @@ challenges:
     Install the provider binary.
 
     ```
-    make install
+    make instruqt_install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1094,7 +1094,7 @@ challenges:
     Install the provider binary.
 
     ```
-    make install
+    make instruqt_install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1181,7 +1181,7 @@ challenges:
     Install the provider binary.
 
     ```
-    make install
+    make instruqt_install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1689,7 +1689,7 @@ challenges:
     Install the provider binary.
 
     ```
-    make install
+    make instruqt_install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1877,7 +1877,7 @@ challenges:
     Install the provider binary.
 
     ```
-    make install
+    make instruqt_install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -1999,7 +1999,7 @@ challenges:
     Install the provider binary.
 
     ```
-    make install
+    make instruqt_install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -2093,7 +2093,7 @@ challenges:
     Install the provider binary.
 
     ```
-    make install
+    make instruqt_install
     ```
 
     Navigate to the `terraform-provider-hashicups/examples` directory. This contains a sample Terraform configuration
@@ -2251,4 +2251,4 @@ challenges:
     hostname: workstation
   difficulty: advanced
   timelimit: 900
-checksum: "8916172145285538752"
+checksum: "11780616142728970325"

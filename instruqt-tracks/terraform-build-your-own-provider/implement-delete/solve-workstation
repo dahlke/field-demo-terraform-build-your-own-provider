@@ -5,7 +5,7 @@ cd $PROJECT_HOME_DIR
 git checkout implement-delete
 
 # Install the provider
-make install
+make instruqt_install
 
 # Initialize and apply
 cd $PROJECT_HOME_DIR/examples

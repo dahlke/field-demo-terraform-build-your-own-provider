@@ -9,7 +9,7 @@ rm .terraform.lock.hcl
 
 # Install the provider
 cd $PROJECT_HOME_DIR
-make install
+make instruqt_install
 
 # Set the working directory to the project home
 set-workdir $PROJECT_HOME_DIR
