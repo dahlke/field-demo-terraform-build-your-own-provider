@@ -1,9 +1,5 @@
 # terraform-build-your-own-provider
 
-## TODO
-
-- `last_updated` is being set to `tostring` not the actual timestamp
-
 ## Build the Image
 
 Using `instruqt-packer/hashistack-go-development`.
