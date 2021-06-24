@@ -2,13 +2,8 @@
 
 ## TODO
 
-- Check the test suite runs successfully
-- Merge Nick Polish
-- Address Kawsar Feedback
-- Remove the terraform lock file w/ the install Make directive (on every branch)
-- Use the actual hashicorp version of HashiCorp HashiCups instead of my version (git clone --branch boilerplate https://github.com/hashicorp/terraform-provider-hashicups)
+- Use `hashicorp` HashiCups repo, not `dahlke`.
 - `last_updated` is being set to `tostring` not the actual timestamp
-- https://www.terraform.io/docs/extend/resources/import.html
 
 ## Build the Image
 
@@ -29,41 +24,6 @@ make \
 
 ### Challenge Work
 
-- Setup and Implement Read (still can be a bit tricky if need to rebuild the provider)
-    -[x] Setup
-    -[x] Check
-    -[x] Solve
-    -[?] Cleanup
-- Add Authentication to a Provider
-    -[x] Setup
-    -[x] Check
-    -[x] Solve
-    -[?] Cleanup
-- Implement a Complex Read
-    -[x] Setup
-    -[x] Check
-    -[x] Solve
-    -[?] Cleanup
-- Debug a Terraform Provider
-    -[x] Setup
-    -[x] Check
-    -[x] Solve
-    -[?] Cleanup
-- Implement Create
-    -[x] Setup
-    -[x] Check
-    -[x] Solve
-    -[?] Cleanup
-- Implement Update
-    -[x] Setup
-    -[x] Check
-    -[x] Solve
-    -[?] Cleanup
-- Implement Delete
-    -[x] Setup
-    -[x] Check
-    -[x] Solve
-    -[?] Cleanup
 - Implement Import
     -[x] Setup
     -[ ] Check

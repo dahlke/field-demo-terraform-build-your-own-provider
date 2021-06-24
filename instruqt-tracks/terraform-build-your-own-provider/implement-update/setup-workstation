@@ -4,9 +4,6 @@
 cd $PROJECT_HOME_DIR
 git checkout implement-create
 
-cd $PROJECT_HOME_DIR/examples
-rm .terraform.lock.hcl
-
 # Install the provider
 cd $PROJECT_HOME_DIR
 make instruqt_install

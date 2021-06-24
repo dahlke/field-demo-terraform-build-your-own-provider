@@ -36,9 +36,9 @@ BASHRC_FILE=/root/.bashrc
 echo "export BASH_HISTORY_FILE=$BASH_HISTORY_FILE" >> /root/.bashrc
 echo "export BASHRC_FILE=$BASHRC_FILE" >> /root/.bashrc
 
-# TODO: parameterize the version
+PROVIDER_VERSION=0.3
 PROVIDER_FILE=/root/github.com/hashicorp/terraform-provider-hashicups/hashicups/provider.go
-PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/0.3/linux_amd64/terraform-provider-hashicups
+PROVIDER_BINARY_FILE=/root/.terraform.d/plugins/hashicorp.com/edu/hashicups/$PROVIDER_VERSION/linux_amd64/terraform-provider-hashicups
 echo "export PROVIDER_FILE=$PROVIDER_FILE" >> /root/.bashrc
 echo "export PROVIDER_BINARY_FILE=$PROVIDER_BINARY_FILE" >> /root/.bashrc
 

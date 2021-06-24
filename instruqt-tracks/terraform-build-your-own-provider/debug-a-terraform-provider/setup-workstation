@@ -4,10 +4,6 @@
 cd $PROJECT_HOME_DIR
 git checkout implement-complex-read
 
-# Remove terraform lock from previous challenge
-cd $PROJECT_HOME_DIR/examples
-rm .terraform.lock.hcl
-
 # Install the provider
 cd $PROJECT_HOME_DIR
 make instruqt_install
