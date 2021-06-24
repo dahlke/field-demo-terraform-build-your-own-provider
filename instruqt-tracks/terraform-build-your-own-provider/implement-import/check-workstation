@@ -17,4 +17,8 @@ if ! grep -q 'sample_order' "$TF_IMPORT_MAIN_FILE"; then
     exit 1
 fi
 
-# TODO: check the state file and see that something has been imported - currently this stage does not work
+# Check the state file and see that something has been imported (isn't ID #1)
+LAST_RESOURCE_ID=$(cat terraform.tfstate | jq -r .resources[0].instances[-1].attributes.id)
+if [ "$LAST_RESOURCE_ID" = "1" ]; then
+    fail-message "You did not successfully import the resource to your Terraform state."
+fi
