@@ -2,7 +2,6 @@
 
 ## TODO
 
-- Use `hashicorp` HashiCups repo, not `dahlke`.
 - `last_updated` is being set to `tostring` not the actual timestamp
 
 ## Build the Image

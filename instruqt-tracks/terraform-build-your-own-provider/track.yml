@@ -1832,7 +1832,7 @@ challenges:
           return diag.FromErr(err)
         }
 
-        d.Set("last_updated", time.Now().Format(time.RFC850))
+        d.Set("last_updated", string(time.Now().Format(time.RFC850)))
       }
 
       return resourceOrderRead(ctx, d, m)
@@ -2251,4 +2251,4 @@ challenges:
     hostname: workstation
   difficulty: advanced
   timelimit: 900
-checksum: "12682095363361486953"
+checksum: "5758804265427704798"
