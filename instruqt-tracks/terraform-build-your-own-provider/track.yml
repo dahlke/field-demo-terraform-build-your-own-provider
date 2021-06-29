@@ -4,10 +4,10 @@ type: track
 title: Build Your Own Terraform Provider
 teaser: Learn how to create your own Terraform Provider to perform CRUD operations.
 description: |-
-  In this track, you will create a Terraform provider to interact with a fictional coffee-shop application, HashiCups.
-  In the process, you will learn how providers map target APIs to Terraform in order to create, read, update, and delete
-  resources. It is recommended that you have some familiarity with the Go language, as well as some general software
-  development background. This track is designed for advanced Terraform users.
+  In this track, you will create a Terraform provider to interact with a coffee shop application, used by HashiCups,
+  a fictional coffee shop.  In the process, you will learn how providers map target APIs to Terraform in order to
+  create, read, update, and delete resources. It is recommended that you have some familiarity with the Go language, as
+  well as some general software development background. This track is designed for advanced Terraform users.
 icon: https://storage.googleapis.com/instruqt-frontend/assets/hashicorp/tracks/terraform.png
 tags:
 - terraform
@@ -17,7 +17,6 @@ developers:
 - nyoung@hashicorp.com
 private: true
 published: true
-maintenance: true
 show_timer: true
 skipping_enabled: true
 challenges:
@@ -29,8 +28,8 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In these challenges, you will write a custom provider against the API of a fictional coffee-shop application
-      called HashiCups using the Terraform Plugin SDKv2. Through the process, you will learn how to create data
+      In these challenges, you will write a custom provider against the API of a coffee shop application, used by
+      fictional coffee shop HashiCups, using the Terraform Plugin SDKv2. Through the process, you will learn how to create data
       sources, authenticate the provider to the HashiCups client, and create resources with CRUD functionality.
   - type: text
     contents: |-
@@ -57,6 +56,9 @@ challenges:
     The Terraform HashiCups Provider repository has been cloned for you. It will serve as the boilerplate for your
     provider workspace. Change into the cloned repository.
 
+    Notice there are two tabs in the top left corner. You can use VS Code to make any edits in this track, or, if you
+    prefer you can use an editor in the terminal tab.
+
     The HashiCups provider requires an instance of HashiCups, a server application with a simple REST API. This has been started for you using `docker-compose` and
     the service is run on port `:19090`. Confirm the service is running.
 
@@ -64,8 +66,9 @@ challenges:
     curl localhost:19090/health
     ```
 
-    *Explore your development environment*
+    You should see an `ok` returned.
 
+    *Explore your development environment*
 
     Run the `go mod init` command to define this directory as the root of a module. Then, run `go mod vendor` to
     create a `vendor` directory that contains all the provider's dependencies.
@@ -75,51 +78,18 @@ challenges:
     go mod vendor
     ```
 
+    You should see `go` downloading the provider's dependencies.
+
     *Explore `main.go` file*
 
     Open `main.go` in the root of the repository. The contents of the main function consume the Plugin SDK's `plugin`
     library which facilitates the RPC communication between Terraform Core and the plugin.
 
-    ```
-    package main
-
-    import (
-      "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-      "github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-
-      "terraform-provider-hashicups/hashicups"
-    )
-
-    func main() {
-      plugin.Serve(&plugin.ServeOpts{
-        ProviderFunc: func() *schema.Provider {
-          return hashicups.Provider()
-        },
-      })
-    }
-    ```
-
     Notice the `ProviderFunc` returns a `*schema.Provider` from the `hashicups` package.
 
     *Explore provider schema*
 
-    The `hashicups/provider.go` file currently defines an empty provider.
-
-    ```
-    package hashicups
-
-    import (
-      "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-    )
-
-    // Provider -
-    func Provider() *schema.Provider {
-      return &schema.Provider{
-        ResourcesMap: map[string]*schema.Resource{},
-        DataSourcesMap: map[string]*schema.Resource{},
-      }
-    }
-    ```
+    Open `hashicups/provider.go`, and see that the file currently defines an empty provider.
 
     The [`helper/schema` library](https://www.terraform.io/docs/extend/schemas/index.html) is part of Terraform Core.
     It abstracts many of the complexities and ensures consistency between providers. The `*schema.Provider` type can
@@ -463,7 +433,7 @@ challenges:
   - type: text
     contents: |-
       In this challenge, you will add authentication to a Terraform provider that interacts with the API of a
-      fictional coffee-shop application, HashiCups, and access protected API endpoints.
+      coffee shop application used by HashiCups, and access protected API endpoints.
   - type: text
     contents: |-
       To do this, you will:
@@ -682,13 +652,13 @@ challenges:
   id: bcwthxrik7le
   type: challenge
   title: Implement a Complex Read
-  teaser: Learn to read from a auth protected endpoint with a Terraform Provider.
+  teaser: Learn to read from an auth protected endpoint with a Terraform Provider.
   notes:
   - type: text
     contents: |-
       In this challenge, you will retrieve an order, a protected endpoint,
-      to verify whether a Terraform provider that interacts with the API of a fictional
-      coffee-shop application, HashiCups, has been authenticated to the API successfully.
+      to verify whether a Terraform provider that interacts with the API of the HashiCups
+      coffee shop application, has been authenticated to the API successfully.
       The order schema contains nested objects, making it a more complicated data
       structure than the previously defined coffee data source.
   - type: text
@@ -1005,8 +975,8 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this challenge, you will add custom error messages to a Terraform provider that interacts with the API of a
-      fictional coffee-shop application, HashiCups and view detailed Terraform provider logs.
+      In this challenge, you will add custom error messages to a Terraform provider that interacts with the API of the
+      HashiCups coffee shop application, and view detailed Terraform provider logs.
   assignment: |-
     *Update error messages*
 
@@ -1284,7 +1254,7 @@ challenges:
   - type: text
     contents: |-
       In this challenge, you will create an `order` resource for a Terraform provider that interacts with the API of a
-      fictional coffee-shop application, HashiCups. Then, you will use the schema to create a new order and populate
+      coffee shop application, HashiCups. Then, you will use the schema to create a new order and populate
       the order.
   - type: text
     contents: |-
@@ -1755,7 +1725,7 @@ challenges:
   - type: text
     contents: |-
       In this challenge, you will add update capabilities to the order resource of a provider that interacts with the
-      API of a fictional coffee-shop application, HashiCups.
+      HashiCups coffee shop application API.
   - type: text
     contents: |-
       To do this, you will:
@@ -1940,8 +1910,8 @@ challenges:
   - type: text
     contents: |-
       In this challenge, you will add delete capabilities to the `order` resource
-      for a Terraform provider that interacts with the API of a fictional coffee-shop
-      application, HashiCups. To do this, you will implement delete. This delete function
+      for a Terraform provider that interacts with the API of the HashiCups coffee shop
+      application. To do this, you will implement delete. This delete function
       invokes a `DELETE` request to the `/orders/{orderId}` endpoint.
   assignment: |-
     *Implement delete*
@@ -2042,8 +2012,8 @@ challenges:
   notes:
   - type: text
     contents: In this challenge, you will add import capabilities to the `order` resource
-      of the HashiCups Terraform provider, which interacts with the API of a fictional
-      coffee-shop application. To do this, you will implement a `ResourceImporter()`
+      of the HashiCups Terraform provider, which interacts with the HashiCups coffee
+      shop application API. To do this, you will implement a `ResourceImporter()`
       function. This function retrieves an existing HashiCups order and brings it
       into Terraform state, enabling Terraform to manage it.
   assignment: |-
@@ -2250,5 +2220,5 @@ challenges:
     type: terminal
     hostname: workstation
   difficulty: advanced
-  timelimit: 900
-checksum: "5987300336297064395"
+  timelimit: 7200
+checksum: "4607042371713171884"
