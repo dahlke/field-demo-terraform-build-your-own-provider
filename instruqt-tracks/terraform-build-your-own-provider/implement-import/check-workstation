@@ -21,4 +21,5 @@ fi
 LAST_RESOURCE_ID=$(cat terraform.tfstate | jq -r .resources[0].instances[-1].attributes.id)
 if [ "$LAST_RESOURCE_ID" = "1" ]; then
     fail-message "You did not successfully import the resource to your Terraform state."
+    exit 1
 fi
