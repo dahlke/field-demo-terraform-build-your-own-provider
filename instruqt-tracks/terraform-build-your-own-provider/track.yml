@@ -438,7 +438,7 @@ challenges:
     contents: |-
       To do this, you will:
 
-      - *Update provider schema.* You will add `username` and `password` parameters to your provider schema. In addition, you will set the `ConfigureContextFunc` property to the the name of the function that will configure your provider, `providerConfigure`.
+      - *Update provider schema.* You will add `username` and `password` parameters to your provider schema. In addition, you will set the `ConfigureContextFunc` property to the name of the function that will configure your provider, `providerConfigure`.
       - *Define `providerConfigure`* This function actually configures your provider. If both the username and password are not empty, the function returns an authenticated API client; else, the function returns an unauthenticated API client. The authenticated API client is able to access protected endpoints, the unauthenticated one is not.
   assignment: |-
     *Update provider schema*
@@ -804,7 +804,8 @@ challenges:
     ```
 
     Notice the `m` (meta) input parameter contains the HashiCups API Client set by the `ConfigureContextFunc` defined
-    above. If provider uses an unauthenticated API Client, this function will fail and return an error message.
+    in the previous challenge. If provider uses an unauthenticated API Client, this function will fail and return an
+    error message.
 
     The API Client's `GetOrder` function returns an order object. However, you must flatten this response to accurately
     map the response to the `order` schema. An order consists of an order ID and a list of coffee objects and their
@@ -1564,8 +1565,8 @@ challenges:
     ```
 
     Then, add the second flattening function, `flattenCoffee`, to your `hashicups/resource_order.go` file. This is
-    called in the first flattening function. It takes a `hc.Coffee` and turns a slice with a single object. Notice how
-    this mirrors the coffee schema — a `schema.TypeList` with a maximum of one item.
+    called in the first flattening function. It takes a `hc.Coffee` and retturns a slice with a single object. Notice
+    how this mirrors the coffee schema — a `schema.TypeList` with a maximum of one item.
 
     ```
     func flattenCoffee(coffee hc.Coffee) []interface{} {
@@ -2217,4 +2218,4 @@ challenges:
     hostname: workstation
   difficulty: advanced
   timelimit: 7200
-checksum: "14180960661956454517"
+checksum: "7461249928436413436"
