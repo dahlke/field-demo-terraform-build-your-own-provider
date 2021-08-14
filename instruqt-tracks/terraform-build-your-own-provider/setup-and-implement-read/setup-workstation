@@ -4,8 +4,8 @@
 # Requires Golang version 1.16.3
 # Requires Docker Compose version 1.29.1
 ###########
-
 PROJECT_HOME_DIR="/root/github.com/hashicorp/terraform-provider-hashicups/"
+
 
 ###########
 # Install Docker Compose and Docker
@@ -15,6 +15,7 @@ apt install -y docker-compose docker.io
 
 sudo systemctl unmask docker
 sudo systemctl start docker
+
 
 ###########
 # Add all our relevant env vars to the bashrc
@@ -98,5 +99,6 @@ docker-compose up -d
 # Set the working directory to the project home
 ###########
 set-workdir $PROJECT_HOME_DIR
+
 
 exit 0

@@ -70,8 +70,8 @@ challenges:
 
     *Explore your development environment*
 
-    Run the `go mod init` command to define this directory as the root of a module. Then, run `go mod vendor` to
-    create a `vendor` directory that contains all the provider's dependencies.
+    Define the "terraform-provider-hashicups" directory as the root of a Go module and create your module's vendor
+    directory that contains all of the provider's dependencies with the following commands:
 
     ```
     go mod init terraform-provider-hashicups
@@ -519,14 +519,14 @@ challenges:
     *Define `preconfigure`*
 
     Import the `context`, API client and `diag` libraries into the `hashicups/provider.go` file. The `providerConfigure` function
-    will use these libraries.
+    will use these libraries. Replace the `import` block with the one below.
 
     ```
     import (
-    + "context"
+      "context"
 
-    + "github.com/hashicorp-demoapp/hashicups-client-go"
-    + "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+      "github.com/hashicorp-demoapp/hashicups-client-go"
+      "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
       "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
     )
     ```
@@ -578,9 +578,6 @@ challenges:
 
     By returning the HashiCups API client, the provider will be able to access the API client as a `meta` input
     parameter. You will use the `meta` input parameter to access a protected endpoint (`/orders`) later in this track.
-
-    Save your `hashicups/provider.go` file, then run `go mod vendor` to download the API client library into your
-    `/vendor` directory.
 
     *Test the provider*
 
@@ -1455,15 +1452,15 @@ challenges:
     }
     ```
 
-    Since this uses `strconv` to convert the `ID` into a string, remember to import the `strconv` library. Remember
-    to also import the HashiCups API client library.
+    Since this uses `strconv` to convert the `ID` into a string, remember to import the `strconv` library. Replace the
+    `import` block with the one below.
 
     ```
     import (
       "context"
-    + "strconv"
+      "strconv"
 
-    + hc "github.com/hashicorp-demoapp/hashicups-client-go"
+      hc "github.com/hashicorp-demoapp/hashicups-client-go"
       "github.com/hashicorp/terraform-plugin-sdk/v2/diag"
       "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
     )
@@ -1526,8 +1523,8 @@ challenges:
     This function should be similar to the `dataSourceOrderRead` function in `hashicups/data_resource_order.go` with
     two significant change.
 
-    - The order resource's read function (`resourceOrderRead`) uses `d.ID()` as the order ID. The `order` data resource's read function (`dataSourceOrderRead`) uses an order ID provider by the user.
-    - The function uses `flattenOrderItems` instead of `flattenOrderItemsData` because the `order` resource and the `order` data source uses different schemas. You will define the `flattenOrderItems` in the next section.
+    - The order resource's read function (`resourceOrderRead`) uses `d.ID()` as the order ID. The `order` data resource's read function (`dataSourceOrderRead`) uses an order ID provided by the user.
+    - The function uses `flattenOrderItems` instead of `flattenOrderItemsData` because the `order` resource and the `order` data source use different schemas. You will define the `flattenOrderItems` in the next section.
 
     *Add flattening functions*
 
@@ -1884,11 +1881,13 @@ challenges:
     terraform init && terraform apply --auto-approve
     ```
 
+    Notice in the apply output, you can see `1 changed`.
+
     Verify that the provider updated your order by invoking the HashiCups API. Substitute the order number with your
     order ID and the auth token with your auth token.
 
     ```
-    curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
+    curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/<order_id>
     ```
 
     Congratulations! You have added update capabilities to the order resource.
@@ -1954,12 +1953,12 @@ challenges:
 
     The function retrieves the order ID using `d.ID()` and deletes the order.
 
-    - If the `destroy` callback returns *without* an error, the provider assumes the resource is destroyed and all state is removed.
-    - If the `destroy` callback returns *with* an error, the provider assumes the resource still exists and all prior state is preserved.
+    - If the `DeleteOrder` callback returns *without* an error, the provider assumes the resource is destroyed and all state is removed.
+    - If the `DeleteOrder` callback returns *with* an error, the provider assumes the resource still exists and all prior state is preserved.
 
-    The `destroy` callback should never update any state on the resource. In addition, the destroy callback should
-    always handle the case where the resource might already be destroyed. If the resource is already destroyed, the
-    destroy function should not return an error. If the target API doesn't have this functionality, the destroy
+    The `DeleteOrder` callback should never update any state on the resource. In addition, the `DeleteOrder` callback
+    should always handle the case where the resource might already be destroyed. If the resource is already destroyed,
+    the destroy function should not return an error. If the target API doesn't have this functionality, the destroy
     function should verify the resource exists; if the resource does not exist, set the resource ID to "". This
     behavior allows Terraform users to manually delete resources without breaking Terraform.
 
@@ -1987,11 +1986,17 @@ challenges:
     terraform init && terraform destroy --auto-approve
     ```
 
-    Verify that the provider updated your order by invoking the HashiCups API. Substitute the order number with your
+    Verify that the provider deleted your order by invoking the HashiCups API. Substitute the order number with your
     order ID and the auth token with your auth token.
 
     ```
-    curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/1
+    curl -X GET -H "Authorization: ${HASHICUPS_TOKEN}" localhost:19090/orders/<order_id>
+    ```
+
+    You should see the below output.
+
+    ```
+    {}
     ```
 
     Congratulations! You have added delete capabilities to the order resource.
@@ -2120,7 +2125,7 @@ challenges:
 
     ```
     {
-      "id": 3,
+      "id": 4,
       "items": [
         {
           "coffee": {
@@ -2159,10 +2164,10 @@ challenges:
     The output should look like the below.
 
     ```
-    hashicups_order.sample: Importing from ID "3"...
+    hashicups_order.sample: Importing from ID "4"...
     hashicups_order.sample: Import prepared!
       Prepared hashicups_order for import
-    hashicups_order.sample: Refreshing state... [id=3]
+    hashicups_order.sample: Refreshing state... [id=4]
     Import successful!
     The resources that were imported are shown above. These resources are now in
     your Terraform state and will henceforth be managed by Terraform.
@@ -2179,7 +2184,7 @@ challenges:
     ```
     # hashicups_order.sample:
     resource "hashicups_order" "sample" {
-        id = "3"
+        id = "4"
         items {
             quantity = 4
             coffee {
@@ -2218,4 +2223,4 @@ challenges:
     hostname: workstation
   difficulty: advanced
   timelimit: 7200
-checksum: "7461249928436413436"
+checksum: "9070535760718183438"
